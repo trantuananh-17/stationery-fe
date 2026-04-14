@@ -37,7 +37,7 @@ export default function Header({ logo, navItems, primaryButton, secondaryButton 
         <SidebarTrigger className='md:hidden' />
         <div>{logo}</div>
 
-        <nav className='hidden items-center gap-8 md:flex'>
+        <nav className='hidden items-center gap-4 md:flex lg:gap-8'>
           {navItems?.map((item, index) => (
             <Link
               key={index}
@@ -52,7 +52,7 @@ export default function Header({ logo, navItems, primaryButton, secondaryButton 
 
         <InputButtonGroup className='hidden max-w-50 lg:flex' />
 
-        <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-2 lg:gap-4'>
           <CartButton />
           {secondaryButton?.link?.href && (
             <Link

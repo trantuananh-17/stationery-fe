@@ -1,22 +1,15 @@
-import Image from 'next/image';
 import BANNER from '@/assets/images/banner.webp';
-import BannerCard from '@/components/ui/banner-card';
 import BLOG_COST from '@/assets/images/banner_cost--card.webp';
 import BLOG_DELI from '@/assets/images/banner_deli--card.webp';
+import BannerCard from '@/components/blocks/BannerCard';
+import FeatureItem from '@/components/ui/feature-item';
 import { BadgePercent, Headset, ShieldCheck, Truck } from 'lucide-react';
-import FeatureItem from '../ui/feature-item';
+import Image from 'next/image';
 
 export default function Banner() {
   const bannerCards = [
     {
-      image: (
-        <Image
-          src={BLOG_COST}
-          alt='Blog cart cost'
-          fill
-          className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-110'
-        />
-      ),
+      image: BLOG_COST,
       label: 'Minaco Blog',
       description: 'Làm sao để có được báo giá văn phòng phẩm tốt nhất?!',
       primary: true,
@@ -24,14 +17,7 @@ export default function Banner() {
       link: { href: '#', target: '_self' as const }
     },
     {
-      image: (
-        <Image
-          src={BLOG_DELI}
-          alt='Banner deli min'
-          fill
-          className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-110'
-        />
-      ),
+      image: BLOG_DELI,
       label: 'Văn phòng phẩm Deli',
       description: 'Top Trending văn phòng phẩm',
       primary: false,
@@ -44,7 +30,7 @@ export default function Banner() {
     {
       icon: BadgePercent,
       title: 'Tiết kiệm tới 20%',
-      description: 'Tối ưu chi phí VPP định kỳ tới 20% so với giá thị trường'
+      description: 'Tối ưu chi phí VPP định kỳ so với giá thị trường'
     },
     {
       icon: Headset,
@@ -63,7 +49,7 @@ export default function Banner() {
     }
   ];
   return (
-    <section className='flex flex-col gap-4 py-10'>
+    <section className='flex flex-col gap-4 py-4 md:py-8'>
       <h2 className='sr-only'>Banner blog</h2>
 
       <div className='grid grid-cols-3 items-stretch gap-4'>

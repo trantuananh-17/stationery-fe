@@ -8,10 +8,12 @@ interface Props {
 
 export default function FeatureItem({ icon: Icon, title, description }: Props) {
   return (
-    <div className='flex items-center justify-center gap-2'>
-      <Icon size={64} className='text-primary' />
+    <div className='flex items-start justify-center gap-2'>
+      <div className='flex h-full items-center justify-center'>
+        <Icon size={48} className='text-primary' />
+      </div>
       <div className='flex flex-col gap-1'>
-        <p className='font-semibold'>{title}</p>
+        <p className='truncate font-semibold'>{title}</p>
         <p className='text-muted-foreground'>{description}</p>
       </div>
     </div>

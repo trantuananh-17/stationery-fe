@@ -1,12 +1,12 @@
-import Image from 'next/image';
-import { Card, CardAction, CardContent } from './card';
-import { IconType, LinkType } from '@/types/type';
-import { Button } from './button';
+import Image, { StaticImageData } from 'next/image';
+import { LinkType } from '@/types/type';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface Props {
-  image?: IconType;
+  image: StaticImageData;
   label: string;
   description: string;
   primary: boolean;
@@ -18,14 +18,19 @@ export default function BannerCard({ image, label, description, primary, buttonL
   return (
     <Link href={link.href || '#'} target={link.target || '_self'}>
       <Card className='group relative h-full cursor-pointer overflow-hidden rounded-2xl border-0'>
-        {image}
+        <Image
+          src={image}
+          alt='Banner deli min'
+          fill
+          className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-110'
+        />
 
         <div className='absolute inset-0 bg-black/20 transition-colors duration-500 group-hover:bg-black/40' />
 
-        <div className='absolute inset-0 flex flex-col items-end justify-center p-6 text-white'>
+        <div className='absolute inset-0 flex flex-col items-end justify-center gap-2 p-6 text-white'>
           <div className='text-end'>
             <h3 className='text-xl font-semibold'>{label}</h3>
-            <p className='text-sm text-white/75'>{description}</p>
+            <p className='pl-10 text-sm text-white/75'>{description}</p>
           </div>
 
           <Button
