@@ -80,7 +80,7 @@ export default function Layout(props: Props) {
         <SidebarProvider>
           <AppSidebar />
           <SidebarInset>
-            <Container size='xl'>
+            <Container size='lg'>
               <Header {...headerProps} />
 
               <main className='flex-1'>{props.children}</main>

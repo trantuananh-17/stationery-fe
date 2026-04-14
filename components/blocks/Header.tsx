@@ -1,14 +1,14 @@
 'use client';
 
+import { CartButton } from '@/components/blocks/CartButton';
 import { InputButtonGroup } from '@/components/blocks/InputButtonGroup';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 import { IconType, LinkType } from '@/types/type';
 import { VariantProps } from 'class-variance-authority';
-import { Menu, ShoppingCart } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import Link from 'next/link';
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '../ui/sheet';
-import { SidebarTrigger } from '../ui/sidebar';
-import { CartButton } from './CartButton';
 
 interface Props {
   logo?: IconType;

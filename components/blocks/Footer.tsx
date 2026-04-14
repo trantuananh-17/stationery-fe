@@ -1,5 +1,4 @@
 import { IconType, LinkType } from '@/types/type';
-import { Container } from '../ui/container';
 import Link from 'next/link';
 
 interface Props {
