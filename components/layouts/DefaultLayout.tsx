@@ -29,7 +29,7 @@ export default function Layout(props: Props) {
     },
     navItems: [
       { link: { href: '/', target: '_self' as const }, label: 'Trang chủ' },
-      { link: { href: '/store', target: '_self' as const }, label: 'Cửa hàng' },
+      { link: { href: '/products', target: '_self' as const }, label: 'Sản phẩm' },
       { link: { href: '/about', target: '_self' as const }, label: 'Về chúng tôi' },
       { link: { href: '/contact', target: '_self' as const }, label: 'Liên hệ' }
     ]

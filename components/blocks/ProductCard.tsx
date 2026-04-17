@@ -14,11 +14,13 @@ export default function ProductCard() {
           <Image
             src={PAPER}
             fill
-            className='h-auto rounded-xl object-cover transition-transform duration-500 group-hover:scale-110'
+            sizes='(max-width: 640px) 100vw, 400px'
+            className='rounded-xl object-cover transition-transform duration-500 group-hover:scale-110'
             priority
             alt='Paper banner'
           />
         </AspectRatio>
+
         <div className='flex flex-col gap-2 p-2'>
           <CardTitle>Bút nước Tizo-TG 310</CardTitle>
           <ProductPrice regular={4099000} sale={399000} />

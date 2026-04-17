@@ -52,7 +52,7 @@ export default function Header({ logo, navItems, primaryButton, secondaryButton 
 
         <InputButtonGroup className='hidden max-w-50 lg:flex' />
 
-        <div className='flex items-center gap-2 lg:gap-4'>
+        <div className='flex items-center gap-2'>
           <CartButton />
           {secondaryButton?.link?.href && (
             <Link
