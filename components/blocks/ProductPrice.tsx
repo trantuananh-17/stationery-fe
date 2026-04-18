@@ -1,9 +1,12 @@
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
-type PriceProps = {
+interface PriceProps {
+  className?: string;
   regular: number;
   sale?: number | null;
-};
+  currency?: string | 'VND';
+}
 
 const formatVND = (value: number) =>
   new Intl.NumberFormat('vi-VN', {
@@ -11,14 +14,14 @@ const formatVND = (value: number) =>
     currency: 'VND'
   }).format(value);
 
-export function ProductPrice({ regular, sale }: PriceProps) {
+export function ProductPrice({ regular, sale, className }: PriceProps) {
   const hasSale = sale != null;
 
   return (
-    <div className='flex items-center justify-between gap-3'>
-      {hasSale && <span className='text-muted-foreground text-sm line-through'>{formatVND(regular)}</span>}
+    <div className={cn('flex items-center gap-3', className)}>
+      {hasSale && <span className='text-muted-foreground line-through'>{formatVND(regular)}</span>}
 
-      <span className='text-destructive text-sm font-bold'>{formatVND(sale ?? regular)}</span>
+      <span className='text-destructive font-bold'>{formatVND(sale ?? regular)}</span>
 
       {hasSale && (
         <Badge className='absolute top-3 left-3' variant='destructive'>

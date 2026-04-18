@@ -23,7 +23,7 @@ export default function ProductCard() {
 
         <div className='flex flex-col gap-2 p-2'>
           <CardTitle>Bút nước Tizo-TG 310</CardTitle>
-          <ProductPrice regular={4099000} sale={399000} />
+          <ProductPrice regular={409900} sale={399000} className='justify-between text-sm' />
           <Button className='cursor-pointer'>
             Thêm giỏ hàng <ShoppingCart />
           </Button>

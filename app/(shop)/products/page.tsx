@@ -13,7 +13,7 @@ interface Props {
   }>;
 }
 
-export default async function page({ searchParams }: Props) {
+export default async function Page({ searchParams }: Props) {
   const params = await searchParams;
   const currentPage = Number(params.page || '1');
   const currentSort = params.sort || 'newest';
