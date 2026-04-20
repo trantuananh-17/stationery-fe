@@ -173,7 +173,7 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
       </section>
 
       <section className={cn('', className)}>
-        <div className='container'>
+        <div className=''>
           <div className='grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12'>
             <div>
               <ProductImages images={product.images} />
@@ -190,13 +190,13 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
 
                       <Badge variant='secondary'>
                         <CircleCheck />
-                        {isInStock ? 'In Stock' : 'Out of Stock'}
+                        {isInStock ? 'Còn hàng' : 'Hết hàng'}
                       </Badge>
                     </div>
                   </div>
                 </div>
 
-                <ProductPrice {...product.price} className='text-xl' />
+                <ProductPrice showBadge={false} {...product.price} className='text-xl' />
                 <p className='text-muted-foreground'>{product.description}</p>
               </div>
 

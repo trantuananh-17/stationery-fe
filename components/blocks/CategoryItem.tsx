@@ -24,7 +24,7 @@ export default function CategoryItem({ image, label, link }: Props) {
           </div>
         </Card>
 
-        <p className='mt-2 min-h-[56px]'>{label}</p>
+        <p className='mt-2 text-center text-xs md:text-sm'>{label}</p>
       </div>
     </Link>
   );

@@ -17,8 +17,8 @@ export default function ProductShowCase({ link }: Props) {
     <section className='py-4 md:py-8'>
       <h2 className='sr-only'>Product Show case</h2>
 
-      <div className='grid grid-cols-12 gap-2'>
-        <div className='col-span-3'>
+      <div className='grid grid-cols-1 gap-2 lg:grid-cols-12'>
+        <div className='col-span-1 h-full min-h-30 lg:col-span-3'>
           {/* <Link href={link.href || '#'} target={link.target || '_self'}> */}
           <Card size='default' className='group relative h-full cursor-pointer overflow-hidden p-0'>
             <Image
@@ -43,11 +43,11 @@ export default function ProductShowCase({ link }: Props) {
           {/* </Link> */}
         </div>
 
-        <div className='col-span-9 flex flex-col gap-4'>
+        <div className='col-span-1 flex flex-col gap-4 lg:col-span-9'>
           <Tabs defaultValue='overview' className='h-full w-full'>
             <div className='overflow-x-auto overflow-y-hidden'>
-              <TabsList className='w-full'>
-                <span className='truncate px-4 text-xl font-bold text-black'>Bút Các Loại</span>
+              <TabsList className='inline-flex w-max min-w-max justify-start'>
+                <span className='truncate px-4 text-sm font-bold text-black md:text-xl'>Bút Các Loại</span>
                 <TabsTrigger value='overview'>Overview</TabsTrigger>
                 <TabsTrigger value='analytics'>Analytics</TabsTrigger>
                 <TabsTrigger value='settings'>Settings</TabsTrigger>
@@ -57,7 +57,7 @@ export default function ProductShowCase({ link }: Props) {
               </TabsList>
             </div>
             <TabsContent value='overview'>
-              <div className='grid h-full grid-cols-4 gap-2'>
+              <div className='grid h-full grid-cols-2 gap-2 md:grid-cols-4'>
                 <ProductCard />
                 <ProductCard />
                 <ProductCard />

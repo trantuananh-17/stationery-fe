@@ -30,12 +30,12 @@ export default function ProductCard() {
           target={link.target || '_self'}
           className='text-muted-foreground hover:text-foreground truncate text-sm font-medium transition-colors'
         >
-          <CardTitle>Bút nước Tizo-TG 310</CardTitle>
+          <CardTitle className='text-xs sm:text-sm'>Bút nước Tizo-TG 310</CardTitle>
         </Link>
 
-        <ProductPrice regular={409900} sale={399000} className='justify-between text-sm' />
+        <ProductPrice regular={409900} sale={399000} className='justify-between text-xs xl:text-sm' />
         <Button className='cursor-pointer'>
-          Thêm giỏ hàng <ShoppingCart />
+          <p className='hidden text-xs md:flex xl:text-sm'>Thêm giỏ hàng</p> <ShoppingCart />
         </Button>
       </div>
     </Card>

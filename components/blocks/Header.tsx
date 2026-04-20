@@ -1,6 +1,5 @@
 'use client';
 
-import { CartButton } from '@/components/blocks/CartButton';
 import { InputButtonGroup } from '@/components/blocks/InputButtonGroup';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -9,6 +8,7 @@ import { IconType, LinkType } from '@/types/type';
 import { VariantProps } from 'class-variance-authority';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
+import { CartDrawer } from './CartDrawer';
 
 interface Props {
   logo?: IconType;
@@ -33,17 +33,17 @@ interface Props {
 export default function Header({ logo, navItems, primaryButton, secondaryButton }: Props) {
   return (
     <header>
-      <div className='flex items-center justify-between gap-4'>
+      <div className='flex items-center justify-between gap-2'>
         <SidebarTrigger className='md:hidden' />
         <div>{logo}</div>
 
-        <nav className='hidden items-center gap-4 md:flex lg:gap-8'>
+        <nav className='hidden items-center md:flex md:gap-4 lg:gap-8'>
           {navItems?.map((item, index) => (
             <Link
               key={index}
               href={item.link.href}
               target={item.link.target || '_self'}
-              className='text-muted-foreground hover:text-foreground truncate text-sm font-medium transition-colors'
+              className='text-muted-foreground hover:text-foreground truncate text-xs font-medium transition-colors md:text-sm'
             >
               {item.label}
             </Link>
@@ -53,7 +53,7 @@ export default function Header({ logo, navItems, primaryButton, secondaryButton 
         <InputButtonGroup className='hidden max-w-50 lg:flex' />
 
         <div className='flex items-center gap-2'>
-          <CartButton />
+          <CartDrawer />
           {secondaryButton?.link?.href && (
             <Link
               href={secondaryButton.link.href}

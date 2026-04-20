@@ -6,6 +6,7 @@ interface PriceProps {
   regular: number;
   sale?: number | null;
   currency?: string | 'VND';
+  showBadge?: boolean;
 }
 
 const formatVND = (value: number) =>
@@ -14,16 +15,16 @@ const formatVND = (value: number) =>
     currency: 'VND'
   }).format(value);
 
-export function ProductPrice({ regular, sale, className }: PriceProps) {
+export function ProductPrice({ regular, sale, className, showBadge = true }: PriceProps) {
   const hasSale = sale != null;
 
   return (
-    <div className={cn('flex items-center gap-3', className)}>
+    <div className={cn('flex items-center gap-1', className)}>
       {hasSale && <span className='text-muted-foreground line-through'>{formatVND(regular)}</span>}
 
       <span className='text-destructive font-bold'>{formatVND(sale ?? regular)}</span>
 
-      {hasSale && (
+      {hasSale && showBadge && (
         <Badge className='absolute top-3 left-3' variant='destructive'>
           -{Math.round(((regular - sale!) / regular) * 100)}%
         </Badge>

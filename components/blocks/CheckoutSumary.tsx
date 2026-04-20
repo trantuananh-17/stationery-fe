@@ -14,11 +14,11 @@ interface Props {
 }
 
 export default function CheckoutSumary({ totalItems, subtotal, shipping, total, initialItems }: Props) {
-  const formatPrice = (price: number) =>
-    new Intl.NumberFormat('en-US', {
+  const formatVND = (value: number) =>
+    new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'USD'
-    }).format(price);
+      currency: 'VND'
+    }).format(value);
 
   return (
     <div className='p-2 md:p-4'>
@@ -38,7 +38,7 @@ export default function CheckoutSumary({ totalItems, subtotal, shipping, total, 
 
         <div className='flex items-center justify-between text-base'>
           <span className='text-muted-foreground'>Tạm tính: </span>
-          <span>{formatPrice(subtotal)}</span>
+          <span>{formatVND(subtotal)}</span>
         </div>
 
         <div className='flex items-center justify-between text-base'>
@@ -50,7 +50,7 @@ export default function CheckoutSumary({ totalItems, subtotal, shipping, total, 
 
         <div className='flex items-center justify-between text-lg font-semibold'>
           <span>Tổng tiền: </span>
-          <span>{formatPrice(total)}</span>
+          <span>{formatVND(total)}</span>
         </div>
       </div>
 

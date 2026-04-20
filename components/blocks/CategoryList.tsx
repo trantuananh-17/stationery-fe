@@ -57,7 +57,7 @@ export default function CategoryList() {
     <section className='py-4 md:py-8'>
       <h2 className='mb-4 text-2xl font-semibold'>Danh mục nổi bật</h2>
 
-      <div className='grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8'>
+      <div className='grid grid-cols-2 items-start gap-2 sm:grid-cols-4 md:gap-4 lg:grid-cols-8'>
         {categories.map((category, index) => (
           <CategoryItem key={index} {...category} />
         ))}

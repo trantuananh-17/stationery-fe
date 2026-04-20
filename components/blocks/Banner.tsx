@@ -52,18 +52,18 @@ export default function Banner() {
     <section className='flex flex-col gap-4 py-4 md:py-8'>
       <h2 className='sr-only'>Banner blog</h2>
 
-      <div className='grid grid-cols-3 items-stretch gap-4'>
+      <div className='grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3'>
         <div className='col-span-2 max-w-225'>
           <Image src={BANNER} alt='Banner cart img' className='h-auto rounded-xl object-cover' priority />
         </div>
-        <div className='col-span-1 grid h-full grid-rows-2 gap-4'>
+        <div className='hidden grid-cols-2 gap-4 md:grid-cols-1 md:grid-rows-2 lg:grid'>
           {bannerCards.map((card, index) => (
             <BannerCard {...card} key={index} />
           ))}
         </div>
       </div>
 
-      <div className='grid grid-cols-4 gap-4'>
+      <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'>
         {features.map((feature, index) => (
           <FeatureItem key={index} {...feature} />
         ))}

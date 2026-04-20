@@ -7,14 +7,14 @@ export default function BestPriceSection() {
     <section className='py-4 md:py-8'>
       <div className='flex flex-col gap-4'>
         <div className='flex items-center justify-between'>
-          <h2 className='text-2xl font-semibold'>Lựa chọn tốt nhất</h2>
+          <h2 className='text-lg font-semibold md:text-xl lg:text-2xl'>Lựa chọn tốt nhất</h2>
 
-          <Button size={'lg'} className='cursor-pointer'>
+          <Button size={'lg'} className='cursor-pointer text-xs md:text-sm'>
             Xem tất cả <ArrowRightIcon />
           </Button>
         </div>
 
-        <div className='grid grid-cols-6 gap-2'>
+        <div className='grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6'>
           <ProductCard />
           <ProductCard />
           <ProductCard />

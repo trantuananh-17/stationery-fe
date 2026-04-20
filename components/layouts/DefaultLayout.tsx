@@ -14,7 +14,16 @@ interface Props {
 
 export default function Layout(props: Props) {
   const headerProps = {
-    logo: <Image src={LOGO} alt='Logo' className='h-auto w-45 rounded-xl object-contain' priority />,
+    logo: (
+      <Image
+        src={LOGO}
+        alt='Logo'
+        width={300}
+        height={300}
+        className='h-auto w-45 rounded-xl object-contain'
+        priority
+      />
+    ),
     primaryButton: {
       icon: null,
       link: { href: '/register', target: '_self' as const },

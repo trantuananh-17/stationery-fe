@@ -12,11 +12,11 @@ interface Props {
 }
 
 export default function CartSummary({ totalItems, subtotal, shipping, total }: Props) {
-  const formatPrice = (price: number) =>
-    new Intl.NumberFormat('en-US', {
+  const formatVND = (value: number) =>
+    new Intl.NumberFormat('vi-VN', {
       style: 'currency',
-      currency: 'USD'
-    }).format(price);
+      currency: 'VND'
+    }).format(value);
 
   const TRUST_SIGNALS = [
     {
@@ -48,7 +48,7 @@ export default function CartSummary({ totalItems, subtotal, shipping, total }: P
 
         <div className='flex items-center justify-between text-base'>
           <span className='text-muted-foreground'>Tạm tính: </span>
-          <span>{formatPrice(subtotal)}</span>
+          <span>{formatVND(subtotal)}</span>
         </div>
 
         <div className='flex items-center justify-between text-base'>
@@ -60,7 +60,7 @@ export default function CartSummary({ totalItems, subtotal, shipping, total }: P
 
         <div className='flex items-center justify-between text-xl font-semibold'>
           <span>Tổng tiền: </span>
-          <span>{formatPrice(total)}</span>
+          <span>{formatVND(total)}</span>
         </div>
       </div>
 
