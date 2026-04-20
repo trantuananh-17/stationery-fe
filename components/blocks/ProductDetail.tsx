@@ -5,7 +5,6 @@ import ProductInfo from '@/components/blocks/ProductInfo';
 import { ProductPrice } from '@/components/blocks/ProductPrice';
 import ProductReview from '@/components/blocks/ProductReview';
 import Reviews from '@/components/blocks/Reviews';
-import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
@@ -120,8 +119,36 @@ const PRODUCT_DETAILS = {
   } as Record<FieldName, Hinges>,
   images: [
     {
-      srcset: '',
+      srcset:
+        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-1.jpg 640w',
       src: 'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-3.jpg',
+      alt: '',
+      width: 1920,
+      height: 2880,
+      sizes: '(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw'
+    },
+    {
+      srcset:
+        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-2.jpg 640w',
+      src: 'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-3.jpg',
+      alt: '',
+      width: 1920,
+      height: 2880,
+      sizes: '(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw'
+    },
+    {
+      srcset:
+        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-1.jpg 640w',
+      src: 'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-3.jpg',
+      alt: '',
+      width: 1920,
+      height: 2880,
+      sizes: '(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw'
+    },
+    {
+      srcset:
+        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-1.jpg 640w',
+      src: 'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-3.jpg',
       alt: '',
       width: 1920,
       height: 2880,
@@ -140,7 +167,7 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
   const isInStock = product.hinges.size.options?.some((item) => item.stockInfo.stockStatusCode === 'IN_STOCK');
 
   return (
-    <DefaultLayout>
+    <>
       <section className='py-4 md:py-8'>
         <BreadcrumbSection />
       </section>
@@ -212,6 +239,6 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
       </section>
 
       <RelatedProduct />
-    </DefaultLayout>
+    </>
   );
 }

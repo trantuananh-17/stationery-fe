@@ -1,6 +1,10 @@
 import ProductDetail from '@/components/blocks/ProductDetail';
-import React from 'react';
+import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 export default function page() {
-  return <ProductDetail />;
+  return (
+    <DefaultLayout>
+      <ProductDetail />
+    </DefaultLayout>
+  );
 }
