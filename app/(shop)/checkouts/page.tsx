@@ -1,5 +1,4 @@
 import CheckoutClient from '@/components/blocks/CheckoutClient';
-import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { CartItem } from '@/types/cart.type';
 
 async function getCartItems(): Promise<CartItem[]> {
@@ -36,14 +35,12 @@ async function getCartItems(): Promise<CartItem[]> {
 export default async function page() {
   const items = await getCartItems();
   return (
-    <DefaultLayout>
-      <section className='py-8 lg:py-12'>
-        <div className='container'>
-          <h1 className='mb-4 text-2xl font-semibold lg:text-3xl'>Thanh Toán</h1>
+    <section className='py-8 lg:py-12'>
+      <div className='container'>
+        <h1 className='mb-4 text-2xl font-semibold lg:text-3xl'>Thanh Toán</h1>
 
-          <CheckoutClient initialItems={items} />
-        </div>
-      </section>
-    </DefaultLayout>
+        <CheckoutClient initialItems={items} />
+      </div>
+    </section>
   );
 }

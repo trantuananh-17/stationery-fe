@@ -3,7 +3,6 @@ import PaginationSection from '@/components/blocks/PaginationSection';
 import ProductList from '@/components/blocks/ProductList';
 import ProductResultInfo from '@/components/blocks/ProductsResultInfo';
 import ProductToolbarFilter from '@/components/blocks/ProductToolbarFilter';
-import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 interface Props {
   searchParams: Promise<{
@@ -28,7 +27,7 @@ export default async function Page({ searchParams }: Props) {
   console.log(params.brand);
   console.log(params.sort);
   return (
-    <DefaultLayout>
+    <>
       <section className='flex flex-col gap-4 py-4 md:flex-row md:justify-between md:py-8'>
         <BreadcrumbSection />
         <ProductResultInfo page={currentPage} limit={8} total={100} />
@@ -44,6 +43,6 @@ export default async function Page({ searchParams }: Props) {
         basePath='/products'
         searchParams={params}
       />
-    </DefaultLayout>
+    </>
   );
 }

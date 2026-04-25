@@ -2,10 +2,8 @@
 
 import * as React from 'react';
 
-import { NavMain } from '@/components/ui/nav-main';
-import { NavProjects } from '@/components/ui/nav-projects';
-import { NavUser } from '@/components/ui/nav-user';
-import { TeamSwitcher } from '@/components/ui/team-switcher';
+import { NavMain } from '@/components/blocks/NavMain';
+import { NavUser } from '@/components/blocks/NavUser';
 import {
   Sidebar,
   SidebarContent,
@@ -15,24 +13,17 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar';
 import {
-  GalleryVerticalEndIcon,
-  AudioLinesIcon,
-  TerminalIcon,
-  TerminalSquareIcon,
-  BotIcon,
-  BookOpenIcon,
-  Settings2Icon,
-  FrameIcon,
-  PieChartIcon,
-  MapIcon,
-  Files,
-  Pencil,
   BookOpen,
-  Calculator,
   Building2,
-  RefreshCcw,
+  Calculator,
+  Files,
+  Folder,
+  FrameIcon,
+  MapIcon,
   Package,
-  Folder
+  Pencil,
+  PieChartIcon,
+  RefreshCcw
 } from 'lucide-react';
 
 // This is sample data.
@@ -172,7 +163,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible='icon' {...props}>
+    <Sidebar overlay collapsible='icon' {...props}>
       <SidebarHeader>
         <SidebarTrigger withLabel />
       </SidebarHeader>

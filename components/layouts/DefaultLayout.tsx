@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Header from '../blocks/Header';
 import { TooltipProvider } from '../ui/tooltip';
 import { SidebarInset, SidebarProvider } from '../ui/sidebar';
-import { AppSidebar } from '../ui/app-sidebar';
+import { AppSidebar } from '../blocks/AppSidebar';
 import { Container } from '../ui/container';
 import Footer from '../blocks/Footer';
 
@@ -89,7 +89,7 @@ export default function Layout(props: Props) {
         <SidebarProvider>
           <AppSidebar />
           <SidebarInset>
-            <Container size='xl'>
+            <Container size='xl' className='md:px-10 lg:px-20'>
               <Header {...headerProps} />
 
               <main className='flex-1'>{props.children}</main>

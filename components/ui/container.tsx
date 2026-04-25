@@ -18,7 +18,7 @@ const sizeClasses = {
 };
 
 const Container: React.FC<ContainerProps> = ({ children, className, size = 'default' }) => {
-  return <div className={cn('mx-auto w-full px-4 py-4 md:px-20', sizeClasses[size], className)}>{children}</div>;
+  return <div className={cn('mx-auto w-full px-4 py-4', sizeClasses[size], className)}>{children}</div>;
 };
 
 export { Container };

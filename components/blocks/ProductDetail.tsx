@@ -1,16 +1,18 @@
 import { CircleCheck } from 'lucide-react';
+
 import BreadcrumbSection from '@/components/blocks/BreadcrumbSection';
 import ProductDescription from '@/components/blocks/ProductDescription';
 import ProductInfo from '@/components/blocks/ProductInfo';
 import { ProductPrice } from '@/components/blocks/ProductPrice';
 import ProductReview from '@/components/blocks/ProductReview';
 import Reviews from '@/components/blocks/Reviews';
+import RelatedProduct from '@/components/blocks/RelatedProduct';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import RelatedProduct from '@/components/blocks/RelatedProduct';
-import ProductPurchaseForm from './ProductPurchaseForm';
+
 import ProductImages from './ProductImages';
+import ProductPurchaseForm from './ProductPurchaseForm';
 
 type StockStatusCode = 'IN_STOCK' | 'OUT_OF_STOCK';
 
@@ -27,7 +29,8 @@ type Option = {
   value: string;
 };
 
-const formSchemaKeys = ['color', 'quantity', 'size'] as const;
+const formSchemaKeys = ['color', 'quantity', 'sizes'] as const;
+
 type FieldName = (typeof formSchemaKeys)[number];
 
 interface Hinges {
@@ -42,7 +45,7 @@ interface Hinges {
 export type ProductFormValues = {
   color: string;
   quantity: number;
-  size: string;
+  sizes: string;
 };
 
 export interface ProductImagesProps {
@@ -57,7 +60,7 @@ export interface ProductImagesProps {
 }
 
 export interface ProductPurchaseFormProps {
-  hinges?: Record<FieldName, Hinges>;
+  hinges?: Partial<Record<FieldName, Hinges>>;
   selected: ProductFormValues;
   productId: string;
 }
@@ -66,7 +69,7 @@ const PRODUCT_DETAILS = {
   id: 'product-1',
   name: 'Urban Chill Jacket',
   color: 'blue',
-  size: 'm',
+  sizes: 'm',
   reviews: {
     rate: 4.5,
     totalReviewers: 0
@@ -79,10 +82,10 @@ const PRODUCT_DETAILS = {
     currency: 'USD'
   },
   hinges: {
-    size: {
+    sizes: {
       label: 'Select size',
-      id: 'size',
-      name: 'size',
+      id: 'sizes',
+      name: 'sizes',
       options: [
         {
           id: 'xs',
@@ -116,7 +119,7 @@ const PRODUCT_DETAILS = {
         }
       ]
     }
-  } as Record<FieldName, Hinges>,
+  },
   images: [
     {
       srcset:
@@ -164,7 +167,7 @@ interface ProductDetailProps {
 export default async function ProductDetail({ className }: ProductDetailProps) {
   const product = PRODUCT_DETAILS;
 
-  const isInStock = product.hinges.size.options?.some((item) => item.stockInfo.stockStatusCode === 'IN_STOCK');
+  const isInStock = product.hinges.sizes?.options?.some((item) => item.stockInfo.stockStatusCode === 'IN_STOCK');
 
   return (
     <>
@@ -173,7 +176,7 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
       </section>
 
       <section className={cn('', className)}>
-        <div className=''>
+        <div>
           <div className='grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12'>
             <div>
               <ProductImages images={product.images} />
@@ -197,6 +200,7 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
                 </div>
 
                 <ProductPrice showBadge={false} {...product.price} className='text-xl' />
+
                 <p className='text-muted-foreground'>{product.description}</p>
               </div>
 
@@ -204,7 +208,7 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
                 productId={product.id}
                 hinges={product.hinges}
                 selected={{
-                  size: product.size,
+                  size: product.sizes,
                   color: product.color,
                   quantity: 1
                 }}
@@ -228,7 +232,7 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
 
             <ProductDescription
               className='md:pr-2'
-              description={`<p><strong>Bút</strong><strong> lông dầu PILOT</strong> là một loại <a target="_blank" rel="noopener noreferrer nofollow" class="google-anno" href="https://vanphongphamminaco.com/but-long-dau-pilot/#">&nbsp;<span style="color: inherit"><u>bút</u></span></a> viết dầu có thiết kế 2 đầu, được sử dụng để viết trên nhiều loại bề mặt. Dưới đây là thông tin chi tiết về sản phẩm này:</p><p><strong>Thông số kỹ thuật:</strong></p><ul class="list-disc"><li><p><strong>Kiểu bút:</strong> Bút lông dầu 2 đầu.</p></li><li><p><strong>Số lượng trong một hộp:</strong> 12 cây/hộp.</p></li></ul><p><strong>Đặc điểm và tính năng:</strong></p><ul class="list-disc"><li><p><strong>Bút 2 đầu:</strong> Sản phẩm có hai đầu viết khác nhau hoặc màu sắc khác nhau, giúp bạn chuyển đổi giữa các đặc tính viết một cách dễ dàng.</p></li><li><p><strong>Kiểu dáng thon nhỏ:</strong> Thiết kế của bút thon nhỏ, tiện lợi và dễ sử dụng.</p></li><li><p><strong>Mực đậm:</strong> Bút lông dầu PILOT viết với mực đậm, giúp văn bản nổi bật và dễ đọc.</p></li><li><p><strong>Độ bền màu cao:</strong> Mực viết có độ bền màu cao, không bị nhòe hoặc phai màu sau thời gian sử dụng.</p></li><li><p><strong>Không độc hại:</strong> Sản phẩm không chứa các hạt kim loại nặng độc hại đối với người sử dụng.</p></li></ul><p><strong>Bảo quản:</strong></p><ul class="list-disc"><li><p>Tránh để sản phẩm gần nhiệt độ cao.</p></li><li><p>Tránh va chạm mạnh vào các vật cứng để bảo quản sản phẩm trong tình trạng tốt nhất.</p></li></ul><p><strong>Đối tượng sử dụng phù hợp:</strong></p><ul class="list-disc"><li><p><span style="color: var(--editor-text-blue)"><strong>Các cá nhân và chuyên nghiệp:</strong></span> Bút lông dầu PILOT phù hợp cho cả cá nhân và người làm việc chuyên nghiệp trong việc viết và ghi chép trên nhiều loại giấy và bề mặt.</p></li></ul><p><strong>Ứng dụng trong thực tế:</strong></p><p><span style="color: inherit">Bút viết bảng không xóa được</span></p><p></p><ul class="list-disc"><li><p>Sản phẩm có thể được sử dụng trong văn phòng, trường học, và trong các hoạt động sáng tạo và nghệ thuật.</p></li><li><p>Sản phẩm cũng thích hợp để sử dụng trong việc đánh dấu và tô màu.</p></li></ul><p><strong>Mẹo sử dụng sản phẩm hữu ích:</strong></p><ul class="list-disc"><li><p>Khi không sử dụng, nên đậy kín nắp để tránh mực khô hoặc tiết kiệm mực.</p></li><li><p>Bảo quản sản phẩm ở nhiệt độ phòng và tránh ánh nắng trực tiếp để giữ cho mực không bị chảy hoặc thay đổi màu sắc.</p></li></ul><p>Minaco chuyên cung cấp: văn phòng phẩm, thiết bị máy văn phòng, vật tư tiêu hao, vật tư phòng sạch. Tham khảo ngay danh sách Văn phòng phẩm cơ bản hoặc danh sách Văn phòng phẩm bán chạy. Để được tư vấn trực tiếp vui lòng liên hệ hotline: <a target="_blank" rel="noopener noreferrer nofollow" href="tel:0961531616">0961 53 16 16</a></p>`}
+              description={`<p><strong>Bút</strong><strong> lông dầu PILOT</strong> là một loại <a target="_blank" rel="noopener noreferrer nofollow" class="google-anno" href="https://vanphongphamminaco.com/but-long-dau-pilot/#">&nbsp;<span style="color: inherit"><u>bút</u></span></a> viết dầu có thiết kế 2 đầu, được sử dụng để viết trên nhiều loại bề mặt.</p>`}
             />
 
             <Separator />

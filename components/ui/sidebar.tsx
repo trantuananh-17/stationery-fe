@@ -16,8 +16,8 @@ import { PanelLeftIcon } from 'lucide-react';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = '18rem';
-const SIDEBAR_WIDTH_MOBILE = '18rem';
+const SIDEBAR_WIDTH = '16rem';
+const SIDEBAR_WIDTH_MOBILE = '16rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
@@ -136,6 +136,7 @@ function Sidebar({
   side = 'left',
   variant = 'sidebar',
   collapsible = 'offcanvas',
+  overlay = false,
   className,
   children,
   dir,
@@ -144,6 +145,7 @@ function Sidebar({
   side?: 'left' | 'right';
   variant?: 'sidebar' | 'floating' | 'inset';
   collapsible?: 'offcanvas' | 'icon' | 'none';
+  overlay?: boolean;
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
@@ -195,17 +197,23 @@ function Sidebar({
       data-slot='sidebar'
     >
       {/* This is what handles the sidebar gap on desktop */}
-      {/* <div
+      <div
         data-slot='sidebar-gap'
         className={cn(
-          'relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear',
-          'group-data-[collapsible=offcanvas]:w-0',
-          'group-data-[side=right]:rotate-180',
-          variant === 'floating' || variant === 'inset'
-            ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
-            : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)'
+          'relative bg-transparent transition-[width] duration-200 ease-linear',
+          overlay
+            ? 'w-0'
+            : [
+                'w-(--sidebar-width)',
+                'group-data-[collapsible=offcanvas]:w-0',
+                'group-data-[side=right]:rotate-180',
+                variant === 'floating' || variant === 'inset'
+                  ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
+                  : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)'
+              ]
         )}
-      /> */}
+      />
+
       <div
         data-slot='sidebar-container'
         data-side={side}

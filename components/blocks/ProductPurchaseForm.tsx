@@ -33,12 +33,11 @@ interface ProductOption {
 interface ProductHinge {
   label: string;
   id: string;
-  name: 'sizes' | 'color' | 'quantity';
+  name: 'size' | 'color' | 'quantity';
   options?: ProductOption[];
   min?: number;
   max?: number;
 }
-
 interface ProductPurchaseFormValues {
   color: string;
   quantity: number;
@@ -49,7 +48,7 @@ interface ProductPurchaseFormProps {
   productId: string;
   selected: ProductPurchaseFormValues;
   hinges?: {
-    size?: ProductHinge;
+    sizes?: ProductHinge;
     color?: ProductHinge;
     quantity?: ProductHinge;
   };
@@ -86,7 +85,7 @@ export default function ProductPurchaseForm({ hinges, selected, productId }: Pro
     console.log('add to cart payload', payload);
   }
 
-  const sizeHinges = hinges?.size;
+  const sizeHinges = hinges?.sizes;
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
