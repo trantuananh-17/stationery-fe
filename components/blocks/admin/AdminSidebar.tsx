@@ -54,13 +54,13 @@ const data = {
       items: [
         {
           title: 'Bảng điều khiển',
-          url: '/dashboard',
+          url: '/admin/dashboard',
           icon: <LayoutDashboard />,
           isActive: true
         },
         {
           title: 'Phân tích',
-          url: '/analytics',
+          url: '/admin/analytics',
           icon: <ChartColumn />
         }
       ]
@@ -70,28 +70,28 @@ const data = {
       items: [
         {
           title: 'Đơn hàng',
-          url: '/orders',
+          url: '/admin/orders',
           icon: <ShoppingBag />,
           badge: 12
         },
         {
           title: 'Sản phẩm',
-          url: '/products',
+          url: '/admin/products',
           icon: <Package2 />
         },
         {
           title: 'Khách hàng',
-          url: '/customers',
+          url: '/admin/customers',
           icon: <Users2 />
         },
         {
           title: 'Kho hàng',
-          url: '/inventory',
+          url: '/admin/inventory',
           icon: <Boxes />
         },
         {
           title: 'Hóa đơn',
-          url: '/invoices',
+          url: '/admin/invoices',
           icon: <Receipt />
         }
       ]
@@ -101,17 +101,17 @@ const data = {
       items: [
         {
           title: 'Người dùng',
-          url: '/users',
+          url: '/admin/users',
           icon: <ShieldUser />
         },
         {
           title: 'Thông báo',
-          url: '/notifications',
+          url: '/admin/notifications',
           icon: <Bell />
         },
         {
           title: 'Đánh giá',
-          url: '/reviews',
+          url: '/admin/reviews',
           icon: <Star />
         }
       ]

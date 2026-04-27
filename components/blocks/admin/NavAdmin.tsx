@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { Collapsible } from '@/components/ui/collapsible';
+import { usePathname } from 'next/navigation';
 
 type NavSection = {
   label: string;
@@ -27,6 +28,8 @@ type NavSection = {
 };
 
 export function NavAdmin({ sections }: { sections: NavSection[] }) {
+  const pathname = usePathname();
+
   return (
     <>
       {sections.map((section) => (
@@ -35,19 +38,18 @@ export function NavAdmin({ sections }: { sections: NavSection[] }) {
 
           <SidebarMenu className='gap-0.5'>
             {section.items.map((item) => {
+              const isActive = pathname === item.url || pathname.startsWith(`${item.url}/`);
+
               return (
-                <Collapsible key={item.title} asChild defaultOpen={item.isActive} className='group/collapsible'>
-                  <SidebarMenuItem key={item.title}>
+                <Collapsible key={item.title} asChild defaultOpen={isActive} className='group/collapsible'>
+                  <SidebarMenuItem>
                     <SidebarMenuButton
                       asChild
                       tooltip={item.title}
-                      isActive={item.isActive}
+                      isActive={isActive}
                       className='data-[active=true]:text-primary data-[active=true]:bg-muted-foreground/10 hover:bg-muted-foreground/5 hover:font-semibold'
                     >
-                      <Link
-                        href={item.url}
-                        className='group-data-[active=true]:text-primary text-foreground/75 flex items-center'
-                      >
+                      <Link href={item.url} className='text-foreground/75 flex items-center'>
                         {item.icon}
                         <span className='flex-1 text-sm font-medium'>{item.title}</span>
                       </Link>

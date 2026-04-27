@@ -38,7 +38,7 @@ const apiData: ChartItem[] = [
   { date: '2026-04-21', revenue: 3900000, orders: 44, profit: 1060000 },
   { date: '2026-04-22', revenue: 4100000, orders: 54, profit: 1280000 },
   { date: '2026-04-23', revenue: 4250000, orders: 57, profit: 1300000 },
-  { date: '2026-04-24', revenue: 42400000, orders: 62, profit: 11280000 }
+  { date: '2026-04-24', revenue: 4200000, orders: 62, profit: 11280000 }
 ];
 
 const getLocalDateKey = (date: Date) => {

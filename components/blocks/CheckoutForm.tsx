@@ -2,10 +2,10 @@
 
 import { Controller, useFormContext } from 'react-hook-form';
 
-import type { CheckoutFormValues } from '@/types/checkout.type';
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { InputGroup, InputGroupAddon, InputGroupText, InputGroupTextarea } from '@/components/ui/input-group';
+import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
+import type { CheckoutFormValues } from '@/types/checkout.type';
 
 export default function CheckoutForm() {
   const form = useFormContext<CheckoutFormValues>();

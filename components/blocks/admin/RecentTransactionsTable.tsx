@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
 
 type TransactionStatus = 'Completed' | 'Processing' | 'Pending' | 'Cancelled';
 
@@ -73,7 +74,7 @@ const transactions: Transaction[] = [
 const statusStyles: Record<TransactionStatus, string> = {
   Completed: 'bg-green-600 text-white hover:bg-green-600',
   Processing: 'bg-black text-white hover:bg-black',
-  Pending: 'bg-amber-500 text-black hover:bg-amber-500',
+  Pending: 'bg-amber-500 text-white hover:bg-amber-500',
   Cancelled: 'bg-red-600 text-white hover:bg-red-600'
 };
 
@@ -122,7 +123,14 @@ export default function RecentTransactionsTable() {
                 <TableCell className='text-right font-semibold'>{transaction.amount}</TableCell>
 
                 <TableCell className='text-center'>
-                  <Badge className={statusStyles[transaction.status]}>{transaction.status}</Badge>
+                  <Badge
+                    className={cn(
+                      statusStyles[transaction.status],
+                      'rounded-md px-2 py-0.5 text-[11px] font-medium shadow-sm'
+                    )}
+                  >
+                    {transaction.status}
+                  </Badge>
                 </TableCell>
 
                 <TableCell className='text-muted-foreground text-right'>{transaction.date}</TableCell>

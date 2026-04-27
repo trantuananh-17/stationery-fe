@@ -61,7 +61,7 @@ export function CartDrawer() {
         <Button variant='ghost' size='icon-sm' className='relative'>
           <ShoppingBag size={48} />
           <span className='absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-300 text-xs font-medium text-black'>
-            3
+            11
           </span>
         </Button>
       </SheetTrigger>

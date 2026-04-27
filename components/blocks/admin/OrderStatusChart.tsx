@@ -6,10 +6,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 
 const chartData = [
-  { status: 'Hoàn thành', orders: 584, color: '#fb4b00' },
-  { status: 'Đang xử lý', orders: 234, color: '#07998d' },
-  { status: 'Đang chờ', orders: 127, color: '#0f4c5c' },
-  { status: 'Đã hủy', orders: 47, color: '#f6b300' }
+  { status: 'Hoàn thành', orders: 122, color: '#fb4b00' },
+  { status: 'Đang xử lý', orders: 34, color: '#07998d' },
+  { status: 'Đang chờ', orders: 77, color: '#0f4c5c' },
+  { status: 'Đã hủy', orders: 11, color: '#f6b300' }
 ];
 
 const chartConfig = {

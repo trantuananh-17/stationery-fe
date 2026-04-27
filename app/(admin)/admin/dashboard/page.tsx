@@ -98,11 +98,11 @@ export default function Page() {
   useEffect(() => {
     const fakeData: DashboardStats = {
       sales: {
-        value: 100000000,
+        value: 12532000,
         percent: '+18.2%'
       },
       avgOrderValue: {
-        value: 64500,
+        value: 182000,
         percent: '+4.8%'
       },
       conversionRate: {
@@ -117,7 +117,7 @@ export default function Page() {
 
     const timer = setTimeout(() => {
       setStats(fakeData);
-    }, 500);
+    }, 200);
 
     return () => clearTimeout(timer);
   }, []);

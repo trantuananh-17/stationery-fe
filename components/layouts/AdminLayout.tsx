@@ -13,9 +13,9 @@ export default function AdminLayout(props: Props) {
       <SidebarProvider defaultOpen>
         <AdminSidebar />
 
-        <SidebarInset>
+        <SidebarInset className='bg-muted'>
           <Header />
-          <Container size='full' className='p-6'>
+          <Container size='full' className='p-4 md:p-6'>
             <main className='flex-1'>{props.children}</main>
           </Container>
         </SidebarInset>

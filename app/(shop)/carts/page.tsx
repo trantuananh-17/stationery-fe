@@ -5,21 +5,18 @@ async function getCartItems(): Promise<CartItem[]> {
   return [
     {
       id: '1',
-      name: 'Minimalist Beige Sneakers',
-      image:
-        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/Minimalist-Beige-Sneakers-2.png',
-      price: 120,
+      name: 'Giấy in ảnh A4 1 mặt Kim Mai ĐL 135',
+      image: 'https://vanphongphamminaco.com/wp-content/uploads/2023/06/Giay-in-anh-A4-1-mat-Kim-Mai-DL-135-3.webp',
+      price: 60400,
       quantity: 1,
-      variant: 'Size: EU 36'
+      variant: ''
     },
     {
       id: '2',
-      name: 'Embroidered Blue Top',
-      image:
-        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/Woman-in-Embroidered-Blue-Top-2.png',
-      price: 140,
-      quantity: 1,
-      variant: 'Size: S'
+      name: 'Bút nước Acumen 0.7mm',
+      image: 'https://vanphongphamminaco.com/wp-content/uploads/2023/06/But-nuoc-Acumen-0.7mm.webp',
+      price: 7500,
+      quantity: 10
     },
     {
       id: '3',

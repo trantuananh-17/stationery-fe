@@ -55,7 +55,7 @@ export default function CheckoutSumary({ totalItems, subtotal, shipping, total, 
       </div>
 
       <Button type='submit' size='lg' className='mt-4 w-full'>
-        {/* <Link href='/checkout'>Proceed to Checkout</Link> */} Checkout
+        {/* <Link href='/checkout'>Proceed to Checkout</Link> */} Thanh Toán
       </Button>
 
       <div className='mt-6 rounded-lg bg-green-50 p-4 dark:bg-green-900/20'>
