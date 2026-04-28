@@ -8,6 +8,9 @@ export const productSchema = z.object({
   brandId: z.string().min(1, 'Vui lòng chọn thương hiệu'),
   images: z.array(z.string()).min(1, 'Vui lòng thêm ít nhất 1 hình ảnh'),
   thumbnail: z.string().min(1, 'Vui lòng chọn ảnh đại diện'),
+  status: z.enum(['active', 'inactive', 'draft'], {
+    error: 'Vui lòng chọn trạng thái'
+  }),
   featured: z.boolean().optional(),
   searchKeywords: z.array(z.string()).optional(),
   seoTitle: z.string().optional(),

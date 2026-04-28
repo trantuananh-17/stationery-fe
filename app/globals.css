@@ -367,6 +367,8 @@
   outline: none;
   font-family: var(--editor-font-sans);
 
+  min-height: 25vh !important;
+
   position: relative;
   /* background-color: var(--editor-bg-default); */
   color: var(--editor-text-default);
@@ -410,7 +412,7 @@
 }
 
 .ProseMirror > p {
-  margin: var(--editor-spacing-4) 0;
+  margin: var(--editor-spacing-1) 0;
 }
 
 .ProseMirror h1,
