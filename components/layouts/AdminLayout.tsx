@@ -13,7 +13,7 @@ export default function AdminLayout(props: Props) {
       <SidebarProvider defaultOpen>
         <AdminSidebar />
 
-        <SidebarInset className='bg-muted'>
+        <SidebarInset className='bg-background'>
           <Header />
           <Container size='full' className='p-4 md:p-6'>
             <main className='flex-1'>{props.children}</main>

@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   flexRender,
   getCoreRowModel,
@@ -13,6 +12,7 @@ import {
   type VisibilityState
 } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, Package } from 'lucide-react';
+import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,11 +25,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-import ProductStatusBadge from './ProductStatusBadge';
-import ProductsToolbar from './ProductsToolbar';
 import { Product } from '@/app/(admin)/admin/products/page';
-import AdminPagination from './AdminPagination';
 import { formatCurrency } from '@/lib/utils';
+import AdminPagination from './AdminPagination';
+import ProductStatusBadge from './ProductStatusBadge';
+import AdminTableToolbar from './AdminTableToolbar';
 
 type ProductsTableProps = {
   products: Product[];
@@ -163,7 +163,8 @@ const columns: ColumnDef<Product>[] = [
 export default function ProductsTable({ products }: ProductsTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-    category: false
+    category: false,
+    status: false
   });
 
   const table = useReactTable({
@@ -183,9 +184,9 @@ export default function ProductsTable({ products }: ProductsTableProps) {
 
   return (
     <div>
-      <ProductsToolbar table={table} />
+      <AdminTableToolbar table={table} searchColumn='name' searchPlaceholder='Tìm sản phẩm...' />
 
-      <div className='rounded-xl border'>
+      <div className='bg-background rounded-xl border'>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

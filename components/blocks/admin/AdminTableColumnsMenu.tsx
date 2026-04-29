@@ -11,20 +11,24 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { Product } from '@/app/(admin)/admin/products/page';
 
-export default function ProductsColumnsMenu({ table }: { table: Table<Product> }) {
+interface Props<TData> {
+  table: Table<TData>;
+  labels?: Record<string, string>;
+}
+
+export default function AdminTableColumnsMenu<TData>({ table, labels = {} }: Props<TData>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='outline' size='sm' className='gap-2'>
-          <SlidersHorizontal className='h-4 w-4' />
-          Columns
+          <SlidersHorizontal className='size-4' />
+          Cột
         </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align='end' className='w-48'>
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuLabel>Hiển thị cột</DropdownMenuLabel>
 
         {table
           .getAllColumns()
@@ -35,7 +39,7 @@ export default function ProductsColumnsMenu({ table }: { table: Table<Product> }
               checked={column.getIsVisible()}
               onCheckedChange={(value) => column.toggleVisibility(!!value)}
             >
-              {column.id}
+              {labels[column.id] ?? column.id}
             </DropdownMenuCheckboxItem>
           ))}
       </DropdownMenuContent>

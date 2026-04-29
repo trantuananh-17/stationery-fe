@@ -86,14 +86,14 @@ const data = {
         },
         {
           title: 'Kho hàng',
-          url: '/admin/inventory',
+          url: '/admin/inventories',
           icon: <Boxes />
-        },
-        {
-          title: 'Hóa đơn',
-          url: '/admin/invoices',
-          icon: <Receipt />
         }
+        // {
+        //   title: 'Hóa đơn',
+        //   url: '/admin/invoices',
+        //   icon: <Receipt />
+        // }
       ]
     },
     {
@@ -138,7 +138,7 @@ const data = {
 
 export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible='icon' {...props}>
+    <Sidebar className='' collapsible='icon' {...props}>
       <SidebarHeader className='h-16 border-b'>
         <NavHeader />
       </SidebarHeader>

@@ -1,5 +1,5 @@
 import ProductsDataTable from '@/components/blocks/admin/ProductsDataTable';
-import { ProductsTabs } from '@/components/blocks/admin/ProductsTabs';
+import { QueryTabs } from '@/components/blocks/admin/QueryTabs';
 import TitlePage from '@/components/blocks/admin/TitlePage';
 
 export type ProductStatus = 'active' | 'draft' | 'archived';
@@ -60,7 +60,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-4'>
       <TitlePage
         title='Quản lý sản phẩm'
         subtitle='Browse and manage your product catalog.'
@@ -70,7 +70,16 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
         }}
       />
 
-      <ProductsTabs currentStatus={status} />
+      <QueryTabs
+        queryKey='status'
+        currentValue={status}
+        items={[
+          { label: 'All', value: 'all' },
+          { label: 'Active', value: 'active' },
+          { label: 'Draft', value: 'draft' },
+          { label: 'Archived', value: 'archived' }
+        ]}
+      />
 
       <ProductsDataTable products={filteredProducts} />
     </div>

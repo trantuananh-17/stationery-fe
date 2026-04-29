@@ -24,7 +24,7 @@ export default function Header() {
             <Button
               type='button'
               variant='outline'
-              className='text-muted-foreground h-9 w-[320px] justify-between rounded-xl'
+              className='text-muted-foreground hidden h-9 w-[320px] justify-between rounded-xl sm:flex'
               onClick={() => setOpen(true)}
             >
               <span className='text-muted-foreground/65 flex items-center gap-2'>
