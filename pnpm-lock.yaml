@@ -11,6 +11,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.72.1(react@19.2.4))
+      '@tanstack/react-query':
+        specifier: ^5.100.6
+        version: 5.100.6(react@19.2.4)
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -1480,6 +1483,14 @@ packages:
 
   '@tailwindcss/postcss@4.2.2':
     resolution: {integrity: sha512-n4goKQbW8RVXIbNKRB/45LzyUqN451deQK0nzIeauVEqjlI49slUlgKYJM2QyUzap/PcpnS7kzSUmPb1sCRvYQ==}
+
+  '@tanstack/query-core@5.100.6':
+    resolution: {integrity: sha512-Os2CPUr98to98RYm+D4qGqGkiffn7MGSyl2547a4MljVkHE30AMJRqTiyCqBfMwzAx/I91vCkAxp5tHSla6Twg==}
+
+  '@tanstack/react-query@5.100.6':
+    resolution: {integrity: sha512-uVSrps0PV16Cxmcn2rvL+dUhwTpTUtiRW347AEeYxMZXO2pZe9ja7E24PAMGoQ5u2g89DD8u4QhOviBk+RN8RA==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@tanstack/react-table@8.21.3':
     resolution: {integrity: sha512-5nNMTSETP4ykGegmVkhjcS8tTLW6Vl4axfEGQN3v0zdHYbK4UfoqfPChclTrJ4EoK9QynqAu9oUf8VEmrpZ5Ww==}
@@ -5643,6 +5654,13 @@ snapshots:
       '@tailwindcss/oxide': 4.2.2
       postcss: 8.5.10
       tailwindcss: 4.2.2
+
+  '@tanstack/query-core@5.100.6': {}
+
+  '@tanstack/react-query@5.100.6(react@19.2.4)':
+    dependencies:
+      '@tanstack/query-core': 5.100.6
+      react: 19.2.4
 
   '@tanstack/react-table@8.21.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:

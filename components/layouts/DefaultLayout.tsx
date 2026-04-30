@@ -7,6 +7,8 @@ import { SidebarInset, SidebarProvider } from '../ui/sidebar';
 import { AppSidebar } from '../blocks/AppSidebar';
 import { Container } from '../ui/container';
 import Footer from '../blocks/Footer';
+import Provider from './Provider';
+import RefreshToken from '../blocks/RefreshToken';
 
 interface Props {
   children: React.ReactNode;
@@ -26,13 +28,13 @@ export default function Layout(props: Props) {
     ),
     primaryButton: {
       icon: null,
-      link: { href: '/register', target: '_self' as const },
+      link: { href: '/auth/sign-up', target: '_self' as const },
       label: 'Đăng ký',
       variant: 'default' as const
     },
     secondaryButton: {
       icon: null,
-      link: { href: '/login', target: '_self' as const },
+      link: { href: '/auth/sign-in', target: '_self' as const },
       label: 'Đăng nhập',
       variant: 'ghost' as const
     },

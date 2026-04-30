@@ -9,6 +9,16 @@ import { VariantProps } from 'class-variance-authority';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import { CartDrawer } from './CartDrawer';
+import { useQuery } from '@tanstack/react-query';
+import { DropdownMenuAvatar } from './DropdownMenuAvatar';
+import { AppContext } from '@/components/layouts/Provider';
+import { use } from 'react';
+import { deleteToken, makeRefreshToken } from '@/lib/auth';
+import { usePathname } from 'next/navigation';
+import { FetchWrapper } from '@/lib/fetch-wrapper';
+
+const fetchWrapper = new FetchWrapper(process.env.NEXT_PUBLIC_SERVER_API as string);
+const fetchWrapperInternal = new FetchWrapper();
 
 interface Props {
   logo?: IconType;
@@ -31,6 +41,16 @@ interface Props {
 }
 
 export default function Header({ logo, navItems, primaryButton, secondaryButton }: Props) {
+  const { user, isAuthLoading, accessToken } = use(AppContext);
+  const pathname = usePathname();
+  const isAuthPage = pathname.startsWith('/auth');
+
+  console.log(user);
+
+  const isLoggedIn = !isAuthPage && accessToken && !!user;
+
+  console.log(isLoggedIn);
+
   return (
     <header className='bg-background sticky top-0 z-5 py-2'>
       <div className='flex items-center justify-between gap-2'>
@@ -54,30 +74,44 @@ export default function Header({ logo, navItems, primaryButton, secondaryButton 
 
         <div className='flex items-center gap-2'>
           <CartDrawer />
-          {secondaryButton?.link?.href && (
-            <Link
-              href={secondaryButton.link.href}
-              target={secondaryButton.link.target || '_self'}
-              className='hidden md:inline-flex'
-            >
-              <Button variant={secondaryButton.variant || 'default'} size='sm' className='gap-2'>
-                {secondaryButton.label}
-                {secondaryButton.icon}
-              </Button>
-            </Link>
-          )}
 
-          {primaryButton?.link?.href && (
-            <Link
-              href={primaryButton.link.href}
-              target={primaryButton.link.target || '_self'}
-              className='hidden md:inline-flex'
-            >
-              <Button variant={primaryButton.variant || 'default'} size='sm' className='gap-2'>
-                {primaryButton.label}
-                {primaryButton.icon}
-              </Button>
-            </Link>
+          {isAuthLoading ? (
+            <div className='bg-muted h-8 w-8 animate-pulse rounded-full' />
+          ) : isLoggedIn ? (
+            <DropdownMenuAvatar
+              firstName={user.firstName}
+              lastName={user.lastName}
+              email={user.email}
+              avatar={undefined}
+            />
+          ) : (
+            <>
+              {secondaryButton?.link?.href && (
+                <Link
+                  href={secondaryButton.link.href}
+                  target={secondaryButton.link.target || '_self'}
+                  className='hidden md:inline-flex'
+                >
+                  <Button variant={secondaryButton.variant || 'default'} size='sm' className='gap-2'>
+                    {secondaryButton.label}
+                    {secondaryButton.icon}
+                  </Button>
+                </Link>
+              )}
+
+              {primaryButton?.link?.href && (
+                <Link
+                  href={primaryButton.link.href}
+                  target={primaryButton.link.target || '_self'}
+                  className='hidden md:inline-flex'
+                >
+                  <Button variant={primaryButton.variant || 'default'} size='sm' className='gap-2'>
+                    {primaryButton.label}
+                    {primaryButton.icon}
+                  </Button>
+                </Link>
+              )}
+            </>
           )}
 
           <Sheet>

@@ -39,7 +39,7 @@ export default function Header() {
 
         <div className='flex gap-2'>
           <NotificationMenu />
-          <DropdownMenuAvatar />
+          {/* <DropdownMenuAvatar /> */}
         </div>
       </header>
 

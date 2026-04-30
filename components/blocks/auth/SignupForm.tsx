@@ -1,65 +1,160 @@
+'use client';
+
+import { useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { handleSignup } from '@/app/(marketing)/auth/sign-up/action';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+type SignupFormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+type Props = {
+  className?: string;
+};
+
+export function SignupForm({ className, ...props }: Props) {
+  const [isPending, startTransition] = useTransition();
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors }
+  } = useForm<SignupFormValues>();
+
+  const onSubmit = (values: SignupFormValues) => {
+    startTransition(async () => {
+      const result = await handleSignup(values);
+
+      if (!result.success) {
+        setError('root', {
+          message: result.message
+        });
+
+        return;
+      }
+
+      console.log(result);
+    });
+  };
+
   return (
-    <Card {...props}>
-      <CardHeader className='text-center'>
-        <CardTitle className='text-xl'>Create an account</CardTitle>
-        <CardDescription>Enter your information below to create your account</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <FieldGroup className='gap-4'>
-            <Field>
-              <Button variant='outline' type='button'>
-                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
-                  <path
-                    d='M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z'
-                    fill='currentColor'
+    <div className={cn('flex flex-col', className)} {...props}>
+      <Card>
+        <CardHeader className='text-center'>
+          <CardTitle className='text-xl'>Create an account</CardTitle>
+          <CardDescription>Enter your information below to create your account</CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FieldGroup className='gap-4'>
+              <Field>
+                <Button variant='outline' type='button'>
+                  Sign up with Google
+                </Button>
+              </Field>
+
+              <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>
+                Or continue with
+              </FieldSeparator>
+
+              <div className='grid grid-cols-2 gap-2'>
+                <Field>
+                  <FieldLabel htmlFor='firstName'>First Name</FieldLabel>
+                  <Input
+                    id='firstName'
+                    type='text'
+                    placeholder='John'
+                    disabled={isPending}
+                    {...register('firstName', {
+                      required: 'First name không được để trống'
+                    })}
                   />
-                </svg>
-                Sign up with Google
-              </Button>
-            </Field>
+                  {errors.firstName && <p className='text-destructive text-sm'>{errors.firstName.message}</p>}
+                </Field>
 
-            <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>Or continue with</FieldSeparator>
+                <Field>
+                  <FieldLabel htmlFor='lastName'>Last Name</FieldLabel>
+                  <Input
+                    id='lastName'
+                    type='text'
+                    placeholder='Doe'
+                    disabled={isPending}
+                    {...register('lastName', {
+                      required: 'Last name không được để trống'
+                    })}
+                  />
+                  {errors.lastName && <p className='text-destructive text-sm'>{errors.lastName.message}</p>}
+                </Field>
+              </div>
 
-            <div className='grid grid-cols-2 gap-2 sm:grid-cols-2'>
               <Field>
-                <FieldLabel htmlFor='firstName'>FirstName</FieldLabel>
-                <Input id='firstName' type='text' placeholder='John Doe' required />
+                <FieldLabel htmlFor='email'>Email</FieldLabel>
+                <Input
+                  id='email'
+                  type='email'
+                  placeholder='m@example.com'
+                  disabled={isPending}
+                  {...register('email', {
+                    required: 'Email không được để trống'
+                  })}
+                />
+                {errors.email && <p className='text-destructive text-sm'>{errors.email.message}</p>}
               </Field>
+
               <Field>
-                <FieldLabel htmlFor='lastName'>Last Name</FieldLabel>
-                <Input id='lastName' type='text' placeholder='John Doe' required />
+                <FieldLabel htmlFor='password'>Password</FieldLabel>
+                <Input
+                  id='password'
+                  type='password'
+                  disabled={isPending}
+                  {...register('password', {
+                    required: 'Password không được để trống'
+                  })}
+                />
+                {errors.password && <p className='text-destructive text-sm'>{errors.password.message}</p>}
               </Field>
-            </div>
-            <Field>
-              <FieldLabel htmlFor='email'>Email</FieldLabel>
-              <Input id='email' type='email' placeholder='m@example.com' required />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor='password'>Password</FieldLabel>
-              <Input id='password' type='password' required />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor='confirm-password'>Confirm Password</FieldLabel>
-              <Input id='confirm-password' type='password' required />
-            </Field>
-            <FieldGroup>
+
               <Field>
-                <Button type='submit'>Create Account</Button>
+                <FieldLabel htmlFor='confirmPassword'>Confirm Password</FieldLabel>
+                <Input
+                  id='confirmPassword'
+                  type='password'
+                  disabled={isPending}
+                  {...register('confirmPassword', {
+                    required: 'Confirm password không được để trống',
+                    validate: (value, formValues) => value === formValues.password || 'Mật khẩu xác nhận không khớp'
+                  })}
+                />
+                {errors.confirmPassword && <p className='text-destructive text-sm'>{errors.confirmPassword.message}</p>}
+              </Field>
+
+              {errors.root && <p className='text-destructive text-center text-sm'>{errors.root.message}</p>}
+
+              <Field>
+                <Button type='submit' disabled={isPending}>
+                  {isPending ? 'Đang tạo tài khoản...' : 'Create Account'}
+                </Button>
+
                 <FieldDescription className='px-6 text-center'>
                   Already have an account? <a href='/auth/sign-in'>Sign in</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>
-          </FieldGroup>
-        </form>
-      </CardContent>
-    </Card>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
