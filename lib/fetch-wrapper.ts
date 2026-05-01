@@ -71,19 +71,19 @@ export class FetchWrapper {
     return this.#send<T>(path, 'GET', null, options);
   }
 
-  async post(path: string, data: null | { [key: string]: unknown } = null, options = {}) {
-    return this.#send(path, 'POST', data, options);
+  async post<T>(path: string, data: null | { [key: string]: unknown } = null, options = {}) {
+    return this.#send<T>(path, 'POST', data, options);
   }
 
-  async put(path: string, data: null | { [key: string]: unknown } = null, options = {}) {
-    return this.#send(path, 'PUT', data, options);
+  async put<T>(path: string, data: null | { [key: string]: unknown } = null, options = {}) {
+    return this.#send<T>(path, 'PUT', data, options);
   }
 
-  async patch(path: string, data: null | { [key: string]: unknown } = null, options = {}) {
-    return this.#send(path, 'PATCH', data, options);
+  async patch<T>(path: string, data: null | { [key: string]: unknown } = null, options = {}) {
+    return this.#send<T>(path, 'PATCH', data, options);
   }
 
-  async delete(path: string, options = {}) {
-    return this.#send(path, 'DELETE', null, options);
+  async delete<T>(path: string, options = {}) {
+    return this.#send<T>(path, 'DELETE', null, options);
   }
 }

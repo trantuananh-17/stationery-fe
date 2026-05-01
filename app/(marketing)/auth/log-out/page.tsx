@@ -35,6 +35,9 @@ export default function Page() {
       setRefreshToken(null);
       setUser(null);
 
+      localStorage.removeItem('sessionId');
+      localStorage.setItem('sessionId', crypto.randomUUID());
+
       queryClient.removeQueries({
         queryKey: ['profile']
       });

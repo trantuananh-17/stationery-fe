@@ -86,3 +86,11 @@ export type FormType = {
     successMessage?: string;
   };
 };
+
+export type ApiResponse<T> = {
+  message: string;
+  statusCode: number;
+  data: T;
+  processID: string;
+  duration: string;
+};

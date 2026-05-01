@@ -26,8 +26,8 @@ export const variantSchema = z.object({
   name: z.string().min(1, 'Vui lòng nhập tên biến thể'),
   price: z.number().min(0, 'Giá không được nhỏ hơn 0'),
   stock: z.number().min(0, 'Tồn kho không được nhỏ hơn 0'),
-  compareAtPrice: z.number().min(0, 'Giá so sánh không được nhỏ hơn 0').optional(),
-  image: z.string().optional(),
+  compareAtPrice: z.number().min(0, 'Giá so sánh không được nhỏ hơn 0').nullable().optional(),
+  image: z.string().nullable().optional(),
   sortOrder: z.number().optional(),
   isDefault: z.boolean().optional(),
   attributeValueIds: z.array(z.string()).min(1, 'Vui lòng chọn giá trị thuộc tính'),
@@ -41,3 +41,93 @@ export const ProductSchema = z.object({
 });
 
 export type ProductFormValues = z.infer<typeof ProductSchema>;
+export type ProductBody = z.infer<typeof productSchema>;
+export type ProductSpecificationBody = z.infer<typeof specificationSchema>;
+export type ProductVariantBody = z.infer<typeof variantSchema>;
+
+export interface ProductCategoryParent {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface ProductCategory {
+  id: string;
+  name: string;
+  slug: string;
+  parent?: ProductCategoryParent | null;
+}
+
+export interface ProductBrand {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+export interface ProductVariantAttribute {
+  attributeId: string;
+  attributeName: string;
+  attributeValueId: string;
+  attributeValue: string;
+  attributeValueSlug: string;
+}
+
+export interface ProductVariant {
+  id: string;
+  name: string;
+  sku: string;
+  price: number;
+  compareAtPrice?: number | null;
+  stock: number;
+  reservedStock: number;
+  sortOrder: number;
+  isDefault: boolean;
+  isAvailable: boolean;
+  attributes: ProductVariantAttribute[];
+  image?: string | null;
+}
+
+export interface ProductVariantOptionValue {
+  id: string;
+  value: string;
+}
+
+export interface ProductVariantOption {
+  attributeId: string;
+  attributeName: string;
+  values: ProductVariantOptionValue[];
+}
+
+export interface ProductSpecification {
+  id: string;
+  attributeId: string;
+  attributeName: string;
+  value: string;
+}
+
+export type ProductStatus = 'ACTIVE' | 'INACTIVE' | 'DRAFT' | 'ARCHIVED';
+
+export interface Product {
+  id: string;
+  name: string;
+  slug: string;
+
+  thumbnail: string;
+  images: string[];
+
+  category: ProductCategory;
+  brand: ProductBrand;
+
+  description: string;
+  shortDescription: string;
+
+  status: ProductStatus;
+  featured: boolean;
+
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+
+  variants: ProductVariant[];
+  variantOptions: ProductVariantOption[];
+  specifications?: ProductSpecification[];
+}

@@ -3,7 +3,6 @@ import { CircleCheck } from 'lucide-react';
 import BreadcrumbSection from '@/components/blocks/BreadcrumbSection';
 import ProductDescription from '@/components/blocks/ProductDescription';
 import ProductInfo from '@/components/blocks/ProductInfo';
-import { ProductPrice } from '@/components/blocks/ProductPrice';
 import ProductReview from '@/components/blocks/ProductReview';
 import Reviews from '@/components/blocks/Reviews';
 import RelatedProduct from '@/components/blocks/RelatedProduct';
@@ -13,161 +12,22 @@ import { cn } from '@/lib/utils';
 
 import ProductImages from './ProductImages';
 import ProductPurchaseForm from './ProductPurchaseForm';
-
-type StockStatusCode = 'IN_STOCK' | 'OUT_OF_STOCK';
-
-interface StockInfo {
-  stockStatusCode?: StockStatusCode;
-  stockQuantity?: number;
-}
-
-type Option = {
-  id: string;
-  label: string;
-  stockInfo: StockInfo;
-  color?: string;
-  value: string;
-};
-
-const formSchemaKeys = ['color', 'quantity', 'sizes'] as const;
-
-type FieldName = (typeof formSchemaKeys)[number];
-
-interface Hinges {
-  label: string;
-  id: string;
-  name: FieldName;
-  options?: Option[];
-  min?: number;
-  max?: number;
-}
-
-export type ProductFormValues = {
-  color: string;
-  quantity: number;
-  sizes: string;
-};
-
-export interface ProductImagesProps {
-  images: Array<{
-    srcset: string;
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-    sizes: string;
-  }>;
-}
-
-export interface ProductPurchaseFormProps {
-  hinges?: Partial<Record<FieldName, Hinges>>;
-  selected: ProductFormValues;
-  productId: string;
-}
-
-const PRODUCT_DETAILS = {
-  id: 'product-1',
-  name: 'Urban Chill Jacket',
-  color: 'blue',
-  sizes: 'm',
-  reviews: {
-    rate: 4.5,
-    totalReviewers: 0
-  },
-  description:
-    'This denim puffer jacket blends warmth and street style, featuring tonal blue shades for a distinctive look thats both bold and versatile.',
-  price: {
-    regular: 300000,
-    sale: 200000,
-    currency: 'USD'
-  },
-  hinges: {
-    sizes: {
-      label: 'Select size',
-      id: 'sizes',
-      name: 'sizes',
-      options: [
-        {
-          id: 'xs',
-          label: 'xs',
-          value: 'xs',
-          stockInfo: { stockStatusCode: 'OUT_OF_STOCK' }
-        },
-        {
-          id: 's',
-          label: 's',
-          value: 's',
-          stockInfo: { stockStatusCode: 'OUT_OF_STOCK' }
-        },
-        {
-          id: 'm',
-          label: 'm',
-          value: 'm',
-          stockInfo: { stockStatusCode: 'IN_STOCK' }
-        },
-        {
-          id: 'l',
-          label: 'l',
-          value: 'l',
-          stockInfo: { stockStatusCode: 'IN_STOCK' }
-        },
-        {
-          id: 'xl',
-          label: 'xl',
-          value: 'xl',
-          stockInfo: { stockStatusCode: 'IN_STOCK' }
-        }
-      ]
-    }
-  },
-  images: [
-    {
-      srcset:
-        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-1.jpg 640w',
-      src: 'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-3.jpg',
-      alt: '',
-      width: 1920,
-      height: 2880,
-      sizes: '(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw'
-    },
-    {
-      srcset:
-        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-2.jpg 640w',
-      src: 'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-3.jpg',
-      alt: '',
-      width: 1920,
-      height: 2880,
-      sizes: '(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw'
-    },
-    {
-      srcset:
-        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-1.jpg 640w',
-      src: 'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-3.jpg',
-      alt: '',
-      width: 1920,
-      height: 2880,
-      sizes: '(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw'
-    },
-    {
-      srcset:
-        'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-1.jpg 640w',
-      src: 'https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-3.jpg',
-      alt: '',
-      width: 1920,
-      height: 2880,
-      sizes: '(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw'
-    }
-  ]
-};
+import { Product } from '@/types/product.type';
 
 interface ProductDetailProps {
+  product: Product;
   className?: string;
 }
 
-export default async function ProductDetail({ className }: ProductDetailProps) {
-  const product = PRODUCT_DETAILS;
+export default async function ProductDetail({ product, className }: ProductDetailProps) {
+  const defaultVariant = product.variants.find((item) => item.isDefault) ?? product.variants[0];
 
-  const isInStock = product.hinges.sizes?.options?.some((item) => item.stockInfo.stockStatusCode === 'IN_STOCK');
+  const isInStock = product.variants.some((item) => item.isAvailable && item.stock > 0);
+
+  const reviews = {
+    rate: 0,
+    totalReviewers: 0
+  };
 
   return (
     <>
@@ -179,7 +39,7 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
         <div>
           <div className='grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12'>
             <div>
-              <ProductImages images={product.images} />
+              <ProductImages thumbnail={product.thumbnail} images={product.images} name={product.name} />
             </div>
 
             <div className='space-y-6'>
@@ -189,7 +49,7 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
                     <h1 className='text-xl font-bold tracking-tight lg:text-3xl'>{product.name}</h1>
 
                     <div className='mt-3 flex flex-wrap items-center gap-4'>
-                      <Reviews rate={product.reviews.rate} totalReviewers={product.reviews.totalReviewers} />
+                      <Reviews rate={reviews.rate} totalReviewers={reviews.totalReviewers} />
 
                       <Badge variant='secondary'>
                         <CircleCheck />
@@ -198,46 +58,31 @@ export default async function ProductDetail({ className }: ProductDetailProps) {
                     </div>
                   </div>
                 </div>
-
-                <ProductPrice showBadge={false} {...product.price} className='text-xl' />
-
-                <p className='text-muted-foreground'>{product.description}</p>
               </div>
 
               <ProductPurchaseForm
                 productId={product.id}
-                hinges={product.hinges}
+                shortDescription={product.shortDescription}
+                variants={product.variants}
+                variantOptions={product.variantOptions}
                 selected={{
-                  size: product.sizes,
-                  color: product.color,
+                  variantId: defaultVariant?.id,
                   quantity: 1
                 }}
               />
 
-              <ProductInfo
-                info={[
-                  { label: 'Material', value: '100% Premium Denim' },
-                  { label: 'Style', value: 'Puffer Jacket' },
-                  { label: 'Season', value: 'All Season' },
-                  { label: 'Care', value: 'Machine Washable' },
-                  { label: 'Origin', value: 'Made in Italy' },
-                  { label: 'Fit', value: 'Regular Fit' }
-                ]}
-              />
+              <ProductInfo category={product.category} brand={product.brand} specifications={product.specifications} />
             </div>
           </div>
 
           <div className='grid grid-cols-1 gap-4 py-4'>
             <Separator />
 
-            <ProductDescription
-              className='md:pr-2'
-              description={`<p><strong>Bút</strong><strong> lông dầu PILOT</strong> là một loại <a target="_blank" rel="noopener noreferrer nofollow" class="google-anno" href="https://vanphongphamminaco.com/but-long-dau-pilot/#">&nbsp;<span style="color: inherit"><u>bút</u></span></a> viết dầu có thiết kế 2 đầu, được sử dụng để viết trên nhiều loại bề mặt.</p>`}
-            />
+            <ProductDescription className='md:pr-2' description={product.description} />
 
             <Separator />
 
-            <ProductReview className='' {...product.reviews} />
+            <ProductReview className='' {...reviews} />
           </div>
         </div>
       </section>

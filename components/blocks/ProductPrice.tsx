@@ -3,8 +3,8 @@ import { cn } from '@/lib/utils';
 
 interface PriceProps {
   className?: string;
-  regular: number;
-  sale?: number | null;
+  price: number;
+  compareAtPrice?: number | null;
   currency?: string | 'VND';
   showBadge?: boolean;
 }
@@ -15,19 +15,17 @@ const formatVND = (value: number) =>
     currency: 'VND'
   }).format(value);
 
-export function ProductPrice({ regular, sale, className, showBadge = true }: PriceProps) {
-  const hasSale = sale != null;
+export function ProductPrice({ price, compareAtPrice, className, showBadge = true }: PriceProps) {
+  const hasSale = compareAtPrice != null && compareAtPrice > price;
 
   return (
-    <div className={cn('flex items-center gap-1', className)}>
-      {hasSale && <span className='text-muted-foreground line-through'>{formatVND(regular)}</span>}
+    <div className={cn('flex items-center gap-2', className)}>
+      {hasSale && <span className='text-muted-foreground line-through'>{formatVND(compareAtPrice)}</span>}
 
-      <span className='text-destructive font-bold'>{formatVND(sale ?? regular)}</span>
+      <span className='text-destructive font-bold'>{formatVND(price)}</span>
 
       {hasSale && showBadge && (
-        <Badge className='absolute top-3 left-3' variant='destructive'>
-          -{Math.round(((regular - sale!) / regular) * 100)}%
-        </Badge>
+        <Badge variant='destructive'>-{Math.round(((compareAtPrice! - price) / compareAtPrice!) * 100)}%</Badge>
       )}
     </div>
   );
