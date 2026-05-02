@@ -13,6 +13,7 @@ interface Props {
   currentSort: string;
   currentBrand: string;
 }
+
 export default function ProductToolbarFilter({ title, currentSort, currentBrand }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -26,11 +27,12 @@ export default function ProductToolbarFilter({ title, currentSort, currentBrand 
   ];
 
   const sortOptions: Option[] = [
-    { label: 'Sắp xếp theo độ phổ biến', value: 'popular' },
     { label: 'Sắp xếp theo mới nhất', value: 'newest' },
-    { label: 'Sắp xếp theo giá tăng dần', value: 'price-asc' },
-    { label: 'Sắp xếp theo giá giảm dần', value: 'price-desc' },
-    { label: 'Sắp xếp theo tên A-Z', value: 'name-asc' }
+    { label: 'Sắp xếp theo cũ nhất', value: 'oldest' },
+    { label: 'Sắp xếp theo giá tăng dần', value: 'price_asc' },
+    { label: 'Sắp xếp theo giá giảm dần', value: 'price_desc' },
+    { label: 'Sắp xếp theo tên A-Z', value: 'name_asc' },
+    { label: 'Sắp xếp theo tên Z-A', value: 'name_desc' }
   ];
 
   const updateQuery = (key: string, value: string) => {
@@ -44,7 +46,9 @@ export default function ProductToolbarFilter({ title, currentSort, currentBrand 
 
     params.set('page', '1');
 
-    router.push(`${pathname}?${params.toString()}`);
+    const queryString = params.toString();
+
+    router.push(queryString ? `${pathname}?${queryString}` : pathname);
   };
 
   return (
@@ -59,8 +63,10 @@ export default function ProductToolbarFilter({ title, currentSort, currentBrand 
           <SelectTrigger className='w-60 rounded-full sm:w-45'>
             <SelectValue placeholder='Lọc theo thương hiệu' />
           </SelectTrigger>
-          <SelectContent>
+
+          <SelectContent position='popper'>
             <SelectItem value='__all__'>Tất cả thương hiệu</SelectItem>
+
             {brands.map((brand) => (
               <SelectItem key={brand.value} value={brand.value}>
                 {brand.label}
@@ -69,11 +75,12 @@ export default function ProductToolbarFilter({ title, currentSort, currentBrand 
           </SelectContent>
         </Select>
 
-        <Select value={currentSort} onValueChange={(value) => updateQuery('sort', value)}>
-          <SelectTrigger className='w-60 rounded-full sm:w-48'>
-            <SelectValue />
+        <Select value={currentSort || 'newest'} onValueChange={(value) => updateQuery('sort', value)}>
+          <SelectTrigger className='w-60 rounded-full sm:w-56'>
+            <SelectValue placeholder='Sắp xếp theo mới nhất' />
           </SelectTrigger>
-          <SelectContent>
+
+          <SelectContent position='popper'>
             {sortOptions.map((sort) => (
               <SelectItem key={sort.value} value={sort.value}>
                 {sort.label}

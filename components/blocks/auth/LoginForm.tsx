@@ -12,6 +12,7 @@ import { handleLogin } from '@/app/(marketing)/auth/sign-in/action';
 import { getUser } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '@/stores/auth-store';
 
 type LoginFormValues = {
   email: string;
@@ -26,6 +27,7 @@ export function LoginForm({ className, ...props }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const {
     register,
@@ -38,8 +40,6 @@ export function LoginForm({ className, ...props }: Props) {
     startTransition(async () => {
       const result = await handleLogin(values);
 
-      console.log(result);
-
       if (!result.success) {
         setError('root', {
           message: result.message
@@ -47,22 +47,25 @@ export function LoginForm({ className, ...props }: Props) {
         return;
       }
 
+      setAuth({
+        accessToken: result.data.accessToken,
+        refreshToken: result.data.refreshToken,
+        user: result.data.profile.data
+      });
+
       await queryClient.invalidateQueries({
         queryKey: ['profile']
       });
 
-      router.refresh();
-
       const role = result.data.profile.data.role;
 
-      console.log(role);
-
-      if (role === 'ADMIN') {
-        router.replace('/admin/dashboard');
-        return;
-      }
+      // if (role === 'ADMIN') {
+      //   router.replace('/admin/dashboard');
+      //   return;
+      // }
 
       router.replace('/');
+      router.refresh();
     });
   };
 

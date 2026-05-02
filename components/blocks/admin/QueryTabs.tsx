@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type TabItem = {
   label: string;
@@ -15,10 +15,11 @@ interface Props {
 
 export function QueryTabs({ items, queryKey, currentValue }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   function handleChange(value: string) {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
 
     if (value === 'all') {
       params.delete(queryKey);
@@ -26,7 +27,11 @@ export function QueryTabs({ items, queryKey, currentValue }: Props) {
       params.set(queryKey, value);
     }
 
-    router.push(`?${params.toString()}`);
+    params.delete('page');
+
+    const queryString = params.toString();
+
+    router.push(queryString ? `${pathname}?${queryString}` : pathname);
   }
 
   return (
@@ -37,6 +42,7 @@ export function QueryTabs({ items, queryKey, currentValue }: Props) {
         return (
           <button
             key={item.value}
+            type='button'
             onClick={() => handleChange(item.value)}
             className={[
               'rounded-lg px-2 py-1 text-sm transition',

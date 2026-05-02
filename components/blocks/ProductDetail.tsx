@@ -1,4 +1,4 @@
-import { CircleCheck } from 'lucide-react';
+import { CircleCheck, CircleX } from 'lucide-react';
 
 import BreadcrumbSection from '@/components/blocks/BreadcrumbSection';
 import ProductDescription from '@/components/blocks/ProductDescription';
@@ -51,18 +51,18 @@ export default async function ProductDetail({ product, className }: ProductDetai
                     <div className='mt-3 flex flex-wrap items-center gap-4'>
                       <Reviews rate={reviews.rate} totalReviewers={reviews.totalReviewers} />
 
-                      <Badge variant='secondary'>
-                        <CircleCheck />
+                      <Badge variant={isInStock ? 'default' : 'destructive'}>
+                        {isInStock ? <CircleCheck className='mr-1 h-4 w-4' /> : <CircleX className='mr-1 h-4 w-4' />}
                         {isInStock ? 'Còn hàng' : 'Hết hàng'}
                       </Badge>
                     </div>
                   </div>
                 </div>
               </div>
+              <p className='text-muted-foreground text-xs md:text-sm'>{product.shortDescription}</p>
 
               <ProductPurchaseForm
                 productId={product.id}
-                shortDescription={product.shortDescription}
                 variants={product.variants}
                 variantOptions={product.variantOptions}
                 selected={{

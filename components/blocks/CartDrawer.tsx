@@ -9,11 +9,11 @@ import { AspectRatio } from '../ui/aspect-ratio';
 import { useCartStore } from '@/stores/cart-store';
 import { getCart } from '@/services/cart.service';
 import { use } from 'react';
-import { AppContext } from '../layouts/Provider';
 import { getOrCreateSessionId } from '@/lib/cart-session';
 import { formatCurrency } from '@/lib/utils';
 import { CartEmpty } from './CartEmpty';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/auth-store';
 
 export function CartDrawer() {
   // const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -27,7 +27,7 @@ export function CartDrawer() {
   const cart = useCartStore((state) => state.cart);
   const isCartLoaded = useCartStore((state) => state.isCartLoaded);
 
-  const { accessToken } = use(AppContext);
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   const handleOpenCart = async () => {
     if (!isCartLoaded) {
@@ -57,7 +57,7 @@ export function CartDrawer() {
           <ShoppingBag size={48} />
           {totalItems > 0 && (
             <span className='absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-300 text-xs font-medium text-black'>
-              {totalItems}
+              {totalItems > 99 ? '99+' : totalItems}
             </span>
           )}
         </Button>

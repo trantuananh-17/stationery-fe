@@ -62,7 +62,7 @@ export async function addToCart(
       quantity
     },
     {
-      headers: getCartHeaders(accessToken, '550e8400-e29b-41d4-a716-446655440000')
+      headers: getCartHeaders(accessToken, sessionId)
     }
   );
 }
@@ -79,13 +79,13 @@ export async function updateCartItemQuantity(
       quantity
     },
     {
-      headers: getCartHeaders(accessToken, '550e8400-e29b-41d4-a716-446655440000')
+      headers: getCartHeaders(accessToken, sessionId)
     }
   );
 }
 
 export async function removeCartItem(cartItemId: string, accessToken?: string | null, sessionId?: string | null) {
   return fetchWrapper.delete<ApiResponse<null>>(`/cart/items/${cartItemId}`, {
-    headers: getCartHeaders(accessToken, '550e8400-e29b-41d4-a716-446655440000')
+    headers: getCartHeaders(accessToken, sessionId)
   });
 }

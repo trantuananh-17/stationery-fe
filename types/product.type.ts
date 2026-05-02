@@ -1,3 +1,4 @@
+import { GrpcTimestamp } from '@/lib/utils';
 import * as z from 'zod';
 
 export const productSchema = z.object({
@@ -8,7 +9,7 @@ export const productSchema = z.object({
   brandId: z.string().min(1, 'Vui lòng chọn thương hiệu'),
   images: z.array(z.string()).min(1, 'Vui lòng thêm ít nhất 1 hình ảnh'),
   thumbnail: z.string().min(1, 'Vui lòng chọn ảnh đại diện'),
-  status: z.enum(['active', 'inactive', 'draft'], {
+  status: z.enum(['ACTIVE', 'ARCHIVED', 'DRAFT'], {
     error: 'Vui lòng chọn trạng thái'
   }),
   featured: z.boolean().optional(),
@@ -18,18 +19,22 @@ export const productSchema = z.object({
 });
 
 export const specificationSchema = z.object({
+  id: z.string().optional(),
   attributeId: z.string().min(1, 'Vui lòng chọn thuộc tính'),
   value: z.string().min(1, 'Vui lòng nhập giá trị')
 });
 
 export const variantSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1, 'Vui lòng nhập tên biến thể'),
   price: z.number().min(0, 'Giá không được nhỏ hơn 0'),
   stock: z.number().min(0, 'Tồn kho không được nhỏ hơn 0'),
+  reservedStock: z.number().optional(),
   compareAtPrice: z.number().min(0, 'Giá so sánh không được nhỏ hơn 0').nullable().optional(),
   image: z.string().nullable().optional(),
   sortOrder: z.number().optional(),
   isDefault: z.boolean().optional(),
+  isAvailable: z.boolean().optional(),
   attributeValueIds: z.array(z.string()).min(1, 'Vui lòng chọn giá trị thuộc tính'),
   attributeValueSlug: z.array(z.string()).min(1, 'Vui lòng chọn slug thuộc tính')
 });
@@ -105,7 +110,7 @@ export interface ProductSpecification {
   value: string;
 }
 
-export type ProductStatus = 'ACTIVE' | 'INACTIVE' | 'DRAFT' | 'ARCHIVED';
+export type ProductStatus = 'ACTIVE' | 'DRAFT' | 'ARCHIVED';
 
 export interface Product {
   id: string;
@@ -121,7 +126,8 @@ export interface Product {
   description: string;
   shortDescription: string;
 
-  status: ProductStatus;
+  status: ProductStatus | Uppercase<ProductStatus>;
+
   featured: boolean;
 
   seoTitle?: string | null;
@@ -131,3 +137,48 @@ export interface Product {
   variantOptions: ProductVariantOption[];
   specifications?: ProductSpecification[];
 }
+
+export interface ProductItem {
+  id: string;
+  name: string;
+  slug: string;
+  thumbnail: string;
+  description: string;
+  sku: string;
+  category: string;
+  brand: string;
+  status: ProductStatus;
+  price: number;
+  compareAtPrice?: number | null;
+  stock: number;
+  createdAt: GrpcTimestamp;
+}
+
+export const updateSpecificationSchema = z.object({
+  id: z.string().optional(),
+  attributeId: z.string().min(1, 'Vui lòng chọn thuộc tính'),
+  value: z.string().min(1, 'Vui lòng nhập giá trị')
+});
+
+export const updateVariantSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1, 'Vui lòng nhập tên biến thể'),
+  price: z.number().min(0, 'Giá không được nhỏ hơn 0'),
+  stock: z.number().min(0, 'Tồn kho không được nhỏ hơn 0'),
+  compareAtPrice: z.number().min(0, 'Giá so sánh không được nhỏ hơn 0').nullable().optional(),
+  image: z.string().nullable().optional(),
+  sortOrder: z.number().optional(),
+  isDefault: z.boolean().optional(),
+  attributeValueIds: z.array(z.string()).min(1, 'Vui lòng chọn giá trị thuộc tính'),
+  attributeValueSlug: z.array(z.string()).min(1, 'Vui lòng chọn slug thuộc tính')
+});
+
+export const UpdateProductSchema = z.object({
+  product: productSchema,
+  specifications: z.array(updateSpecificationSchema),
+  variants: z.array(updateVariantSchema).min(1, 'Vui lòng thêm ít nhất 1 biến thể')
+});
+
+export type UpdateProductFormValues = z.infer<typeof UpdateProductSchema>;
+export type UpdateProductSpecificationBody = z.infer<typeof updateSpecificationSchema>;
+export type UpdateProductVariantBody = z.infer<typeof updateVariantSchema>;

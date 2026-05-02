@@ -34,8 +34,6 @@ export function DropdownMenuAvatar({ firstName, lastName, email, avatar }: Props
             <AvatarImage src={avatar} alt={fullName} />
             <AvatarFallback className='bg-background text-sm'>{initials}</AvatarFallback>
           </Avatar>
-
-          <span className='hidden text-sm font-medium md:inline'>{fullName}</span>
         </Button>
       </DropdownMenuTrigger>
 

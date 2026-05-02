@@ -67,6 +67,27 @@ export class FetchWrapper {
     return response;
   }
 
+  async upload<T>(
+    path: string,
+    formData: FormData,
+    options: { headers?: Record<string, string> } = {}
+  ): Promise<Response & { data?: T }> {
+    const requestInit: RequestInit = {
+      method: 'POST',
+      headers: {
+        ...this.#headers,
+        ...options.headers
+      },
+      body: formData
+    };
+
+    const response: Response & { data?: T } = await fetch(`${this.#baseUrl}${path}`, requestInit);
+
+    response.data = await response.json();
+
+    return response;
+  }
+
   async get<T>(path: string, options = {}) {
     return this.#send<T>(path, 'GET', null, options);
   }

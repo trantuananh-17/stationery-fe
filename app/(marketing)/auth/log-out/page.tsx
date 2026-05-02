@@ -1,9 +1,11 @@
 'use client';
 
-import { use, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { AppContext } from '@/components/layouts/Provider';
+
+import { useAuthStore } from '@/stores/auth-store';
+import { useCartStore } from '@/stores/cart-store';
 
 const removeToken = async () => {
   const [tokenRes, refreshRes] = await Promise.all([
@@ -25,28 +27,43 @@ const removeToken = async () => {
 export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { setToken, setRefreshToken, setUser } = use(AppContext);
+
+  const resetAuth = useAuthStore((state) => state.resetAuth);
+  const setAuthLoading = useAuthStore((state) => state.setAuthLoading);
+  const setAuthInitialized = useAuthStore((state) => state.setAuthInitialized);
+
+  const resetCart = useCartStore((state) => state.resetCart);
 
   useEffect(() => {
     const logout = async () => {
-      await removeToken();
+      try {
+        setAuthLoading(true);
 
-      setToken(null);
-      setRefreshToken(null);
-      setUser(null);
+        await removeToken();
 
-      localStorage.removeItem('sessionId');
-      localStorage.setItem('sessionId', crypto.randomUUID());
+        resetAuth();
+        resetCart();
 
-      queryClient.removeQueries({
-        queryKey: ['profile']
-      });
+        localStorage.removeItem('sessionId');
+        localStorage.setItem('sessionId', crypto.randomUUID());
 
-      router.replace('/auth/sign-in');
+        queryClient.removeQueries({
+          queryKey: ['profile']
+        });
+
+        queryClient.clear();
+
+        setAuthInitialized(true);
+
+        router.replace('/auth/sign-in');
+      } catch {
+        setAuthLoading(false);
+        setAuthInitialized(true);
+      }
     };
 
     logout();
-  }, [router, queryClient]);
+  }, [router, queryClient, resetAuth, resetCart, setAuthLoading, setAuthInitialized]);
 
   return <div className='flex min-h-screen items-center justify-center'>Đang đăng xuất...</div>;
 }

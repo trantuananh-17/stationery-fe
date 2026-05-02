@@ -171,7 +171,8 @@ export default function ProductPurchaseForm({
     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
       {matchedVariant && (
         <ProductPrice
-          showBadge={false}
+          showBadge
+          hasInfo
           price={matchedVariant.price}
           compareAtPrice={matchedVariant.compareAtPrice}
           className='text-xl'
@@ -229,7 +230,7 @@ export default function ProductPurchaseForm({
           {isOutOfStock ? (
             <span className='text-destructive'>Hết hàng</span>
           ) : (
-            <span>Còn {matchedVariant.stock} sản phẩm</span>
+            <span>Còn {matchedVariant.stock - matchedVariant.reservedStock} sản phẩm</span>
           )}
         </div>
       )}

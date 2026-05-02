@@ -1,109 +1,77 @@
-import Image from 'next/image';
-import PAPER from '@/assets/images/paper-img.jpg';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import { LinkType } from '@/types/type';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import ProductCard from './ProductCard';
-import { AspectRatio } from '../ui/aspect-ratio';
+import Image, { type StaticImageData } from 'next/image';
 
-interface Props {
+import Link from 'next/link';
+
+import ProductCard from './ProductCard';
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
+
+import type { LinkType } from '@/types/type';
+import type { ProductItem } from '@/types/product.type';
+
+interface ProductShowCaseProps {
+  title?: string;
+  subtitle?: string;
+  buttonLabel?: string;
   link?: LinkType;
+  image: StaticImageData | string;
+  products?: ProductItem[];
 }
 
-export default function ProductShowCase({ link }: Props) {
+export default function ProductShowCase({
+  title = 'Giá tốt - chính hãng',
+  subtitle = 'Trắng tự nhiên - mềm mịn',
+  buttonLabel = 'Xem tất cả',
+  link,
+  image,
+  products = []
+}: ProductShowCaseProps) {
+  if (products.length === 0) return null;
+
+  const href = link?.href ?? '/products';
+  const target = link?.target ?? '_self';
+
   return (
     <section className='py-4 md:py-8'>
       <h2 className='sr-only'>Product Show case</h2>
 
-      <div className='grid grid-cols-1 gap-2 lg:grid-cols-12'>
-        <div className='col-span-1 h-full min-h-30 lg:col-span-3'>
-          {/* <Link href={link.href || '#'} target={link.target || '_self'}> */}
-          <Card size='default' className='group relative h-full cursor-pointer overflow-hidden p-0'>
+      <div className='grid grid-cols-1 gap-3 lg:grid-cols-12'>
+        <div className='col-span-1 h-full min-h-40 lg:col-span-3'>
+          <Card className='group relative h-full min-h-40 cursor-pointer overflow-hidden p-0'>
+            <Link href={href} target={target} className='absolute inset-0 z-10'>
+              <span className='sr-only'>{buttonLabel}</span>
+            </Link>
+
             <Image
-              src={PAPER}
+              src={image}
               fill
-              className='h-auto rounded-xl object-cover transition-transform duration-500 group-hover:scale-110'
+              className='rounded-xl object-cover transition-transform duration-500 group-hover:scale-110'
               priority
-              alt='Paper banner'
+              alt={title}
             />
-            <div className='absolute inset-0 rounded-xl bg-black/20 transition-colors duration-500 group-hover:scale-110 group-hover:bg-black/40' />
 
-            <div className='absolute inset-0 flex flex-col items-center justify-center gap-2 p-6'>
-              <p className='text-white/75'>Trắng tự nhiên - mềm mịn</p>
+            <div className='absolute inset-0 rounded-xl bg-black/20 transition-colors duration-500 group-hover:bg-black/40' />
 
-              <p className='text-xl font-semibold text-white'>Giá tốt - chính hãng</p>
+            <div className='pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center'>
+              <p className='text-sm text-white/75'>{subtitle}</p>
 
-              <Button variant={'default'} className='cursor-pointer'>
-                Xem Tất Cả
+              <p className='text-xl font-semibold text-white'>{title}</p>
+
+              <Button className='pointer-events-auto cursor-pointer' asChild>
+                <Link href={href} target={target}>
+                  {buttonLabel}
+                </Link>
               </Button>
             </div>
           </Card>
-          {/* </Link> */}
         </div>
 
-        <div className='col-span-1 flex flex-col gap-4 lg:col-span-9'>
-          <Tabs defaultValue='overview' className='h-full w-full'>
-            <div className='overflow-x-auto overflow-y-hidden'>
-              <TabsList className='inline-flex w-max min-w-max justify-start'>
-                <span className='truncate px-4 text-sm font-bold text-black md:text-xl'>Bút Các Loại</span>
-                <TabsTrigger value='overview'>Overview</TabsTrigger>
-                <TabsTrigger value='analytics'>Analytics</TabsTrigger>
-                <TabsTrigger value='settings'>Settings</TabsTrigger>
-                <TabsTrigger value='settings'>Settings</TabsTrigger>
-                <TabsTrigger value='settings'>Settings</TabsTrigger>
-                <TabsTrigger value='reports'>Reports</TabsTrigger>
-              </TabsList>
-            </div>
-            <TabsContent value='overview'>
-              <div className='grid h-full grid-cols-2 gap-2 md:grid-cols-4'>
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-              </div>
-            </TabsContent>
-            <TabsContent value='analytics'>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Analytics</CardTitle>
-                  <CardDescription>
-                    Track performance and user engagement metrics. Monitor trends and identify growth opportunities.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className='text-muted-foreground text-sm'>
-                  Page views are up 25% compared to last month.
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value='reports'>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Reports</CardTitle>
-                  <CardDescription>
-                    Generate and download your detailed reports. Export data in multiple formats for analysis.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className='text-muted-foreground text-sm'>
-                  You have 5 reports ready and available to export.
-                </CardContent>
-              </Card>
-            </TabsContent>
-            <TabsContent value='settings'>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Settings</CardTitle>
-                  <CardDescription>
-                    Manage your account preferences and options. Customize your experience to fit your needs.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className='text-muted-foreground text-sm'>
-                  Configure notifications, security, and themes.
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+        <div className='col-span-1 lg:col-span-9'>
+          <div className='grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4'>
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -2,7 +2,6 @@
 
 import { use, useState } from 'react';
 
-import { AppContext } from '@/components/layouts/Provider';
 import { getOrCreateSessionId } from '@/lib/cart-session';
 import {
   addToCart as addToCartService,
@@ -11,9 +10,10 @@ import {
   updateCartItemQuantity
 } from '@/services/cart.service';
 import { useCartStore } from '@/stores/cart-store';
+import { useAuthStore } from '@/stores/auth-store';
 
 export function useCart() {
-  const { accessToken } = use(AppContext);
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   const cart = useCartStore((state) => state.cart);
   const isCartLoaded = useCartStore((state) => state.isCartLoaded);
