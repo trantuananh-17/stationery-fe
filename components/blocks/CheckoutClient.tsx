@@ -1,15 +1,21 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, SubmitErrorHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import EmptyCart from '@/components/blocks/EmptyCart';
-import type { CartItem } from '@/types/cart.type';
 import { checkoutFormSchema, type CheckoutFormValues, type CheckoutPayload } from '@/types/checkout.type';
 
 import CheckoutForm from './CheckoutForm';
 import CheckoutSumary from './CheckoutSumary';
+import { useAuthStore } from '@/stores/auth-store';
+import { createOrder } from '@/services/order.service';
+import { useRouter } from 'next/navigation';
+import { CartItem } from '@/stores/cart-store';
+import { CheckoutStockItem } from '@/types/order.type';
+import { toast } from 'sonner';
+import { createPaymentIntent } from '@/services/paymet.service';
 
 interface Props {
   initialItems: CartItem[];
@@ -28,10 +34,14 @@ const emptyAddress: CheckoutFormValues['shippingAddress'] = {
 };
 
 export default function CheckoutClient({ initialItems }: Props) {
+  const router = useRouter();
+
   const [items] = useState<CartItem[]>(initialItems);
+  const { accessToken } = useAuthStore();
+  const [stockErrors, setStockErrors] = useState<Record<string, CheckoutStockItem>>({});
 
   const subtotal = useMemo(() => {
-    return items.reduce((total, item) => total + item.price * item.quantity, 0);
+    return items.reduce((total, item) => total + item.unitPriceSnapshot * item.quantity, 0);
   }, [items]);
 
   const shipping = 0;
@@ -58,11 +68,64 @@ export default function CheckoutClient({ initialItems }: Props) {
       notes: data.notes ?? ''
     };
 
+    if (!accessToken) {
+      router.push('/');
+      router.refresh();
+    }
+
     console.log('submit data:', data);
     console.log('payload:', payload);
 
-    // ví dụ:
-    // await checkoutApi.createOrder(payload);
+    const res = await createOrder(accessToken, payload);
+
+    if (!res.data) return;
+
+    if (!res.data.data.success && res.data.data.code === 'STOCK_RESERVATION_FAILED') {
+      const map = Object.fromEntries(res.data.data.stockItems.map((item) => [item.variantId, item])) as Record<
+        string,
+        CheckoutStockItem
+      >;
+
+      console.log(map);
+
+      setStockErrors(map);
+      return;
+    }
+
+    if (res.data.data.success && payload.paymentMethod === 'stripe') {
+      toast.success('Đang chuyển sang trang thanh toán...');
+
+      const order = res.data.data;
+
+      const paymentRes = await createPaymentIntent(accessToken as string, {
+        orderId: order.orderId,
+        clientEmail: payload.shippingAddress.email,
+        lineItems: items.map((item) => ({
+          name: item.productNameSnapshot,
+          price: item.unitPriceSnapshot,
+          quantity: item.quantity
+        }))
+      });
+
+      const clientSecret = paymentRes.data?.data.clientSecret;
+
+      const params = new URLSearchParams({
+        orderId: order.orderId,
+        orderCode: order.orderNumber,
+        receiverEmail: payload.shippingAddress.email,
+        clientSecret: clientSecret ?? '',
+        total: total.toString()
+      });
+
+      router.push(`/payment?${params.toString()}`);
+
+      return;
+    }
+
+    if (res.data.data.success && payload.paymentMethod === 'cod') {
+      toast.success('Đặt hàng thành công');
+      router.push('/orders');
+    }
   }
 
   const onError: SubmitErrorHandler<CheckoutFormValues> = (errors) => {
@@ -87,6 +150,7 @@ export default function CheckoutClient({ initialItems }: Props) {
             shipping={shipping}
             total={total}
             initialItems={items}
+            stockErrors={stockErrors}
           />
         </div>
       </form>

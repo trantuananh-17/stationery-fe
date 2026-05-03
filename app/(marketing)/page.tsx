@@ -7,6 +7,8 @@ import StoreDescriptionSection from '@/components/blocks/StoreDescriptionSection
 import { getProducts } from '@/services/product.service';
 import PEN from '@/assets/images/pen-banner-img.jpg';
 import SHELF from '@/assets/images/ke-banner-img.webp';
+import PaymentToast from '@/components/blocks/PaymentToast';
+import { Suspense } from 'react';
 
 async function getFeaturedProducts() {
   const res = await getProducts({
@@ -77,6 +79,10 @@ export default async function Home() {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <PaymentToast />
+      </Suspense>
+
       <Banner />
 
       <CategoryList />

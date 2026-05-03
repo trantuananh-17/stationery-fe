@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Lock, LockKeyhole, ShoppingCart } from 'lucide-react';
-import Link from 'next/link';
+import { LockKeyhole, ShoppingCart } from 'lucide-react';
 import CheckoutItem from './CheckoutItem';
-import { CartItem } from '@/types/cart.type';
+import { CartItem } from '@/stores/cart-store';
+import { CheckoutStockItem } from '@/types/order.type';
 
 interface Props {
   initialItems: CartItem[];
@@ -11,9 +11,19 @@ interface Props {
   subtotal: number;
   shipping: number;
   total: number;
+  stockErrors?: Record<string, CheckoutStockItem>;
 }
 
-export default function CheckoutSumary({ totalItems, subtotal, shipping, total, initialItems }: Props) {
+export default function CheckoutSumary({
+  totalItems,
+  subtotal,
+  shipping,
+  total,
+  initialItems,
+  stockErrors = {}
+}: Props) {
+  const hasStockError = Object.values(stockErrors).some((error) => !error.success);
+
   const formatVND = (value: number) =>
     new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -23,11 +33,19 @@ export default function CheckoutSumary({ totalItems, subtotal, shipping, total, 
   return (
     <div className='p-2 md:p-4'>
       <h2 className='mb-4 text-lg font-semibold md:mb-6 md:text-xl'>Tóm tắt đơn hàng</h2>
+
       <div className='space-y-2 lg:col-span-2'>
-        {initialItems.map((item) => (
-          <CheckoutItem key={item.id} item={item} />
-        ))}
+        {initialItems.map((item) => {
+          const stockError = stockErrors[item.variantId];
+
+          return (
+            <div key={item.id}>
+              <CheckoutItem key={item.id} item={item} stockError={stockError} />
+            </div>
+          );
+        })}
       </div>
+
       <div className='space-y-4'>
         <div className='text-muted-foreground flex items-center gap-2'>
           <ShoppingCart className='size-4' />
@@ -54,8 +72,8 @@ export default function CheckoutSumary({ totalItems, subtotal, shipping, total, 
         </div>
       </div>
 
-      <Button type='submit' size='lg' className='mt-4 w-full'>
-        {/* <Link href='/checkout'>Proceed to Checkout</Link> */} Thanh Toán
+      <Button type='submit' size='lg' className='mt-4 w-full' disabled={hasStockError}>
+        Thanh Toán
       </Button>
 
       <div className='mt-6 rounded-lg bg-green-50 p-4 dark:bg-green-900/20'>
