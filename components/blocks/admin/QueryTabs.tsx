@@ -45,7 +45,7 @@ export function QueryTabs({ items, queryKey, currentValue }: Props) {
             type='button'
             onClick={() => handleChange(item.value)}
             className={[
-              'rounded-lg px-2 py-1 text-sm transition',
+              'rounded-lg px-4 py-1 text-sm transition',
               isActive ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground'
             ].join(' ')}
           >

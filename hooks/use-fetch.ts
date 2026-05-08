@@ -1,9 +1,10 @@
-import { AppContext } from '@/components/layouts/Provider';
 import { FetchWrapper } from '@/lib/fetch-wrapper';
-import { use, useMemo } from 'react';
+import { useAuthStore } from '@/stores/auth-store';
+import { useMemo } from 'react';
 
 export const useFetch = (baseUrl: string) => {
-  const { accessToken, refreshToken } = use(AppContext);
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const refreshToken = useAuthStore((state) => state.refreshToken);
 
   const fetchWrapper = useMemo(() => {
     if (!accessToken) return null;
@@ -12,7 +13,9 @@ export const useFetch = (baseUrl: string) => {
       Authorization: `Bearer ${accessToken}`
     });
 
-    instance.refreshToken(refreshToken!);
+    if (refreshToken) {
+      instance.refreshToken(refreshToken);
+    }
 
     return instance;
   }, [baseUrl, accessToken, refreshToken]);

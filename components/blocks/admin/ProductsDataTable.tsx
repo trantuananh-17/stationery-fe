@@ -4,6 +4,7 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  PaginationState,
   useReactTable,
   type ColumnDef,
   type VisibilityState
@@ -23,11 +24,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-import { formatCurrency, grpcTimestampToDate } from '@/lib/utils';
+import { formatCurrency, formatDate, grpcTimestampToDate } from '@/lib/utils';
 import ProductStatusBadge from './ProductStatusBadge';
 import AdminTableToolbar from './AdminTableToolbar';
 import { ProductItem } from '@/types/product.type';
 import Image from 'next/image';
+import { StatusBadge } from './StatusBadge';
 
 export type AdminProductSort =
   | 'newest'
@@ -41,19 +43,10 @@ export type AdminProductSort =
   | 'created_at_asc'
   | 'created_at_desc';
 
-type ProductsDataTableProps = {
+interface ProductsDataTableProps {
   products: ProductItem[];
   currentSort: string;
-};
-
-function formatDate(value?: Date | string | null) {
-  if (!value) return '-';
-
-  const date = value instanceof Date ? value : new Date(value);
-
-  if (Number.isNaN(date.getTime())) return '-';
-
-  return date.toLocaleDateString('vi-VN');
+  currentStatus: string;
 }
 
 function getNextSort(currentSort: string, asc: AdminProductSort, desc: AdminProductSort) {
@@ -61,14 +54,15 @@ function getNextSort(currentSort: string, asc: AdminProductSort, desc: AdminProd
   return asc;
 }
 
-export default function ProductsDataTable({ products, currentSort }: ProductsDataTableProps) {
+export default function ProductsDataTable({ products, currentSort, currentStatus }: ProductsDataTableProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     category: false,
-    status: false
+    status: false,
+    actions: false
   });
 
   function handleSort(sort: AdminProductSort) {
@@ -91,10 +85,16 @@ export default function ProductsDataTable({ products, currentSort }: ProductsDat
           />
         ),
         cell: ({ row }) => (
-          <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} />
+          <div onClick={(e) => e.stopPropagation()}>
+            <Checkbox
+              className='cursor-pointer'
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+            />
+          </div>
         ),
-        enableSorting: false,
-        enableHiding: false
+        enableSorting: false
+        // enableHiding: false
       },
       {
         accessorKey: 'name',
@@ -146,7 +146,7 @@ export default function ProductsDataTable({ products, currentSort }: ProductsDat
       {
         accessorKey: 'status',
         header: 'Trạng thái',
-        cell: ({ row }) => <ProductStatusBadge status={row.original.status} />
+        cell: ({ row }) => <StatusBadge status={row.original.status} />
       },
       {
         accessorKey: 'stock',
@@ -205,7 +205,7 @@ export default function ProductsDataTable({ products, currentSort }: ProductsDat
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align='end'>
-              <DropdownMenuItem>Xem chi tiết</DropdownMenuItem>
+              {/* <DropdownMenuItem>Xem chi tiết</DropdownMenuItem> */}
               <DropdownMenuItem onClick={() => router.push(`/admin/products/${row.original.id}/edit`)}>
                 Chỉnh sửa
               </DropdownMenuItem>
@@ -213,8 +213,8 @@ export default function ProductsDataTable({ products, currentSort }: ProductsDat
             </DropdownMenuContent>
           </DropdownMenu>
         ),
-        enableSorting: false,
-        enableHiding: false
+        enableSorting: false
+        // enableHiding: false
       }
     ],
     [currentSort, searchParams]
@@ -226,6 +226,8 @@ export default function ProductsDataTable({ products, currentSort }: ProductsDat
     state: {
       columnVisibility
     },
+
+    manualPagination: true,
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel()
@@ -235,8 +237,29 @@ export default function ProductsDataTable({ products, currentSort }: ProductsDat
 
   return (
     <div>
-      <AdminTableToolbar table={table} searchColumn='name' searchPlaceholder='Tìm sản phẩm...' />
-
+      <AdminTableToolbar
+        table={table}
+        searchColumn='name'
+        searchPlaceholder='Tìm sản phẩm...'
+        columnLabels={{
+          select: 'Lựa chọn',
+          sku: 'Mã SKU',
+          category: 'Danh mục',
+          stock: 'Tòn kho',
+          price: 'Giá bán',
+          status: 'Trạng thái',
+          createdAt: 'Ngày tạo',
+          total: 'Tổng tiền',
+          actions: 'Hành động'
+        }}
+        currentValue={currentStatus}
+        filterItems={[
+          { label: 'Tất cả', value: 'all' },
+          { label: 'Đang bán', value: 'active' },
+          { label: 'Nháp', value: 'draft' },
+          { label: 'Đã lưu trữ', value: 'archived' }
+        ]}
+      />
       <div className='bg-background rounded-xl border'>
         <Table>
           <TableHeader>
@@ -254,7 +277,12 @@ export default function ProductsDataTable({ products, currentSort }: ProductsDat
           <TableBody>
             {rows.length ? (
               rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  onClick={() => router.push(`/admin/products/${row.original.id}/edit`)}
+                  className='cursor-pointer'
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}

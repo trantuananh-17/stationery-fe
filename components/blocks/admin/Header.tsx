@@ -17,7 +17,7 @@ export default function Header() {
 
   return (
     <>
-      <header className='flex h-16 items-center justify-between border-b px-6 py-4'>
+      <header className='bg-muted-foreground/8 flex h-16 items-center justify-between border-b px-6 py-4'>
         <div className='flex gap-2'>
           <SidebarTrigger className='' />
           {!isMobile && (

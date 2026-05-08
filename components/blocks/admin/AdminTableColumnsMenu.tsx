@@ -21,7 +21,7 @@ export default function AdminTableColumnsMenu<TData>({ table, labels = {} }: Pro
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' size='sm' className='gap-2'>
+        <Button variant='outline' size='lg' className='h-9 gap-2'>
           <SlidersHorizontal className='size-4' />
           Cột
         </Button>

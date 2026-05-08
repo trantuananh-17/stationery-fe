@@ -97,23 +97,10 @@ export default function CheckoutClient({ initialItems }: Props) {
 
       const order = res.data.data;
 
-      const paymentRes = await createPaymentIntent(accessToken as string, {
-        orderId: order.orderId,
-        clientEmail: payload.shippingAddress.email,
-        lineItems: items.map((item) => ({
-          name: item.productNameSnapshot,
-          price: item.unitPriceSnapshot,
-          quantity: item.quantity
-        }))
-      });
-
-      const clientSecret = paymentRes.data?.data.clientSecret;
-
       const params = new URLSearchParams({
         orderId: order.orderId,
         orderCode: order.orderNumber,
         receiverEmail: payload.shippingAddress.email,
-        clientSecret: clientSecret ?? '',
         total: total.toString()
       });
 

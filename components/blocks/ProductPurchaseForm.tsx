@@ -14,6 +14,8 @@ import type { ProductVariant, ProductVariantOption } from '@/types/product.type'
 import { useCart } from '@/hooks/use-cart';
 import SpinnerButton from './SpinnerButton';
 
+import { toast } from 'sonner';
+
 const formSchema = z.object({
   variantId: z.string().min(1),
   quantity: z.number().min(1),

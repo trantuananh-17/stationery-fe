@@ -1,6 +1,7 @@
 import CustomersTable from '@/components/blocks/admin/CustomerTable';
 import { QueryTabs } from '@/components/blocks/admin/QueryTabs';
 import TitlePage from '@/components/blocks/admin/TitlePage';
+import { getValidLimit, getValidPage } from '@/lib/utils';
 
 export type Customer = {
   id: string;
@@ -10,13 +11,23 @@ export type Customer = {
   email: string;
   address: string;
   isActive: boolean;
-  isVerfied: boolean;
+  isVerified: boolean;
   orders: number;
   amountSpent: number;
   createdAt: string;
 };
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+interface Props {
+  searchParams: Promise<{
+    page?: string;
+    status?: string;
+    sort?: string;
+    search?: string;
+    limit?: string;
+  }>;
+}
+
+export default async function Page({ searchParams }: Props) {
   const customers: Customer[] = [
     {
       id: '1',
@@ -26,10 +37,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
       email: 'minhanh@gmail.com',
       address: '12 Nguyễn Huệ, Quận 1, TP.HCM',
       isActive: true,
-      isVerfied: true,
+      isVerified: true,
       orders: 12,
       amountSpent: 4250000,
-      createdAt: '2024-01-12'
+      createdAt: '2026-01-12'
     },
     {
       id: '2',
@@ -39,10 +50,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
       email: 'quocbao@gmail.com',
       address: '45 Lê Lợi, Quận 3, TP.HCM',
       isActive: false,
-      isVerfied: false,
+      isVerified: false,
       orders: 7,
       amountSpent: 2890000,
-      createdAt: '2024-02-08'
+      createdAt: '2026-02-08'
     },
     {
       id: '3',
@@ -52,10 +63,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
       email: 'hoangmy@gmail.com',
       address: '88 Hai Bà Trưng, Hà Nội',
       isActive: true,
-      isVerfied: true,
+      isVerified: true,
       orders: 19,
       amountSpent: 8320000,
-      createdAt: '2024-03-21'
+      createdAt: '2026-03-21'
     },
     {
       id: '4',
@@ -65,10 +76,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
       email: 'giahuy@gmail.com',
       address: '102 Trần Phú, Đà Nẵng',
       isActive: false,
-      isVerfied: false,
+      isVerified: false,
       orders: 4,
       amountSpent: 1540000,
-      createdAt: '2024-04-15'
+      createdAt: '2026-04-15'
     },
     {
       id: '5',
@@ -78,12 +89,22 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
       email: 'khanhlinh@gmail.com',
       address: '21 Võ Văn Tần, TP.HCM',
       isActive: true,
-      isVerfied: true,
+      isVerified: true,
       orders: 10,
       amountSpent: 3760000,
-      createdAt: '2024-05-03'
+      createdAt: '2026-05-03'
     }
   ];
+
+  const params = await searchParams;
+
+  const currentPage = getValidPage(params.page);
+  const currentLimit = getValidLimit(params.limit);
+
+  console.log(params);
+
+  const currentSort = params.sort ?? 'newest';
+  const currentSearch = params.search ?? '';
 
   return (
     <div className='space-y-4'>
@@ -96,7 +117,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
         }}
       />
 
-      <CustomersTable customers={customers} />
+      <CustomersTable customers={customers} currentSort={currentSort} />
     </div>
   );
 }

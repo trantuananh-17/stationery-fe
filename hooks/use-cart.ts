@@ -11,6 +11,7 @@ import {
 } from '@/services/cart.service';
 import { useCartStore } from '@/stores/cart-store';
 import { useAuthStore } from '@/stores/auth-store';
+import { toast } from 'sonner';
 
 export function useCart() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -71,7 +72,7 @@ export function useCart() {
       await refetchCart();
 
       setCartLoaded(true);
-      openCart();
+      // openCart();
     } finally {
       stopPending(variantId);
     }
@@ -125,6 +126,7 @@ export function useCart() {
     try {
       await removeCartItem(item.id, accessToken, getSessionId());
       await refetchCart();
+      toast.success('Xóa sản phẩm khỏi giỏ hàng thành công', { position: 'top-right' });
     } finally {
       stopPending(cartItemId);
     }

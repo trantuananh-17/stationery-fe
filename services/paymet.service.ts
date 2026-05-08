@@ -1,28 +1,27 @@
 import { FetchWrapper } from '@/lib/fetch-wrapper';
+import { ApiResponse } from '@/types/type';
 
-const fetchWrapper = new FetchWrapper(process.env.NEXT_PUBLIC_SERVER_PAYMENT_API as string);
+const fetchWrapper = new FetchWrapper(process.env.NEXT_PUBLIC_SERVER_API as string);
 
 export type CreatePaymentIntentPayload = {
   orderId: string;
-  clientEmail: string;
-  lineItems: {
-    name: string;
-    price: number;
-    quantity: number;
-  }[];
 };
 
 export type CreatePaymentIntentResponse = {
-  data: {
-    clientSecret: string;
-    paymentIntentId: string;
-  };
-  message: string;
-  statusCode: number;
+  orderId: string;
+  clientEmail: string;
+  totalItem: number;
+  totalPrice: number;
+  subTotal: number;
+  shippingCost: number;
+  clientSecret: string;
+  paymentIntentId: string;
 };
 
 export async function createPaymentIntent(accessToken: string, payload: CreatePaymentIntentPayload) {
-  return fetchWrapper.post<CreatePaymentIntentResponse>('/payments/payment-intent', payload, {
+  console.log('hello');
+
+  return fetchWrapper.post<ApiResponse<CreatePaymentIntentResponse>>('/payments/create-intent', payload, {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }

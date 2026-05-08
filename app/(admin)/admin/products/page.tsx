@@ -1,7 +1,7 @@
+import AdminPagination from '@/components/blocks/admin/AdminPagination';
 import ProductsDataTable from '@/components/blocks/admin/ProductsDataTable';
-import { QueryTabs } from '@/components/blocks/admin/QueryTabs';
 import TitlePage from '@/components/blocks/admin/TitlePage';
-import PaginationSection from '@/components/blocks/PaginationSection';
+import { getValidLimit, getValidPage } from '@/lib/utils';
 import { AdminProductStatus, getAdminProducts } from '@/services/product.service';
 
 export type AdminProductOrderBy =
@@ -20,10 +20,9 @@ interface Props {
     status?: string;
     sort?: string;
     search?: string;
+    limit?: string;
   }>;
 }
-
-const DEFAULT_LIMIT = 15;
 
 const SORT_TO_ORDER_BY: Record<string, AdminProductOrderBy> = {
   newest: 'created_at_desc',
@@ -46,30 +45,22 @@ function isProductStatus(value?: string): value is AdminProductStatus {
   return value === 'active' || value === 'draft' || value === 'archived';
 }
 
-function getValidPage(value?: string) {
-  const page = Number(value ?? 1);
-
-  if (!Number.isFinite(page) || page < 1) {
-    return 1;
-  }
-
-  return page;
-}
-
 async function getProductList({
   page,
+  limit,
   sort,
   status,
   search
 }: {
   page: number;
+  limit: number;
   sort: string;
   status: string;
   search?: string;
 }) {
   const res = await getAdminProducts({
     page,
-    limit: DEFAULT_LIMIT,
+    limit,
     orderBy: SORT_TO_ORDER_BY[sort] ?? SORT_TO_ORDER_BY.newest,
     status: isProductStatus(status) ? status : undefined,
     search: search || undefined
@@ -80,10 +71,12 @@ async function getProductList({
       items: [],
       total: 0,
       page,
-      limit: DEFAULT_LIMIT,
+      limit,
       totalPages: 1
     };
   }
+
+  console.log(res.data.data);
 
   return res.data.data;
 }
@@ -92,12 +85,15 @@ export default async function Page({ searchParams }: Props) {
   const params = await searchParams;
 
   const currentPage = getValidPage(params.page);
+  const currentLimit = getValidLimit(params.limit);
+
   const currentStatus = params.status ?? 'all';
   const currentSort = params.sort ?? 'newest';
   const currentSearch = params.search ?? '';
 
   const productsData = await getProductList({
     page: currentPage,
+    limit: currentLimit,
     sort: currentSort,
     status: currentStatus,
     search: currentSearch
@@ -114,24 +110,15 @@ export default async function Page({ searchParams }: Props) {
         }}
       />
 
-      <QueryTabs
-        queryKey='status'
-        currentValue={currentStatus}
-        items={[
-          { label: 'All', value: 'all' },
-          { label: 'Active', value: 'active' },
-          { label: 'Draft', value: 'draft' },
-          { label: 'Archived', value: 'archived' }
-        ]}
-      />
+      <ProductsDataTable products={productsData.items ?? []} currentSort={currentSort} currentStatus={currentStatus} />
 
-      <ProductsDataTable products={productsData.items ?? []} currentSort={currentSort} />
-
-      <PaginationSection
-        currentPage={productsData.page}
-        totalPages={productsData.totalPages}
-        basePath='/admin/products'
-        searchParams={params}
+      <AdminPagination
+        pagination={{
+          page: currentPage,
+          limit: currentLimit,
+          total: productsData.total,
+          totalPages: productsData.totalPages
+        }}
       />
     </div>
   );

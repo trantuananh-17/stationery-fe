@@ -1,3 +1,8 @@
+import { GrpcTimestamp } from '@/lib/utils';
+
+export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderStatusUpper = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+
 export type OrderAddress = {
   fullName: string;
   email: string;
@@ -38,3 +43,31 @@ export type CheckoutResult =
       message: string;
       stockItems: CheckoutStockItem[];
     };
+
+export type GetOrdersRequest = {
+  search?: string;
+  status?: string;
+  page?: number;
+  limit?: number;
+};
+
+export type OrdersResponse = {
+  data: Order[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+};
+
+export type Order = {
+  id: string;
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  productName: string;
+  status: OrderStatusUpper;
+  paymentStatus: string;
+  total: number;
+
+  createdAt: GrpcTimestamp;
+};

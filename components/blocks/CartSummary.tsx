@@ -65,7 +65,7 @@ export default function CartSummary({ totalItems, subtotal, shipping, total }: P
       </div>
 
       <Button asChild size='lg' className='mt-6 w-full'>
-        <Link href='/checkout'>Proceed to Checkout</Link>
+        <Link href='/checkout'>Thanh toán</Link>
       </Button>
 
       <p className='text-muted-foreground mt-4 text-center text-sm'>Thuế được tính khi thanh toán</p>

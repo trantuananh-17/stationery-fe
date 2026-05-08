@@ -1,113 +1,116 @@
+import AdminPagination from '@/components/blocks/admin/AdminPagination';
 import OrdersTable from '@/components/blocks/admin/OrdersTable';
 import { QueryTabs } from '@/components/blocks/admin/QueryTabs';
 import TitlePage from '@/components/blocks/admin/TitlePage';
+import { getToken } from '@/lib/auth';
+import { getValidLimit, getValidPage } from '@/lib/utils';
+import { getOrders } from '@/services/order.service';
+import { OrderStatus } from '@/types/order.type';
 
-export type OrderStatus = 'PENDING' | 'PROCESSING' | 'DELIVERED' | 'CANCELLED';
+export type OrderSort = 'price_asc' | 'price_desc' | 'created_at_asc' | 'created_at_desc';
 
-export type Order = {
-  id: string;
-  number: string;
-  customer: string;
-  email: string;
-  product: string;
-  status: OrderStatus;
-  createdAt: string;
-  total: number;
+const SORT_TO_ORDER_BY: Record<string, OrderSort> = {
+  newest: 'created_at_desc',
+  oldest: 'created_at_asc',
+
+  price_asc: 'price_asc',
+  price_desc: 'price_desc',
+
+  created_at_asc: 'created_at_asc',
+  created_at_desc: 'created_at_desc'
 };
 
-const orders: Order[] = [
+function isOrderStatus(value?: string): value is OrderStatus {
+  return (
+    value === 'pending' ||
+    value === 'processing' ||
+    value === 'shipped' ||
+    value === 'delivered' ||
+    value === 'cancelled'
+  );
+}
+
+interface Props {
+  searchParams: Promise<{
+    page?: string;
+    status?: string;
+    sort?: string;
+    search?: string;
+    limit?: string;
+  }>;
+}
+
+async function getOrdersList(
+  token: string,
   {
-    id: '1',
-    number: 'ORD-1001',
-    customer: 'Nguyễn Minh Anh',
-    email: 'minhanh@gmail.com',
-    product: 'Bút bi Thiên Long',
-    status: 'PENDING',
-    createdAt: '2024-05-01',
-    total: 125000
-  },
-  {
-    id: '2',
-    number: 'ORD-1002',
-    customer: 'Trần Quốc Bảo',
-    email: 'quocbao@gmail.com',
-    product: 'Sổ tay A5',
-    status: 'PROCESSING',
-    createdAt: '2024-05-03',
-    total: 285000
-  },
-  {
-    id: '3',
-    number: 'ORD-1003',
-    customer: 'Lê Hoàng My',
-    email: 'hoangmy@gmail.com',
-    product: 'Giấy in Double A',
-    status: 'PROCESSING',
-    createdAt: '2024-05-04',
-    total: 450000
-  },
-  {
-    id: '4',
-    number: 'ORD-1004',
-    customer: 'Phạm Gia Huy',
-    email: 'giahuy@gmail.com',
-    product: 'Bìa hồ sơ nhựa',
-    status: 'DELIVERED',
-    createdAt: '2024-05-06',
-    total: 98000
-  },
-  {
-    id: '5',
-    number: 'ORD-1005',
-    customer: 'Đỗ Khánh Linh',
-    email: 'khanhlinh@gmail.com',
-    product: 'Máy tính Casio FX-580VN X',
-    status: 'CANCELLED',
-    createdAt: '2024-05-08',
-    total: 785000
-  },
-  {
-    id: '6',
-    number: 'ORD-1006',
-    customer: 'Nguyễn Thanh Tùng',
-    email: 'thanhtung@gmail.com',
-    product: 'Thước kẻ 30cm',
-    status: 'CANCELLED',
-    createdAt: '2024-05-09',
-    total: 65000
-  },
-  {
-    id: '7',
-    number: 'ORD-1007',
-    customer: 'Võ Mai Phương',
-    email: 'maiphuong@gmail.com',
-    product: 'Bộ bút màu 24 cây',
-    status: 'DELIVERED',
-    createdAt: '2024-05-10',
-    total: 320000
+    page,
+    limit,
+    sort,
+    status,
+    search
+  }: {
+    page: number;
+    limit: number;
+    sort: string;
+    status: string;
+    search?: string;
   }
-];
+) {
+  const res = await getOrders(token, {
+    page,
+    limit,
+    // orderBy: (SORT_TO_ORDER_BY[sort] as OrderSort) ?? SORT_TO_ORDER_BY.newest,
+    status: isOrderStatus(status) ? status : undefined,
+    search: search || undefined
+  });
+  if (!res?.ok || !res?.data?.data) {
+    return {
+      data: [],
+      total: 0,
+      page,
+      limit,
+      totalPages: 1
+    };
+  }
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
-  const { status = 'all' } = await searchParams;
+  console.log(res.data.data);
 
-  const filteredOrders = status === 'all' ? orders : orders.filter((order) => order.status.toLowerCase() === status);
+  return res.data.data;
+}
+
+export default async function Page({ searchParams }: Props) {
+  const token = await getToken();
+  const params = await searchParams;
+
+  const currentPage = getValidPage(params.page);
+  const currentLimit = getValidLimit(params.limit);
+
+  const currentStatus = params.status ?? 'all';
+  const currentSort = params.sort ?? 'newest';
+  const currentSearch = params.search ?? '';
+
+  const ordersData = await getOrdersList(token!, {
+    page: currentPage,
+    limit: currentLimit,
+    sort: currentSort,
+    status: currentStatus,
+    search: currentSearch
+  });
 
   return (
     <div className='space-y-4'>
-      <TitlePage title='Quản lý đơn hàng' subtitle='Browse and manage your product catalog.' />
-      <QueryTabs
-        queryKey='status'
-        currentValue={status}
-        items={[
-          { label: 'Tất cả', value: 'all' },
-          { label: 'Chờ xử lý', value: 'pending' },
-          { label: 'Đang xử lý', value: 'processing' },
-          { label: 'Đã giao', value: 'delivered' },
-          { label: 'Đã hủy', value: 'cancelled' }
-        ]}
+      <TitlePage title='Quản lý đơn hàng' subtitle='Browse and manage customer orders.' />
+
+      <OrdersTable orders={ordersData.data ?? []} currentSort={currentSort} currentStatus={currentStatus} />
+
+      <AdminPagination
+        pagination={{
+          page: currentPage,
+          limit: currentLimit,
+          total: ordersData.total,
+          totalPages: ordersData.totalPages
+        }}
       />
-      <OrdersTable orders={filteredOrders} />
     </div>
   );
 }
