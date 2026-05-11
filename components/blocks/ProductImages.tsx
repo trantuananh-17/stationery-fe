@@ -26,8 +26,8 @@ export default function ProductImages({ thumbnail, images = [], name }: ProductI
           <Image
             src={selected}
             alt={name ?? 'Product image'}
-            width={800}
-            height={800}
+            width={640}
+            height={640}
             className='size-full object-contain'
           />
         </AspectRatio>

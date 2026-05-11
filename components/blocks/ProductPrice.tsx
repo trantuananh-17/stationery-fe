@@ -34,7 +34,7 @@ export function ProductPrice({ price, compareAtPrice, className, showBadge = tru
     <div
       className={cn(
         'flex w-full items-center gap-2',
-        compareAtPrice && 'justify-between',
+        compareAtPrice && !hasInfo && 'justify-between',
         !hasSale && 'justify-end',
         className
       )}

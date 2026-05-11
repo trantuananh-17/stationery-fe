@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Image from 'next/image';
 
 type AttributeValue = {
   id: string;
@@ -47,6 +48,69 @@ export default function ProductVariantsForm({ value, onChange, attributes }: Pro
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [optionGroups, setOptionGroups] = useState<OptionGroup[]>(() => initialOptionGroups);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const handleDragStart = (index: number) => {
+    setDragIndex(index);
+  };
+
+  const handleUploadVariantImage = async (index: number, file: File) => {
+    try {
+      setUploadingIndex(index);
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // const response = await fetch('/api/upload', {
+      //   method: 'POST',
+      //   body: formData
+      // });
+
+      // if (!response.ok) {
+      //   throw new Error('Upload failed');
+      // }
+
+      // const data = await response.json();
+
+      const data = {
+        url: 'https://vanphongphamminaco.com/wp-content/uploads/2023/10/but-bi-bam-i-5-0-5-mm-radius-muc-den.webp'
+      };
+
+      // ví dụ server trả:
+      // { url: 'https://cdn.xxx.com/image.png' }
+
+      updateVariant(index, 'image', data.url);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setUploadingIndex(null);
+    }
+  };
+
+  const handleDrop = (dropIndex: number) => {
+    if (dragIndex === null || dragIndex === dropIndex) {
+      setDragIndex(null);
+      return;
+    }
+
+    const cloned = [...variants];
+
+    const draggedItem = cloned[dragIndex];
+
+    cloned.splice(dragIndex, 1);
+
+    cloned.splice(dropIndex, 0, draggedItem);
+
+    const updated = cloned.map((variant, index) => ({
+      ...variant,
+      sortOrder: index,
+      isDefault: index === 0
+    }));
+
+    onChange(updated);
+
+    setDragIndex(null);
+  };
 
   const checkboxClass =
     'border-primary data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground';
@@ -500,7 +564,14 @@ export default function ProductVariantsForm({ value, onChange, attributes }: Pro
                   const locked = isLockedVariant(variant);
 
                   return (
-                    <TableRow key={key} data-state={checked ? 'selected' : undefined}>
+                    <TableRow
+                      key={getVariantKey(variant)}
+                      draggable
+                      onDragStart={() => handleDragStart(index)}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={() => handleDrop(index)}
+                      className='cursor-move'
+                    >
                       <TableCell className='w-12'>
                         <Checkbox
                           checked={checked}
@@ -512,12 +583,38 @@ export default function ProductVariantsForm({ value, onChange, attributes }: Pro
 
                       <TableCell>
                         <div className='flex items-center gap-4'>
-                          <button
-                            type='button'
-                            className='text-primary flex size-16 items-center justify-center rounded-xl border border-dashed'
-                          >
-                            <ImagePlus className='size-5' />
-                          </button>
+                          <label className='cursor-pointer'>
+                            <input
+                              type='file'
+                              accept='image/*'
+                              className='hidden'
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+
+                                if (!file) return;
+
+                                await handleUploadVariantImage(index, file);
+                              }}
+                            />
+
+                            {uploadingIndex === index ? (
+                              <div className='flex size-16 items-center justify-center rounded-xl border'>
+                                <span className='text-xs'>...</span>
+                              </div>
+                            ) : variant.image ? (
+                              <Image
+                                src={variant.image}
+                                alt={variant.name}
+                                width={64}
+                                height={64}
+                                className='size-16 rounded-xl border object-cover'
+                              />
+                            ) : (
+                              <div className='text-primary flex size-16 items-center justify-center rounded-xl border border-dashed'>
+                                <ImagePlus className='size-5' />
+                              </div>
+                            )}
+                          </label>
 
                           <span className='font-medium'>{variant.name}</span>
                         </div>
