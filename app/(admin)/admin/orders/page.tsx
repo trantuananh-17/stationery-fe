@@ -59,7 +59,7 @@ async function getOrdersList(
   const res = await getOrders(token, {
     page,
     limit,
-    // orderBy: (SORT_TO_ORDER_BY[sort] as OrderSort) ?? SORT_TO_ORDER_BY.newest,
+    orderBy: (SORT_TO_ORDER_BY[sort] as OrderSort) ?? SORT_TO_ORDER_BY.newest,
     status: isOrderStatus(status) ? status : undefined,
     search: search || undefined
   });

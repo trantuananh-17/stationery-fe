@@ -39,6 +39,24 @@ export function grpcTimestampToDate(timestamp?: GrpcTimestamp | null): Date | nu
   return new Date(seconds * 1000);
 }
 
+export function getDaysSince(timestamp?: GrpcTimestamp | null): number | null {
+  const date = grpcTimestampToDate(timestamp);
+
+  if (!date) return null;
+
+  return Math.floor((Date.now() - date.getTime()) / 86400000);
+}
+
+export function getDaysSinceText(timestamp?: GrpcTimestamp | null): string {
+  const diffDays = getDaysSince(timestamp);
+
+  if (diffDays === null) return '-';
+
+  if (diffDays <= 0) return 'Hôm nay';
+
+  return `${diffDays} ngày`;
+}
+
 export function getValidPage(value?: string) {
   const page = Number(value ?? 1);
 

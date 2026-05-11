@@ -37,7 +37,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <ProductPrice
           price={product.price}
           compareAtPrice={product.compareAtPrice}
-          className='justify-between text-xs xl:text-sm'
+          className='text-xs xl:text-sm'
           showBadge
         />
 

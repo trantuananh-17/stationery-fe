@@ -8,12 +8,22 @@ import CartSummary from '@/components/blocks/CartSummary';
 import { Spinner } from '../ui/spinner';
 import { useCart } from '@/hooks/use-cart';
 import { grpcTimestampToDate } from '@/lib/utils';
+import { useAuthStore } from '@/stores/auth-store';
 
-export default function CartClient() {
+interface Props {
+  token?: string | null;
+}
+export default function CartClient({ token }: Props) {
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+
   const { cart, items, isCartLoaded, isItemPending, fetchCart, increaseItem, decreaseItem, removeItem } = useCart();
 
   useEffect(() => {
-    fetchCart();
+    if (token) {
+      setAccessToken(token);
+    }
+
+    fetchCart(token);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

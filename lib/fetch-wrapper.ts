@@ -16,6 +16,56 @@ export class FetchWrapper {
     this.#refreshToken = refreshToken;
   }
 
+  // async #send<T>(
+  //   path: string,
+  //   method: string,
+  //   data: null | { [key: string]: unknown },
+  //   options: { headers?: { [key: string]: string } } = {}
+  // ): Promise<Response & { data?: T }> {
+  //   const requestInit: RequestInit = {
+  //     method,
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       ...this.#headers,
+  //       ...options.headers
+  //     }
+  //   };
+
+  //   if (data) {
+  //     requestInit.body = JSON.stringify(data);
+  //   }
+
+  //   const response: Response & { data?: T } = await fetch(`${this.#baseUrl}${path}`, requestInit);
+
+  //   if (response.status === 401 && this.#refreshToken && isClient()) {
+  //     const newToken = await makeRefreshToken(this.#refreshToken);
+
+  //     if (newToken) {
+  //       await fetch('/api/cookie?key=token', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         },
+  //         body: JSON.stringify({
+  //           value: newToken.accessToken,
+  //           maxAge: 60 * 15
+  //         })
+  //       });
+  //       this.#headers.Authorization = `Bearer ${newToken.accessToken}`;
+  //       return this.#send<T>(path, method, data, options);
+  //     }
+
+  //     if (window.location.href !== '/auth/log-out') {
+  //       window.location.href = '/auth/log-out';
+  //     }
+  //   }
+
+  //   response.data = await response.json();
+
+  //   console.log(response);
+
+  //   return response;
+  // }
   async #send<T>(
     path: string,
     method: string,
@@ -35,7 +85,29 @@ export class FetchWrapper {
       requestInit.body = JSON.stringify(data);
     }
 
-    const response: Response & { data?: T } = await fetch(`${this.#baseUrl}${path}`, requestInit);
+    let response: Response & { data?: T };
+
+    try {
+      response = (await fetch(`${this.#baseUrl}${path}`, requestInit)) as Response & { data?: T };
+    } catch (error) {
+      console.error('API server is unavailable:', error);
+
+      const fallbackResponse = new Response(
+        JSON.stringify({
+          message: 'API server is unavailable'
+        }),
+        {
+          status: 503,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ) as Response & { data?: T };
+
+      fallbackResponse.data = undefined;
+
+      return fallbackResponse;
+    }
 
     if (response.status === 401 && this.#refreshToken && isClient()) {
       const newToken = await makeRefreshToken(this.#refreshToken);
@@ -51,18 +123,22 @@ export class FetchWrapper {
             maxAge: 60 * 15
           })
         });
+
         this.#headers.Authorization = `Bearer ${newToken.accessToken}`;
+
         return this.#send<T>(path, method, data, options);
       }
 
-      if (window.location.href !== '/auth/log-out') {
+      if (window.location.pathname !== '/auth/log-out') {
         window.location.href = '/auth/log-out';
       }
     }
 
-    response.data = await response.json();
-
-    console.log(response);
+    try {
+      response.data = await response.json();
+    } catch {
+      response.data = undefined;
+    }
 
     return response;
   }

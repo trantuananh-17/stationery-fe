@@ -170,30 +170,34 @@ export default function OrdersTable({ orders, currentSort, currentStatus }: Orde
       {
         accessorKey: 'createdAt',
         header: () => (
-          <Button
-            variant='ghost'
-            className='px-0'
-            onClick={() => handleSort(getNextSort(currentSort, 'created_at_asc', 'created_at_desc'))}
-          >
-            Ngày tạo
-            <ArrowUpDown className='ml-1 size-4' />
-          </Button>
+          <div className='text-right'>
+            <Button
+              variant='ghost'
+              className='px-0'
+              onClick={() => handleSort(getNextSort(currentSort, 'created_at_asc', 'created_at_desc'))}
+            >
+              Ngày tạo
+              <ArrowUpDown className='ml-1 size-4' />
+            </Button>
+          </div>
         ),
-        cell: ({ row }) => <p className='text-center'>{formatDate(grpcTimestampToDate(row.original.createdAt))}</p>
+        cell: ({ row }) => <p className='text-right'>{formatDate(grpcTimestampToDate(row.original.createdAt))}</p>
       },
       {
         accessorKey: 'total',
         header: () => (
-          <Button
-            variant='ghost'
-            className='px-0'
-            onClick={() => handleSort(getNextSort(currentSort, 'price_asc', 'price_desc'))}
-          >
-            Tổng tiền
-            <ArrowUpDown className='ml-1 size-4' />
-          </Button>
+          <div className='text-right'>
+            <Button
+              variant='ghost'
+              className='px-0'
+              onClick={() => handleSort(getNextSort(currentSort, 'price_asc', 'price_desc'))}
+            >
+              Tổng tiền
+              <ArrowUpDown className='ml-1 size-4' />
+            </Button>
+          </div>
         ),
-        cell: ({ row }) => <div className='text-center font-medium'>{formatCurrency(row.original.total)}</div>
+        cell: ({ row }) => <div className='text-right font-medium'>{formatCurrency(row.original.total)}</div>
       },
       {
         id: 'actions',

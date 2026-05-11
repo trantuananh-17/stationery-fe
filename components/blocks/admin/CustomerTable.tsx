@@ -14,8 +14,6 @@ import {
 } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, Search } from 'lucide-react';
 
-import type { Customer } from '@/app/(admin)/admin/customers/page';
-
 import AdminPagination from '@/components/blocks/admin/AdminPagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -30,6 +28,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import AdminTableToolbar from './AdminTableToolbar';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { StatusBadge } from './StatusBadge';
+import { Customer } from '@/types/user.type';
+import { formatDate, grpcTimestampToDate } from '@/lib/utils';
 
 export type CustomerSort =
   | 'newest'
@@ -66,12 +66,8 @@ export default function CustomersTable({ customers, currentSort }: CustomersTabl
 
   function getNextSort(currentSort: string, asc: CustomerSort, desc: CustomerSort) {
     if (currentSort === asc) {
-      console.log('desc');
-
       return desc;
     }
-
-    console.log('hello asc');
 
     return asc;
   }
@@ -80,9 +76,8 @@ export default function CustomersTable({ customers, currentSort }: CustomersTabl
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     firstName: false,
     lastName: false,
-    isActive: false,
-    isVerified: false,
-    actions: false
+    actions: false,
+    address: false
   });
 
   const columns = useMemo<ColumnDef<Customer>[]>(
@@ -108,7 +103,7 @@ export default function CustomersTable({ customers, currentSort }: CustomersTabl
         enableHiding: true
       },
       {
-        accessorKey: 'name',
+        accessorKey: 'fullName',
         header: 'Họ tên'
       },
       {
@@ -141,35 +136,42 @@ export default function CustomersTable({ customers, currentSort }: CustomersTabl
       {
         accessorKey: 'orders',
         header: () => (
-          <Button variant='ghost' onClick={() => handleSort(getNextSort(currentSort, 'order_asc', 'order_desc'))}>
-            Đơn hàng
-            <ArrowUpDown className='ml-1 size-4' />
-          </Button>
+          <div className='text-center'>
+            <Button variant='ghost' onClick={() => handleSort(getNextSort(currentSort, 'order_asc', 'order_desc'))}>
+              Đơn hàng
+              <ArrowUpDown className='ml-1 size-4' />
+            </Button>
+          </div>
         ),
-        cell: ({ row }) => <div className='text-center'>{row.original.orders}</div>
+        cell: ({ row }) => <div className='text-center'>{row.original.totalOrder}</div>
       },
       {
         accessorKey: 'amountSpent',
         header: () => (
-          <Button variant='ghost' onClick={() => handleSort(getNextSort(currentSort, 'total_asc', 'total_desc'))}>
-            Chi tiêu
-            <ArrowUpDown className='ml-1 size-4' />
-          </Button>
+          <div className='text-right'>
+            <Button variant='ghost' onClick={() => handleSort(getNextSort(currentSort, 'total_asc', 'total_desc'))}>
+              Chi tiêu
+              <ArrowUpDown className='ml-1 size-4' />
+            </Button>
+          </div>
         ),
-        cell: ({ row }) => <div className='text-center'>{formatCurrency(row.original.amountSpent)}</div>
+        cell: ({ row }) => <div className='text-right'>{formatCurrency(row.original.totalPrice)}</div>
       },
       {
         accessorKey: 'createdAt',
         header: () => (
-          <Button
-            variant='ghost'
-            className='px-0'
-            onClick={() => handleSort(getNextSort(currentSort, 'created_at_asc', 'created_at_desc'))}
-          >
-            Ngày tạo
-            <ArrowUpDown className='ml-1 size-4' />
-          </Button>
-        )
+          <div className='text-right'>
+            <Button
+              variant='ghost'
+              className='px-0'
+              onClick={() => handleSort(getNextSort(currentSort, 'created_at_asc', 'created_at_desc'))}
+            >
+              Ngày tạo
+              <ArrowUpDown className='ml-1 size-4' />
+            </Button>
+          </div>
+        ),
+        cell: ({ row }) => <p className='text-right'>{formatDate(grpcTimestampToDate(row.original.createdAt))}</p>
       },
       {
         id: 'actions',
@@ -213,11 +215,11 @@ export default function CustomersTable({ customers, currentSort }: CustomersTabl
     <div className='space-y-4'>
       <AdminTableToolbar
         table={table}
-        searchColumn='name'
+        searchColumn='fullName'
         searchPlaceholder='Tìm khách hàng...'
         columnLabels={{
           select: 'Lựa chọn',
-          name: 'Họ tên',
+          fullName: 'Họ tên',
           firstName: 'Tên đệm',
           lastName: 'Tên',
           email: 'Email',

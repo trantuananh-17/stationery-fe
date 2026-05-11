@@ -1,13 +1,15 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { updateOrderStatus } from '@/services/order.service';
 
-type OrderStatus = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELED';
+type OrderStatus = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
 type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
 
 type Props = {
+  accessToken: string | null;
   orderId: string;
   status: OrderStatus;
   paymentMethod: string;
@@ -32,27 +34,49 @@ const getNextPaymentStatus = (orderStatus: OrderStatus, paymentMethod: string): 
   return 'PENDING';
 };
 
-export function OrderActions({ orderId, status, paymentMethod, primaryAction, secondaryActions }: Props) {
+export function OrderActions({ accessToken, orderId, status, paymentMethod, primaryAction, secondaryActions }: Props) {
   const router = useRouter();
 
-  const [isPending, startTransition] = useTransition();
+  const [isRefreshing, startTransition] = useTransition();
+  const [isUpdating, setIsUpdating] = useState(false);
 
-  const updateStatus = (nextStatus: OrderStatus) => {
-    const paymentStatus = getNextPaymentStatus(nextStatus, paymentMethod);
-    console.log(orderId);
-    console.log(nextStatus);
-    console.log(paymentStatus);
+  const loading = isUpdating || isRefreshing;
+
+  const handleUpdateStatus = async (nextStatus: OrderStatus) => {
+    try {
+      setIsUpdating(true);
+
+      const paymentStatus = getNextPaymentStatus(nextStatus, paymentMethod);
+
+      await updateOrderStatus(accessToken, orderId, {
+        status: nextStatus
+      });
+
+      console.log({
+        orderId,
+        nextStatus,
+        paymentStatus
+      });
+
+      startTransition(() => {
+        router.refresh();
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   return (
     <div className='mt-3 flex justify-end gap-2'>
       {secondaryActions?.map((action) => (
         <Button
-          size={'sm'}
+          size='sm'
           key={action.label}
-          disabled={isPending}
+          disabled={loading}
           variant={action.destructive ? 'destructive' : 'default'}
-          onClick={() => updateStatus(action.nextStatus)}
+          onClick={() => handleUpdateStatus(action.nextStatus)}
           className='text-xs!'
         >
           {action.label}
@@ -61,10 +85,10 @@ export function OrderActions({ orderId, status, paymentMethod, primaryAction, se
 
       {primaryAction && (
         <Button
-          disabled={isPending}
-          size={'sm'}
-          variant={'default'}
-          onClick={() => updateStatus(primaryAction.nextStatus)}
+          disabled={loading}
+          size='sm'
+          variant='default'
+          onClick={() => handleUpdateStatus(primaryAction.nextStatus)}
           className='text-xs!'
         >
           {primaryAction.label}

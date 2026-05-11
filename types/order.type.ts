@@ -1,8 +1,6 @@
 import { GrpcTimestamp } from '@/lib/utils';
-
 export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 export type OrderStatusUpper = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
-
 export type OrderAddress = {
   fullName: string;
   email: string;
@@ -47,6 +45,7 @@ export type CheckoutResult =
 export type GetOrdersRequest = {
   search?: string;
   status?: string;
+  orderBy?: string;
   page?: number;
   limit?: number;
 };
@@ -71,3 +70,124 @@ export type Order = {
 
   createdAt: GrpcTimestamp;
 };
+
+export type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
+
+export type OrderDetail = {
+  id: string;
+  orderNumber: string;
+  userId: string;
+  customerEmail: string;
+  status: OrderStatusUpper;
+  paymentStatus: PaymentStatus;
+  paymentMethod: string;
+  subtotal: number;
+  tax: number;
+  shippingCost: number;
+  discount: number;
+  total: number;
+  notes: string;
+  shippingAddress: {
+    firstName: string;
+    lastName: string;
+    address1: string;
+    address2: string;
+    city: string;
+    phone: string;
+  };
+  billingAddress: {
+    firstName: string;
+    lastName: string;
+    address1: string;
+    address2: string;
+    city: string;
+    phone: string;
+  };
+  items: {
+    id: string;
+    productId: string;
+    variantId: string;
+    name: string;
+    sku: string;
+    price: number;
+    quantity: number;
+    subtotal: number;
+    attributes: {
+      name: string;
+      value: string;
+    }[];
+  }[];
+  totalItems: number;
+  totalUniqueItems: number;
+  createdAt: {
+    seconds: {
+      low: number;
+    };
+  };
+  updatedAt: {
+    seconds: {
+      low: number;
+    };
+  };
+};
+
+export type MyOrdersResponse = {
+  data: CustomerOrderDetailGrpc[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+};
+
+export interface CustomerOrderDetailGrpc {
+  id: string;
+  orderNumber: string;
+  status: string;
+  paymentStatus: string;
+  paymentMethod: string;
+  subtotal: number;
+  shippingCost: number;
+  discount: number;
+  total: number;
+  trackingNumber?: string;
+  shippingProvider?: string;
+  shippingAddress: OrderAddressGrpc;
+  items: OrderDetailItemGrpc[];
+  totalItems: number;
+  totalUniqueItems: number;
+
+  estimatedDelivery?: GrpcTimestamp;
+  paidAt?: GrpcTimestamp;
+  shippedAt?: GrpcTimestamp;
+  deliveredAt?: GrpcTimestamp;
+  cancelledAt?: GrpcTimestamp;
+  createdAt: GrpcTimestamp;
+}
+
+export interface OrderDetailItemGrpc {
+  id: string;
+  productId: string;
+  variantId?: string;
+  name: string;
+  sku?: string;
+  image: string;
+  price: number;
+  quantity: number;
+  subtotal: number;
+  attributes: OrderItemAttributeGrpc[];
+}
+
+export interface OrderItemAttributeGrpc {
+  name: string;
+  value: string;
+}
+
+export interface OrderAddressGrpc {
+  firstName: string;
+  lastName: string;
+  company?: string;
+  address1: string;
+  address2?: string;
+  city: string;
+  phone?: string;
+}

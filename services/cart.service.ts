@@ -39,13 +39,13 @@ const getCartHeaders = (accessToken?: string | null, sessionId?: string | null) 
 
 export async function getCart(accessToken?: string | null, sessionId?: string | null) {
   return fetchWrapper.get<ApiResponse<Cart>>('/cart', {
-    headers: getCartHeaders(accessToken, '550e8400-e29b-41d4-a716-446655440000')
+    headers: getCartHeaders(accessToken, sessionId)
   });
 }
 
 export async function getCartCount(accessToken?: string | null, sessionId?: string | null) {
   return fetchWrapper.get<ApiResponse<CartCount>>('/cart/count', {
-    headers: getCartHeaders(accessToken, '550e8400-e29b-41d4-a716-446655440000')
+    headers: getCartHeaders(accessToken, sessionId)
   });
 }
 

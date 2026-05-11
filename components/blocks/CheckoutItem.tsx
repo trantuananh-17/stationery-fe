@@ -50,7 +50,7 @@ export default function CheckoutItem({ item, isPaymentPage, stockError }: Props)
   return (
     <div className={cn(isPaymentPage && 'my-4')}>
       <div className='bg-card relative flex flex-col gap-4 sm:flex-row'>
-        <Card className='w-full shrink-0 p-0 sm:w-28'>
+        <Card className='w-full shrink-0 p-0 sm:w-24'>
           <AspectRatio ratio={1} className='bg-muted relative overflow-hidden rounded-lg'>
             {item.imageVariantSnapshot ? (
               <Image src={item.imageVariantSnapshot} alt={item.productNameSnapshot} fill className='object-cover' />
@@ -61,7 +61,7 @@ export default function CheckoutItem({ item, isPaymentPage, stockError }: Props)
         </Card>
 
         <div className='flex flex-1 flex-col justify-between gap-0'>
-          <h2 className='text-lg font-semibold'>{item.productNameSnapshot}</h2>
+          <h2 className='text-lg'>{item.productNameSnapshot}</h2>
           <div className='text-muted-foreground flex items-center gap-2 text-sm'>
             {item.variantNameSnapshot && <p className=''>{item.variantNameSnapshot}</p>} •
             <p className=''>Số lượng: {item.quantity}</p>
@@ -78,9 +78,7 @@ export default function CheckoutItem({ item, isPaymentPage, stockError }: Props)
           </div>
           <p className='text-muted-foreground text-sm'>Đơn giá: {formatVND(item.unitPriceSnapshot)} mỗi sản phẩm</p>
 
-          {!isPaymentPage && (
-            <p className='text-sm font-semibold'>Thành tiền: {formatVND(item.unitPriceSnapshot * item.quantity)}</p>
-          )}
+          {!isPaymentPage && <p className='text-sm'>Thành tiền: {formatVND(item.unitPriceSnapshot * item.quantity)}</p>}
         </div>
       </div>
       {stockError && (

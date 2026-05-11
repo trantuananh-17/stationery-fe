@@ -30,7 +30,7 @@ export default function PaymentToast() {
       return;
     }
 
-    if (redirectStatus === 'canceled') {
+    if (redirectStatus === 'cancelled') {
       toast.error('Bạn đã hủy thanh toán', { position: 'top-right' });
       sessionStorage.setItem(toastKey, 'shown');
     }

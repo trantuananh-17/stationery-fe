@@ -84,7 +84,7 @@ export default function PaymentPage() {
             <CardContent className='space-y-5 p-5'>
               <div className='space-y-1'>
                 <p className='text-muted-foreground text-sm'>Mã đơn hàng</p>
-                <p className='font-semibold'>#{order?.}</p>
+                <p className='font-semibold'>#</p>
               </div>
 
               <div className='space-y-1'>

@@ -31,10 +31,17 @@ export function ProductPrice({ price, compareAtPrice, className, showBadge = tru
   const discountPercent = hasSale ? Math.round(((compareAtPrice - price) / compareAtPrice) * 100) : 0;
 
   return (
-    <div className={cn('flex items-center gap-2', className)}>
+    <div
+      className={cn(
+        'flex w-full items-center gap-2',
+        compareAtPrice && 'justify-between',
+        !hasSale && 'justify-end',
+        className
+      )}
+    >
       {hasSale && <span className='text-muted-foreground line-through'>{formatVND(compareAtPrice)}</span>}
 
-      <span className='text-destructive font-bold'>{formatVND(price)}</span>
+      <p className='text-destructive font-bold'>{formatVND(price)}</p>
 
       {hasSale && showBadge && hasInfo && <Badge variant='destructive'>-{discountPercent}%</Badge>}
 

@@ -1,8 +1,12 @@
+import NotFound from '@/app/(shop)/products/[slug]/not-found';
 import { OrderActions } from '@/components/blocks/admin/OrderActions';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { getToken } from '@/lib/auth';
+import { getOrderById } from '@/services/order.service';
+import { OrderDetail, OrderStatusUpper, PaymentStatus } from '@/types/order.type';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -19,94 +23,8 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-type OrderStatus = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELED';
-type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
-
-type OrderDetail = {
-  id: string;
-
-  orderNumber: string;
-
-  userId: string;
-
-  customerEmail: string;
-
-  status: OrderStatus;
-
-  paymentStatus: PaymentStatus;
-
-  paymentMethod: string;
-
-  subtotal: number;
-
-  tax: number;
-
-  shippingCost: number;
-
-  discount: number;
-
-  total: number;
-
-  notes: string;
-
-  shippingAddress: {
-    firstName: string;
-    lastName: string;
-    address1: string;
-    address2: string;
-    city: string;
-    phone: string;
-  };
-
-  billingAddress: {
-    firstName: string;
-    lastName: string;
-    address1: string;
-    address2: string;
-    city: string;
-    phone: string;
-  };
-
-  items: {
-    id: string;
-    productId: string;
-    variantId: string;
-
-    name: string;
-
-    sku: string;
-
-    price: number;
-
-    quantity: number;
-
-    subtotal: number;
-
-    attributes: {
-      name: string;
-      value: string;
-    }[];
-  }[];
-
-  totalItems: number;
-
-  totalUniqueItems: number;
-
-  createdAt: {
-    seconds: {
-      low: number;
-    };
-  };
-
-  updatedAt: {
-    seconds: {
-      low: number;
-    };
-  };
-};
-
-const orderStatusConfig: Record<
-  OrderStatus,
+export const orderStatusConfig: Record<
+  OrderStatusUpper,
   {
     label: string;
 
@@ -121,13 +39,13 @@ const orderStatusConfig: Record<
     primaryAction?: {
       label: string;
 
-      nextStatus: OrderStatus;
+      nextStatus: OrderStatusUpper;
     };
 
     secondaryActions?: {
       label: string;
 
-      nextStatus: OrderStatus;
+      nextStatus: OrderStatusUpper;
 
       destructive?: boolean;
     }[];
@@ -154,7 +72,7 @@ const orderStatusConfig: Record<
       {
         label: 'Hủy đơn',
 
-        nextStatus: 'CANCELED',
+        nextStatus: 'CANCELLED',
 
         destructive: true
       }
@@ -182,7 +100,7 @@ const orderStatusConfig: Record<
       {
         label: 'Hủy đơn',
 
-        nextStatus: 'CANCELED',
+        nextStatus: 'CANCELLED',
 
         destructive: true
       }
@@ -219,7 +137,7 @@ const orderStatusConfig: Record<
     cardClassName: 'bg-emerald-100 text-emerald-900 text-xs!'
   },
 
-  CANCELED: {
+  CANCELLED: {
     label: 'Đã hủy',
 
     description: 'Đơn hàng đã bị hủy.',
@@ -232,7 +150,7 @@ const orderStatusConfig: Record<
   }
 };
 
-const paymentStatusConfig: Record<
+export const paymentStatusConfig: Record<
   PaymentStatus,
   {
     label: string;
@@ -303,142 +221,30 @@ const getPaymentMethodLabel = (method: string) => {
   return map[method.toLowerCase()] || method;
 };
 
-async function getOrder(orderId: string): Promise<OrderDetail> {
-  // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`, {
-  //   cache: 'no-store'
-  // });
+async function getOrderInfo(token: string, orderId: string): Promise<OrderDetail | null> {
+  const res = await getOrderById(token, orderId);
+  if (!res?.ok || !res?.data?.data) {
+    return null;
+  }
 
-  // if (!response.ok) {
-  //   throw new Error('Không thể tải đơn hàng');
-  // }
+  console.log(res.data.data);
 
-  // const result = await response.json();
-  const result = {
-    id: '6fa847a4-3ba2-4d06-9c2c-3aec47377985',
-
-    orderNumber: 'ORD-20260503-76697619',
-
-    userId: 'e6d14eb9-268c-4a74-88b0-4b0d9731443b',
-
-    customerEmail: 'anhkyohauik17@gmail.com',
-
-    status: 'SHIPPED',
-
-    paymentStatus: 'PAID',
-
-    paymentMethod: 'cod',
-
-    subtotal: 20000,
-
-    tax: 0,
-
-    shippingCost: 0,
-
-    discount: 0,
-
-    total: 20000,
-
-    notes: '',
-
-    shippingAddress: {
-      firstName: 'Anh',
-      lastName: 'Tuấn',
-      address1: 'Thái Bình',
-      address2: '',
-      city: 'Thái Bình',
-      phone: '0987654321'
-    },
-
-    billingAddress: {
-      firstName: 'Anh',
-      lastName: 'Tuấn',
-      address1: 'Thái Bình',
-      address2: '',
-      city: 'Thái Bình',
-      phone: '0987654321'
-    },
-
-    items: [
-      {
-        id: '7038cb3f-1a2f-4be0-974d-e9f35b37649d',
-
-        productId: '4d24f89c-bb11-4c6d-b836-6e307bccaf90',
-
-        variantId: 'cfdeece9-d138-46af-9b62-ba319108c8ee',
-
-        name: 'Bút Bi Bấm I-5 0.5 mm – Radius – Mực Đen Đỏ',
-
-        sku: 'BUT-RE-VAR-42E4F6',
-
-        price: 2000,
-
-        quantity: 10,
-
-        subtotal: 20000,
-
-        attributes: [
-          {
-            name: 'Màu sắc',
-            value: 'Đỏ'
-          }
-        ]
-      },
-      {
-        id: '7038cb3f-1a2f-4be0-974d-e9f35b376491',
-
-        productId: '4d24f89c-bb11-4c6d-b836-6e307bccaf90',
-
-        variantId: 'cfdeece9-d138-46af-9b62-ba319108c8ee',
-
-        name: 'Bút Bi Bấm I-5 0.5 mm – Radius – Mực Đen Đỏ',
-
-        sku: 'BUT-RE-VAR-42E4F6',
-
-        price: 2000,
-
-        quantity: 10,
-
-        subtotal: 20000,
-
-        attributes: [
-          {
-            name: 'Màu sắc',
-            value: 'Đỏ'
-          }
-        ]
-      }
-    ],
-
-    totalItems: 10,
-
-    totalUniqueItems: 1,
-
-    createdAt: {
-      seconds: {
-        low: 1777826187
-      }
-    },
-
-    updatedAt: {
-      seconds: {
-        low: 1777826187
-      }
-    }
-  };
-
-  return result;
+  return res.data.data;
 }
 
 type Props = {
   params: Promise<{
-    orderId: string;
+    id: string;
   }>;
 };
 
 export default async function OrderDetailPage({ params }: Props) {
-  const { orderId } = await params;
+  const token = await getToken();
+  const { id } = await params;
 
-  const order = await getOrder(orderId);
+  const order = await getOrderInfo(token!, id);
+
+  if (!order) return <NotFound />;
 
   const status = orderStatusConfig[order.status];
 
@@ -460,7 +266,7 @@ export default async function OrderDetailPage({ params }: Props) {
               <ArrowLeft className='h-5 w-5' />
             </Link>
 
-            <h1 className='text-xl font-semibold tracking-tight md:text-2xl'>{order.orderNumber}</h1>
+            <h1 className='text-xl tracking-tight'>{order.orderNumber}</h1>
 
             <Badge variant='outline' className={`gap-1.5 rounded-full px-2.5 py-2 ${payment.className}`}>
               <PaymentIcon className='h-3.5 w-3.5' />
@@ -517,7 +323,7 @@ export default async function OrderDetailPage({ params }: Props) {
                         </div>
 
                         <div>
-                          <p className='text-sm font-semibold'>{item.name}</p>
+                          <p className='text-sm'>{item.name}</p>
 
                           <p className='text-xs text-zinc-500'>SKU: {item.sku}</p>
 
@@ -556,6 +362,7 @@ export default async function OrderDetailPage({ params }: Props) {
 
               {/* ACTIONS */}
               <OrderActions
+                accessToken={token}
                 orderId={order.id}
                 status={order.status}
                 paymentMethod={order.paymentMethod}
@@ -610,7 +417,7 @@ export default async function OrderDetailPage({ params }: Props) {
                     <span>- {formatCurrency(order.discount)}</span>
                   </div>
 
-                  <div className='grid grid-cols-[1fr_auto] gap-4 text-xs font-semibold sm:text-sm'>
+                  <div className='grid grid-cols-[1fr_auto] gap-4 text-xs sm:text-sm'>
                     <span>Tổng cộng</span>
 
                     <span>{formatCurrency(order.total)}</span>
@@ -663,7 +470,7 @@ export default async function OrderDetailPage({ params }: Props) {
               </Link>
 
               <div className='space-y-1'>
-                <p className='font-semibold'>Thông tin liên hệ</p>
+                <p className=''>Thông tin liên hệ</p>
 
                 <p className='text-zinc-500'>Email: {order.customerEmail}</p>
 
@@ -671,13 +478,13 @@ export default async function OrderDetailPage({ params }: Props) {
               </div>
 
               <div className='space-y-1'>
-                <p className='font-semibold'>Địa chỉ giao hàng</p>
+                <p className=''>Địa chỉ giao hàng</p>
 
                 <p className='text-zinc-500'>{joinAddress(order.shippingAddress)}</p>
               </div>
 
               <div className='space-y-1'>
-                <p className='font-semibold'>Địa chỉ thanh toán</p>
+                <p className=''>Địa chỉ thanh toán</p>
 
                 <p className='text-zinc-500'>{joinAddress(order.billingAddress)}</p>
               </div>

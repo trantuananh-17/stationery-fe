@@ -167,7 +167,7 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
       {
         accessorKey: 'price',
         header: () => (
-          <div className='flex justify-end'>
+          <div className='text-right'>
             <Button
               variant='ghost'
               className='px-0'
@@ -178,21 +178,23 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
             </Button>
           </div>
         ),
-        cell: ({ row }) => <div className='text-right font-semibold'>{formatCurrency(row.original.price)}</div>
+        cell: ({ row }) => <div className='text-right font-medium'>{formatCurrency(row.original.price)}</div>
       },
       {
         accessorKey: 'createdAt',
         header: () => (
-          <Button
-            variant='ghost'
-            className='px-0'
-            onClick={() => handleSort(getNextSort(currentSort, 'created_at_asc', 'created_at_desc'))}
-          >
-            Ngày tạo
-            <ArrowUpDown className='ml-1 h-4 w-4' />
-          </Button>
+          <div className='text-right'>
+            <Button
+              variant='ghost'
+              className='px-0'
+              onClick={() => handleSort(getNextSort(currentSort, 'created_at_asc', 'created_at_desc'))}
+            >
+              Ngày tạo
+              <ArrowUpDown className='ml-1 h-4 w-4' />
+            </Button>
+          </div>
         ),
-        cell: ({ row }) => <span>{formatDate(grpcTimestampToDate(row.original.createdAt))}</span>
+        cell: ({ row }) => <p className='text-right'>{formatDate(grpcTimestampToDate(row.original.createdAt))}</p>
       },
       {
         id: 'actions',

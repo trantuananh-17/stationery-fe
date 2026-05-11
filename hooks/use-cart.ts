@@ -52,11 +52,17 @@ export function useCart() {
     }
   };
 
-  const fetchCart = async () => {
+  const fetchCart = async (overrideToken?: string | null) => {
     if (isCartLoaded) return;
 
+    const token = overrideToken ?? accessToken;
+
     try {
-      await refetchCart();
+      const response = await getCart(token, token ? null : getSessionId());
+
+      if (response.data?.data) {
+        setCart(response.data.data);
+      }
     } finally {
       setCartLoaded(true);
     }

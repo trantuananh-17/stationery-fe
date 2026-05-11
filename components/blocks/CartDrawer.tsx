@@ -79,7 +79,7 @@ export function CartDrawer() {
               {items.map((item) => (
                 <div key={item.id} className='space-y-4'>
                   <div className='flex flex-col gap-4 sm:flex-row'>
-                    <div className='w-full shrink-0 sm:w-28'>
+                    <div className='w-full shrink-0 sm:w-20'>
                       <AspectRatio ratio={1} className='bg-muted overflow-hidden rounded-lg'>
                         <Image
                           src={item.productThumbnailSnapshot}

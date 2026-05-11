@@ -66,6 +66,8 @@ export const getUser = cache(async () => {
 export const getToken = async (): Promise<string | null> => {
   let data = null;
 
+  console.log('get token');
+
   if (isClient()) {
     const response = await fetch('/api/cookie?key=token');
 

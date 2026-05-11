@@ -21,13 +21,13 @@ export default function CartItemCard({ item, disabled = false, onIncrease, onDec
       currency: 'VND'
     }).format(value);
 
-  const image = item.productThumbnailSnapshot || item.imageVariantSnapshot || '/placeholder.png';
+  const image = item.imageVariantSnapshot || item.productThumbnailSnapshot || '/placeholder.png';
 
   return (
     <>
       <div className='bg-card flex flex-col gap-4 rounded-xl p-4 sm:flex-row'>
-        <div className='w-full shrink-0 sm:w-28'>
-          <AspectRatio ratio={1} className='bg-muted overflow-hidden rounded-lg'>
+        <div className='w-full shrink-0 sm:w-20'>
+          <AspectRatio ratio={1} className='bg-muted border-muted-foreground/15 overflow-hidden rounded-lg border'>
             <Image
               src={image}
               alt={item.productNameSnapshot}
@@ -41,7 +41,7 @@ export default function CartItemCard({ item, disabled = false, onIncrease, onDec
         <div className='flex flex-1 flex-col justify-between gap-4 sm:flex-row'>
           <div className='space-y-3'>
             <div>
-              <h2 className='text-lg font-semibold'>{item.productNameSnapshot}</h2>
+              <h2 className='text-lg font-medium'>{item.productNameSnapshot}</h2>
 
               {item.variantNameSnapshot && <p className='text-muted-foreground text-sm'>{item.variantNameSnapshot}</p>}
             </div>
@@ -50,7 +50,7 @@ export default function CartItemCard({ item, disabled = false, onIncrease, onDec
               <Button
                 variant='outline'
                 size='icon'
-                className='size-10'
+                className='size-8'
                 disabled={disabled}
                 onClick={() => onDecrease(item.variantId)}
               >
@@ -62,7 +62,7 @@ export default function CartItemCard({ item, disabled = false, onIncrease, onDec
               <Button
                 variant='outline'
                 size='icon'
-                className='size-10'
+                className='size-8'
                 disabled={disabled}
                 onClick={() => onIncrease(item.variantId)}
               >
