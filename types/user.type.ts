@@ -76,3 +76,12 @@ export type CustomerInfo = {
 
   createdAt: GrpcTimestamp;
 };
+
+export type UserProfileAuth = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  permisstions: string[];
+  role: string;
+  userId: string;
+};

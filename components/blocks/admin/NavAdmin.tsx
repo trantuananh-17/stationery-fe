@@ -11,6 +11,7 @@ import {
 import Link from 'next/link';
 import { Collapsible } from '@/components/ui/collapsible';
 import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 type NavSection = {
   label: string;
@@ -20,6 +21,7 @@ type NavSection = {
     icon?: React.ReactNode;
     isActive?: boolean;
     badge?: string | number;
+    disabled?: boolean;
     items?: {
       title: string;
       url: string;
@@ -38,25 +40,42 @@ export function NavAdmin({ sections }: { sections: NavSection[] }) {
 
           <SidebarMenu className='gap-0.5'>
             {section.items.map((item) => {
-              const isActive = pathname === item.url || pathname.startsWith(`${item.url}/`);
+              const isActive = !item.disabled && (pathname === item.url || pathname.startsWith(`${item.url}/`));
 
               return (
                 <Collapsible key={item.title} asChild defaultOpen={isActive} className='group/collapsible'>
                   <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip={item.title}
-                      isActive={isActive}
-                      className='data-[active=true]:text-primary data-[active=true]:bg-muted-foreground/10 hover:bg-muted-foreground/5 hover:font-semibold'
-                    >
-                      <Link href={item.url} className='text-foreground/75 flex items-center'>
+                    {item.disabled ? (
+                      <SidebarMenuButton
+                        disabled
+                        tooltip={item.title}
+                        isActive={false}
+                        className='text-foreground/50 cursor-not-allowed hover:bg-transparent hover:font-medium'
+                      >
                         {item.icon}
                         <span className='flex-1 text-sm font-medium'>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
+                      </SidebarMenuButton>
+                    ) : (
+                      <SidebarMenuButton
+                        asChild
+                        tooltip={item.title}
+                        isActive={isActive}
+                        className='data-[active=true]:text-primary data-[active=true]:bg-muted-foreground/10 hover:bg-muted-foreground/5 hover:font-semibold'
+                      >
+                        <Link href={item.url} className='text-foreground/75 flex items-center'>
+                          {item.icon}
+                          <span className='flex-1 text-sm font-medium'>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    )}
 
                     {item.badge !== undefined && (
-                      <SidebarMenuBadge className='bg-primary/10 text-primary right-3 rounded-full px-2 py-0.5 text-xs font-semibold'>
+                      <SidebarMenuBadge
+                        className={cn(
+                          'right-3 rounded-full px-2 py-0.5 text-xs font-semibold',
+                          item.disabled ? 'bg-muted text-muted-foreground/60' : 'bg-primary/10 text-primary'
+                        )}
+                      >
                         {item.badge}
                       </SidebarMenuBadge>
                     )}

@@ -139,17 +139,17 @@ export default function OrdersTable({ orders, currentSort, currentStatus }: Orde
       {
         accessorKey: 'customer',
         header: 'Khách hàng',
-        cell: ({ row }) => <div className='max-w-[100px] truncate'>{row.original.customerName}</div>
+        cell: ({ row }) => <div className='max-w-25 truncate'>{row.original.customerName}</div>
       },
       {
         accessorKey: 'email',
         header: 'Email',
-        cell: ({ row }) => <div className='truncate'>{row.original.customerEmail}</div>
+        cell: ({ row }) => <div className='max-w-40 truncate'>{row.original.customerEmail}</div>
       },
       {
         accessorKey: 'product',
         header: 'Sản phẩm',
-        cell: ({ row }) => <div className='max-w-[220px] truncate'>{row.original.productName}</div>
+        cell: ({ row }) => <div className='max-w-55 truncate'>{row.original.productName}</div>
       },
       {
         accessorKey: 'status',
@@ -157,8 +157,8 @@ export default function OrdersTable({ orders, currentSort, currentStatus }: Orde
         cell: ({ row }) => <StatusBadge status={row.original.status} />
       },
       {
-        accessorKey: 'payemnt-status',
-        header: 'Trạng thái',
+        accessorKey: 'paymentStatus',
+        header: 'Trạng thái thanh toán',
         cell: ({ row }) => {
           const paymentStatus = (
             row.original.paymentStatus === 'PENDING' ? 'PAYMENT_PENDING' : row.original.paymentStatus
@@ -249,6 +249,7 @@ export default function OrdersTable({ orders, currentSort, currentStatus }: Orde
           email: 'Email',
           product: 'Sản phẩm',
           status: 'Trạng thái',
+          paymentStatus: 'Trạng thái thanh toán',
           createdAt: 'Ngày tạo',
           total: 'Tổng tiền',
           actions: 'Hành động'
@@ -279,18 +280,26 @@ export default function OrdersTable({ orders, currentSort, currentStatus }: Orde
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-                onClick={() => router.push(`/admin/orders/${row.original.id}`)}
-                className='cursor-pointer'
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                ))}
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  onClick={() => router.push(`/admin/orders/${row.original.id}`)}
+                  className='cursor-pointer'
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className='h-24 text-center'>
+                  Không có đơn hàng.
+                </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>

@@ -1,3 +1,4 @@
+import AdminPagination from '@/components/blocks/admin/AdminPagination';
 import CustomersTable from '@/components/blocks/admin/CustomerTable';
 import TitlePage from '@/components/blocks/admin/TitlePage';
 import { getToken } from '@/lib/auth';
@@ -77,6 +78,15 @@ export default async function Page({ searchParams }: Props) {
       />
 
       <CustomersTable customers={customersData.data ?? []} currentSort={currentSort} />
+
+      <AdminPagination
+        pagination={{
+          page: currentPage,
+          limit: currentLimit,
+          total: customersData.total,
+          totalPages: customersData.totalPages
+        }}
+      />
     </div>
   );
 }

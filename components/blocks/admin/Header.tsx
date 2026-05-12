@@ -7,17 +7,21 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import SearchCommand from './SearchCommand';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { DropdownMenuAvatar } from '@/components/blocks/DropdownMenuAvatar';
 import { NotificationMenu } from '@/components/blocks/admin/NotificationMenu';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { AdminDropdownMenu } from './AdminDropdownMenu';
+import { UserProfile } from '@/services/auth.service';
 
-export default function Header() {
+interface Props {
+  user: UserProfile;
+}
+export default function Header({ user }: Props) {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
 
   return (
     <>
-      <header className='bg-muted-foreground/8 flex h-16 items-center justify-between border-b px-6 py-4'>
+      <header className='sticky top-0 z-50 flex h-16 items-center justify-between border-b bg-gray-100 px-6 py-4 backdrop-blur'>
         <div className='flex gap-2'>
           <SidebarTrigger className='' />
           {!isMobile && (
@@ -39,7 +43,12 @@ export default function Header() {
 
         <div className='flex gap-2'>
           <NotificationMenu />
-          {/* <DropdownMenuAvatar /> */}
+          <AdminDropdownMenu
+            firstName={user.firstName}
+            lastName={user.lastName}
+            email={user.email}
+            avatar={undefined}
+          />
         </div>
       </header>
 

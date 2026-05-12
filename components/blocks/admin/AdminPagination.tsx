@@ -45,25 +45,25 @@ export default function AdminPagination({ pagination }: AdminPaginationProps) {
     });
   };
 
-  const startItem = (pagination.page - 1) * pagination.limit + 1;
+  const startItem = pagination.total === 0 ? 0 : (pagination.page - 1) * pagination.limit + 1;
 
-  const endItem = Math.min(pagination.page * pagination.limit, pagination.total);
+  const endItem = pagination.total === 0 ? 0 : Math.min(pagination.page * pagination.limit, pagination.total);
 
   return (
     <div className='mt-4 flex items-center justify-between'>
       <p className='text-muted-foreground text-sm'>
-        Hiển thị {startItem}-{endItem} của {pagination.total} kết quả
+        Hiển thị {startItem} - {endItem} của {pagination.total} kết quả
       </p>
 
       <div className='flex items-center gap-2'>
         <span className='text-muted-foreground text-sm'>Số dòng</span>
 
         <Select value={`${pagination.limit}`} onValueChange={(value) => handlePageSizeChange(Number(value))}>
-          <SelectTrigger className='h-8 w-[70px]'>
+          <SelectTrigger className='w-17'>
             <SelectValue />
           </SelectTrigger>
 
-          <SelectContent>
+          <SelectContent position='popper' className='min-w-17'>
             {[10, 15, 20, 50].map((pageSize) => (
               <SelectItem key={pageSize} value={`${pageSize}`}>
                 {pageSize}
@@ -77,11 +77,12 @@ export default function AdminPagination({ pagination }: AdminPaginationProps) {
           size='sm'
           disabled={pagination.page <= 1}
           onClick={() => handlePageChange(pagination.page - 1)}
+          className='h-9'
         >
           Trước
         </Button>
 
-        <Button variant='default' size='sm'>
+        <Button variant='default' size='sm' className='h-9'>
           {pagination.page}
         </Button>
 
@@ -90,6 +91,7 @@ export default function AdminPagination({ pagination }: AdminPaginationProps) {
           size='sm'
           disabled={pagination.page >= pagination.totalPages}
           onClick={() => handlePageChange(pagination.page + 1)}
+          className='h-9'
         >
           Sau
         </Button>

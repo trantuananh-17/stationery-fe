@@ -1,6 +1,8 @@
 import React from 'react';
+import { redirect } from 'next/navigation';
 import LOGO from '@/assets/images/logo.webp';
 import Image from 'next/image';
+
 import Header from '../blocks/Header';
 import { TooltipProvider } from '../ui/tooltip';
 import { SidebarInset, SidebarProvider } from '../ui/sidebar';
@@ -8,13 +10,20 @@ import { AppSidebar } from '../blocks/AppSidebar';
 import { Container } from '../ui/container';
 import Footer from '../blocks/Footer';
 import Provider from './Provider';
-import RefreshToken from '../blocks/RefreshToken';
+import ShopProvider from '@/providers/ShopProvider';
+import { initAuth } from '@/services/auth.service';
 
 interface Props {
   children: React.ReactNode;
 }
 
-export default function Layout(props: Props) {
+export default async function Layout(props: Props) {
+  const auth = await initAuth();
+
+  if (auth.shouldLogout) {
+    redirect('/auth/log-out');
+  }
+
   const headerProps = {
     logo: (
       <Image
@@ -86,21 +95,24 @@ export default function Layout(props: Props) {
   };
 
   return (
-    <>
-      <TooltipProvider>
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
-            <Container size='xl' className='md:px-10 lg:px-20'>
-              <Header {...headerProps} />
+    <Provider initialAuth={auth}>
+      <ShopProvider>
+        <TooltipProvider>
+          <SidebarProvider>
+            <AppSidebar />
 
-              <main className='flex-1'>{props.children}</main>
+            <SidebarInset>
+              <Container size='xl' className='md:px-10 lg:px-20'>
+                <Header {...headerProps} />
 
-              <Footer {...footerProps} />
-            </Container>
-          </SidebarInset>
-        </SidebarProvider>
-      </TooltipProvider>
-    </>
+                <main className='flex-1'>{props.children}</main>
+
+                <Footer {...footerProps} />
+              </Container>
+            </SidebarInset>
+          </SidebarProvider>
+        </TooltipProvider>
+      </ShopProvider>
+    </Provider>
   );
 }

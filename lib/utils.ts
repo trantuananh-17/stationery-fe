@@ -76,3 +76,63 @@ export function getValidLimit(value?: string) {
 
   return limit;
 }
+
+export function parseDate(value?: Date | string | GrpcTimestamp | null): Date | null {
+  if (!value) {
+    return null;
+  }
+
+  if (value instanceof Date) {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    const date = new Date(value);
+
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  if (typeof value === 'object' && 'seconds' in value) {
+    const seconds = typeof value.seconds === 'number' ? value.seconds : value.seconds.low;
+
+    return new Date(seconds * 1000);
+  }
+
+  return null;
+}
+
+export function formatTimeAgo(value?: Date | string | GrpcTimestamp | null): string {
+  const date = parseDate(value);
+
+  if (!date) {
+    return '-';
+  }
+
+  const diffMs = Date.now() - date.getTime();
+
+  const seconds = Math.floor(diffMs / 1000);
+
+  if (seconds < 60) {
+    return 'Vừa xong';
+  }
+
+  const minutes = Math.floor(seconds / 60);
+
+  if (minutes < 60) {
+    return `${minutes} phút trước`;
+  }
+
+  const hours = Math.floor(minutes / 60);
+
+  if (hours < 24) {
+    return `${hours} giờ trước`;
+  }
+
+  const days = Math.floor(hours / 24);
+
+  if (days < 30) {
+    return `${days} ngày trước`;
+  }
+
+  return formatDate(date);
+}
