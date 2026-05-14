@@ -31,6 +31,20 @@ export function formatDate(value?: Date | string | null) {
   return date.toLocaleDateString('vi-VN');
 }
 
+export function formatDateISO(value?: Date | string | null): string {
+  if (!value) return '-';
+
+  const date = value instanceof Date ? value : new Date(value);
+
+  if (Number.isNaN(date.getTime())) return '-';
+
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 export function grpcTimestampToDate(timestamp?: GrpcTimestamp | null): Date | null {
   if (!timestamp) return null;
 
@@ -135,4 +149,43 @@ export function formatTimeAgo(value?: Date | string | GrpcTimestamp | null): str
   }
 
   return formatDate(date);
+}
+
+export function getCurrentMonthFullRange() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const startDate = new Date(year, month, 1);
+  const endDate = new Date(year, month + 1, 0);
+
+  const toIso = (date: Date) => date.toISOString().split('T')[0];
+
+  return {
+    startDate: toIso(startDate),
+    endDate: toIso(endDate)
+  };
+}
+
+export function getLast28DaysRange() {
+  const end = new Date();
+  const start = new Date();
+
+  start.setDate(end.getDate() - 27);
+
+  const toIso = (date: Date) => date.toISOString().split('T')[0];
+
+  return {
+    startDate: toIso(start),
+    endDate: toIso(end)
+  };
+}
+
+export function getCurrentMonth() {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+
+  return `${year}-${month}`;
 }

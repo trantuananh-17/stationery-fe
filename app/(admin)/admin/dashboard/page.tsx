@@ -1,20 +1,34 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { DollarSign, RotateCcw, ShoppingBag, TrendingUp } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { DollarSign, Package, ShoppingBag, UserPlus } from 'lucide-react';
 
-import StatsCard from '@/components/blocks/admin/StatsCard';
-import SalesOverview from '@/components/blocks/admin/SalesOverview';
 import OrderStatusChart from '@/components/blocks/admin/OrderStatusChart';
-import TopSellingProducts from '@/components/blocks/admin/TopSellingProducts';
-import SalesByCategoryChart from '@/components/blocks/admin/SalesByCategoryChart';
 import RecentTransactionsTable from '@/components/blocks/admin/RecentTransactionsTable';
 import RevenueTargetsCard from '@/components/blocks/admin/RevenueTargetsCard';
+import SalesOverview from '@/components/blocks/admin/SalesOverview';
+import StatsCard from '@/components/blocks/admin/StatsCard';
 import TitlePage from '@/components/blocks/admin/TitlePage';
+import TopSellingProducts from '@/components/blocks/admin/TopSellingProducts';
+import { getToken } from '@/lib/auth';
+import {
+  getDailyGrowth,
+  getDailySummary,
+  getGoalProgress,
+  getRecentTransaction,
+  getSalesChart,
+  getTopProducts,
+  getTotalOrders
+} from '@/services/analytics.service';
 
-type StatKey = 'sales' | 'avgOrderValue' | 'conversionRate' | 'refundRate';
 type StatFormat = 'currency' | 'percent' | 'number';
+export type StatKey = 'totalRevenue' | 'avgOrderValue' | 'totalOrders' | 'totalCustomers';
+
+export type DashboardStats = Record<
+  StatKey,
+  {
+    value: number;
+    percent: string;
+  }
+>;
 
 type StatConfig = {
   key: StatKey;
@@ -25,17 +39,9 @@ type StatConfig = {
   format: StatFormat;
 };
 
-type DashboardStats = Record<
-  StatKey,
-  {
-    value: number;
-    percent: string;
-  }
->;
-
 const statConfigs: StatConfig[] = [
   {
-    key: 'sales',
+    key: 'totalRevenue',
     title: 'Tổng doanh thu',
     icon: DollarSign,
     iconColor: 'text-orange-500',
@@ -51,20 +57,20 @@ const statConfigs: StatConfig[] = [
     format: 'currency'
   },
   {
-    key: 'conversionRate',
-    title: 'Tỷ lệ chuyển đổi',
-    icon: TrendingUp,
+    key: 'totalOrders',
+    title: 'Tổng đơn hàng',
+    icon: Package,
     iconColor: 'text-sky-600',
     bgColor: 'bg-sky-100',
-    format: 'percent'
+    format: 'number'
   },
   {
-    key: 'refundRate',
-    title: 'Tỷ lệ hoàn trả',
-    icon: RotateCcw,
+    key: 'totalCustomers',
+    title: 'Tổng khách hàng',
+    icon: UserPlus,
     iconColor: 'text-yellow-500',
     bgColor: 'bg-yellow-100',
-    format: 'percent'
+    format: 'number'
   }
 ];
 
@@ -92,35 +98,32 @@ const formatStatValue = (format: StatFormat, value: number) => {
   }
 };
 
-export default function Page() {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
+export default async function Page() {
+  const token = await getToken();
+  const dateRange = getCurrentMonthFullRange();
+  const last28Range = getLast28DaysRange();
+  const month = getCurrentMonth();
 
-  useEffect(() => {
-    const fakeData: DashboardStats = {
-      sales: {
-        value: 12532000,
-        percent: '+18.2%'
-      },
-      avgOrderValue: {
-        value: 182000,
-        percent: '+4.8%'
-      },
-      conversionRate: {
-        value: 3.24,
-        percent: '+0.8%'
-      },
-      refundRate: {
-        value: 2.1,
-        percent: '-0.3%'
-      }
-    };
+  const [summaryRes, growthRes, salesChartRes, totalOrdersRes, topProductsRes, goalProgressRes, recentTransactionRes] =
+    await Promise.all([
+      getDailySummary(token, dateRange),
+      getDailyGrowth(token, dateRange),
+      getSalesChart(token, last28Range),
+      getTotalOrders(token, dateRange),
+      getTopProducts(token, dateRange),
+      getGoalProgress(token, month),
+      getRecentTransaction(token)
+    ]);
 
-    const timer = setTimeout(() => {
-      setStats(fakeData);
-    }, 200);
+  const summary = summaryRes.data!.data;
+  const growth = growthRes.data!.data;
+  const salesChart = salesChartRes.data!.data;
+  const totalOrders = totalOrdersRes.data!.data;
+  const topProducts = topProductsRes.data!.data;
+  const goalProgress = goalProgressRes.data!.data;
+  const recentTransaction = recentTransactionRes.data!.data;
 
-    return () => clearTimeout(timer);
-  }, []);
+  const stats = mapStats(summary, growth);
 
   return (
     <div className='flex flex-col gap-6'>
@@ -148,30 +151,51 @@ export default function Page() {
 
       <div className='grid grid-cols-1 gap-4 xl:grid-cols-12'>
         <div className='h-full xl:col-span-8'>
-          <SalesOverview />
+          <SalesOverview salesChartItems={salesChart.data ?? []} />
         </div>
         <div className='h-full xl:col-span-4'>
-          <OrderStatusChart />
+          <OrderStatusChart orderStatus={totalOrders} />
         </div>
       </div>
 
       <div className='grid grid-cols-1 gap-4 xl:grid-cols-12'>
         <div className='h-full xl:col-span-8'>
-          <TopSellingProducts />
+          <TopSellingProducts products={topProducts.data} />
         </div>
-        <div className='h-full min-h-90 xl:col-span-4'>
-          <SalesByCategoryChart />
+        <div className='h-full xl:col-span-4'>
+          <RevenueTargetsCard targets={goalProgress} />
         </div>
       </div>
 
       <div className='grid grid-cols-1 gap-4 xl:grid-cols-12'>
-        <div className='h-full xl:col-span-8'>
-          <RecentTransactionsTable />
-        </div>
-        <div className='h-full xl:col-span-4'>
-          <RevenueTargetsCard />
+        <div className='h-full xl:col-span-12'>
+          <RecentTransactionsTable transactions={recentTransaction.data ?? []} />
         </div>
       </div>
     </div>
   );
+}
+
+import { getCurrentMonth, getCurrentMonthFullRange, getLast28DaysRange } from '@/lib/utils';
+import { DailyGrowthResponse, DailySummaryResponse } from '@/types/analytics.type';
+
+export function mapStats(summary: DailySummaryResponse, growth: DailyGrowthResponse): DashboardStats {
+  return {
+    totalRevenue: {
+      value: summary.totalRevenue,
+      percent: `${growth.revenueGrowth}%`
+    },
+    avgOrderValue: {
+      value: summary.averageOrderValue,
+      percent: `${growth.averageOrderValueGrowth}%`
+    },
+    totalOrders: {
+      value: summary.totalOrders ?? 0,
+      percent: `${growth.averageOrderValueGrowth ?? 0}%`
+    },
+    totalCustomers: {
+      value: summary.newCustomers ?? 0,
+      percent: `${growth.newCustomersGrowth ?? 0}%`
+    }
+  };
 }

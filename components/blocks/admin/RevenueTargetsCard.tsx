@@ -1,9 +1,18 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { formatCurrency } from '@/lib/utils';
+
+export type RevenueTargetsResponse = {
+  revenueGoal: number;
+  currentRevenue: number;
+  revenueProgress: number;
+  ordersGoal: number;
+  currentOrders: number;
+  ordersProgress: number;
+  customersGoal: number;
+  currentCustomers: number;
+  customersProgress: number;
+};
 
 type TargetKey = 'monthlyRevenue' | 'orders' | 'newCustomers';
 
@@ -22,55 +31,57 @@ type TargetConfig = {
   formatter?: (value: number) => string;
 };
 
+interface Props {
+  targets?: RevenueTargetsResponse;
+}
+
 const targetConfigs: TargetConfig[] = [
   {
     key: 'monthlyRevenue',
     label: 'Doanh thu hàng tháng',
     color: 'bg-orange-600',
-    formatter: (value) => `$${value.toLocaleString()}`
+    formatter: formatCurrency
   },
   {
     key: 'orders',
     label: 'Tổng đơn hàng',
-    color: 'bg-teal-600'
+    color: 'bg-teal-600',
+    formatter: (value) => value.toLocaleString('vi-VN')
   },
   {
     key: 'newCustomers',
     label: 'Khách hàng mới',
-    color: 'bg-cyan-900'
+    color: 'bg-cyan-900',
+    formatter: (value) => value.toLocaleString('vi-VN')
   }
 ];
 
-export default function RevenueTargetsCard() {
-  const [targets, setTargets] = useState<RevenueTargetsData | null>(null);
+function mapRevenueTargets(targets?: RevenueTargetsResponse): RevenueTargetsData {
+  return {
+    monthlyRevenue: {
+      value: targets?.currentRevenue ?? 0,
+      target: targets?.revenueGoal ?? 0,
+      percent: targets?.revenueProgress ?? 0
+    },
+    orders: {
+      value: targets?.currentOrders ?? 0,
+      target: targets?.ordersGoal ?? 0,
+      percent: targets?.ordersProgress ?? 0
+    },
+    newCustomers: {
+      value: targets?.currentCustomers ?? 0,
+      target: targets?.customersGoal ?? 0,
+      percent: targets?.customersProgress ?? 0
+    }
+  };
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data: RevenueTargetsData = {
-        monthlyRevenue: {
-          value: 128430,
-          target: 150000,
-          percent: 86
-        },
-        orders: {
-          value: 992,
-          target: 1200,
-          percent: 83
-        },
-        newCustomers: {
-          value: 347,
-          target: 500,
-          percent: 69
-        }
-      };
+function clampProgress(value: number) {
+  return Math.min(Math.max(value, 0), 100);
+}
 
-      setTargets(data);
-    };
-
-    fetchData();
-  }, []);
-
-  if (!targets) return null;
+export default function RevenueTargetsCard({ targets }: Props) {
+  const revenueTargets = mapRevenueTargets(targets);
 
   return (
     <Card className='h-full gap-0 rounded-xl p-5 shadow-sm'>
@@ -83,21 +94,21 @@ export default function RevenueTargetsCard() {
 
       <CardContent className='space-y-5 p-0'>
         {targetConfigs.map((item) => {
-          const target = targets[item.key];
+          const target = revenueTargets[item.key];
+          const formatter = item.formatter ?? ((value: number) => value.toLocaleString('vi-VN'));
 
           return (
             <div key={item.key} className='space-y-2'>
               <div className='flex items-center justify-between text-xs sm:text-sm'>
                 <span className='font-medium'>{item.label}</span>
-                <span className='text-sm font-semibold'>{target.percent}%</span>
+                <span className='text-sm font-semibold'>{target.percent.toLocaleString('vi-VN')}%</span>
               </div>
 
-              <Progress value={target.percent} className='h-2' indicatorClassName={item.color} />
+              <Progress value={clampProgress(target.percent)} className='h-2' indicatorClassName={item.color} />
 
               <div className='text-muted-foreground flex justify-between text-xs'>
-                <span>{item.formatter ? item.formatter(target.value) : target.value}</span>
-
-                <span>Target: {item.formatter ? item.formatter(target.target) : target.target}</span>
+                <span>{formatter(target.value)}</span>
+                <span>Mục tiêu: {formatter(target.target)}</span>
               </div>
             </div>
           );

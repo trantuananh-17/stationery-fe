@@ -3,50 +3,18 @@
 import { useMemo } from 'react';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { formatDateISO, grpcTimestampToDate } from '@/lib/utils';
+import { SalesChartItem } from '@/types/analytics.type';
 
-type ChartItem = {
+type ChartData = {
   date: string;
+  fullDate: string;
   revenue: number;
   orders: number;
   profit: number;
-};
-
-const apiData: ChartItem[] = [
-  { date: '2026-04-01', revenue: 3200000, orders: 52, profit: 900000 },
-  { date: '2026-04-02', revenue: 3500000, orders: 59, profit: 1080000 },
-  { date: '2026-04-03', revenue: 3700000, orders: 66, profit: 1180000 },
-  { date: '2026-04-04', revenue: 3900000, orders: 70, profit: 1280000 },
-  { date: '2026-04-05', revenue: 4000000, orders: 71, profit: 1350000 },
-  { date: '2026-04-06', revenue: 3950000, orders: 69, profit: 1340000 },
-  { date: '2026-04-07', revenue: 3800000, orders: 65, profit: 1250000 },
-  { date: '2026-04-08', revenue: 3600000, orders: 60, profit: 1100000 },
-  { date: '2026-04-09', revenue: 3350000, orders: 54, profit: 950000 },
-  { date: '2026-04-10', revenue: 3100000, orders: 49, profit: 800000 },
-  { date: '2026-04-11', revenue: 2850000, orders: 46, profit: 700000 },
-  { date: '2026-04-12', revenue: 2650000, orders: 44, profit: 630000 },
-  { date: '2026-04-13', revenue: 2500000, orders: 44, profit: 600000 },
-  { date: '2026-04-14', revenue: 2450000, orders: 44, profit: 600000 },
-  { date: '2026-04-15', revenue: 2480000, orders: 46, profit: 620000 },
-  { date: '2026-04-16', revenue: 2550000, orders: 47, profit: 660000 },
-  { date: '2026-04-17', revenue: 2650000, orders: 47, profit: 720000 },
-  { date: '2026-04-18', revenue: 2800000, orders: 46, profit: 800000 },
-  { date: '2026-04-19', revenue: 3000000, orders: 45, profit: 900000 },
-  { date: '2026-04-20', revenue: 3200000, orders: 44, profit: 1000000 },
-  { date: '2026-04-21', revenue: 3900000, orders: 44, profit: 1060000 },
-  { date: '2026-04-22', revenue: 4100000, orders: 54, profit: 1280000 },
-  { date: '2026-04-23', revenue: 4250000, orders: 57, profit: 1300000 },
-  { date: '2026-04-24', revenue: 4200000, orders: 62, profit: 11280000 }
-];
-
-const getLocalDateKey = (date: Date) => {
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  const day = `${date.getDate()}`.padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
 };
 
 const getLastDays = (days = 28) => {
@@ -57,27 +25,35 @@ const getLastDays = (days = 28) => {
     date.setDate(today.getDate() - (days - 1 - index));
 
     return {
-      key: getLocalDateKey(date),
-      label: date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
+      key: formatDateISO(date),
+      label: date.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit'
       })
     };
   });
 };
 
-const buildChartData = (data: ChartItem[]) => {
+const buildChartData = (salesChartItems: SalesChartItem[]): ChartData[] => {
   const days = getLastDays(28);
 
+  const dataMap = new Map(
+    salesChartItems.map((item) => {
+      const itemDate = formatDateISO(grpcTimestampToDate(item.date));
+
+      return [itemDate, item];
+    })
+  );
+
   return days.map((day) => {
-    const item = data.find((x) => x.date === day.key);
+    const item = dataMap.get(day.key);
 
     return {
       date: day.label,
       fullDate: day.key,
       revenue: item?.revenue ?? 0,
       orders: item?.orders ?? 0,
-      profit: item?.profit ?? 0
+      profit: item?.estimatedProfit ?? 0
     };
   });
 };
@@ -89,20 +65,23 @@ const formatVND = (value: number) => {
   return `${value}`;
 };
 
-const getNiceMax = (max: number, base: number) => {
-  return Math.max(base, Math.ceil(max / base) * base);
-};
-
-const getMoneyTicks = (data: ReturnType<typeof buildChartData>, dataKey: 'revenue' | 'profit') => {
+const getMoneyTicks = (data: ChartData[], dataKey: 'revenue' | 'profit') => {
   const max = Math.max(...data.map((item) => Number(item[dataKey] ?? 0)));
-  const niceMax = getNiceMax(max, 1_500_000);
+
+  const base = max <= 100_000 ? 25_000 : max <= 1_000_000 ? 250_000 : 1_000_000;
+
+  const niceMax = Math.max(base, Math.ceil(max / base) * base);
   const step = niceMax / 4;
 
   return [0, step, step * 2, step * 3, niceMax];
 };
 
-export default function SalesOverview() {
-  const chartData = useMemo(() => buildChartData(apiData), []);
+interface Props {
+  salesChartItems: SalesChartItem[] | [];
+}
+
+export default function SalesOverview({ salesChartItems }: Props) {
+  const chartData = useMemo(() => buildChartData(salesChartItems), [salesChartItems]);
 
   const revenueTicks = useMemo(() => getMoneyTicks(chartData, 'revenue'), [chartData]);
   const profitTicks = useMemo(() => getMoneyTicks(chartData, 'profit'), [chartData]);
@@ -112,10 +91,11 @@ export default function SalesOverview() {
       <CardContent>
         <Tabs defaultValue='revenue'>
           <div className='flex justify-between'>
-            <div className=''>
+            <div>
               <h3 className='text-base font-semibold'>Tổng quan bán hàng</h3>
-              <p className='text-muted-foreground text-xs'>Hiệu suất bán hàng trong 30 ngày gần nhất</p>
+              <p className='text-muted-foreground text-xs'>Hiệu suất bán hàng trong 28 ngày gần nhất</p>
             </div>
+
             <TabsList className='mb-6 ml-auto grid w-fit grid-cols-3'>
               <TabsTrigger className='text-xs font-medium' value='revenue'>
                 Doanh thu
