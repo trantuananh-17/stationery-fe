@@ -1,5 +1,4 @@
 import React from 'react';
-import { redirect } from 'next/navigation';
 import LOGO from '@/assets/images/logo.webp';
 import Image from 'next/image';
 
@@ -11,19 +10,14 @@ import { Container } from '../ui/container';
 import Footer from '../blocks/Footer';
 import Provider from './Provider';
 import ShopProvider from '@/providers/ShopProvider';
-import { initAuth } from '@/services/auth.service';
+import FloatingChatbotAssistant from '../blocks/chats/FloatingChatbotAssistant';
+import AuthBootstrap from './AuthBootstrap';
 
 interface Props {
   children: React.ReactNode;
 }
 
-export default async function Layout(props: Props) {
-  const auth = await initAuth();
-
-  if (auth.shouldLogout) {
-    redirect('/auth/log-out');
-  }
-
+export default function Layout(props: Props) {
   const headerProps = {
     logo: (
       <Image
@@ -58,7 +52,6 @@ export default async function Layout(props: Props) {
   const footerProps = {
     logo: <Image src={LOGO} alt='Logo' className='h-auto w-45 rounded-xl object-contain' priority />,
     copyright: '© 2026. Bản quyền thuộc về Tuấn Anh - Văn phòng phẩm Minaco.',
-
     description:
       'Helping businesses grow with innovative solutions and dedicated support. Your success is our mission.',
     address: [
@@ -95,11 +88,14 @@ export default async function Layout(props: Props) {
   };
 
   return (
-    <Provider initialAuth={auth}>
+    <Provider>
+      <AuthBootstrap />
       <ShopProvider>
         <TooltipProvider>
           <SidebarProvider>
             <AppSidebar />
+
+            <FloatingChatbotAssistant />
 
             <SidebarInset>
               <Container size='xl' className='md:px-10 lg:px-20'>

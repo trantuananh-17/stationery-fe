@@ -23,6 +23,7 @@ import { brands } from '@/constants/brand';
 import { createAdminProduct, updateAdminProduct } from '@/services/product.service';
 import { attributeVariants } from '@/constants/attribute_variant';
 import { specification } from '@/constants/specification';
+import { toast } from 'sonner';
 
 type Props = {
   mode?: 'create' | 'edit';
@@ -88,18 +89,32 @@ export default function ProductForm({ mode = 'create', productId, initialData }:
 
   function onSubmit(values: ProductFormValues) {
     startTransition(async () => {
-      const res =
-        mode === 'edit' && productId ? await updateAdminProduct(productId, values) : await createAdminProduct(values);
+      const isEdit = mode === 'edit' && productId;
+
+      const res = isEdit ? await updateAdminProduct(productId, values) : await createAdminProduct(values);
 
       if (!res?.ok) {
         console.log('submit error', res);
+
+        toast.error(isEdit ? 'Cập nhật sản phẩm thất bại' : 'Tạo sản phẩm thất bại', {
+          description: 'Vui lòng thử lại',
+          position: 'top-right'
+        });
+
         return;
       }
 
+      toast.success(isEdit ? 'Cập nhật sản phẩm thành công' : 'Tạo sản phẩm thành công', {
+        description: isEdit
+          ? `Sản phẩm "${values.product.name}" đã được cập nhật`
+          : `Sản phẩm "${values.product.name}" đã được tạo`,
+        position: 'top-right'
+      });
+
       router.push('/admin/products');
+
       router.refresh();
     });
-    console.log(values);
   }
 
   return (

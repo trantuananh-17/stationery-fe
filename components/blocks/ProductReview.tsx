@@ -19,13 +19,13 @@ export default function ProductReview({ className, rate, totalReviewers }: Props
 
       <div className='flex flex-col gap-5'>
         <Reviews rate={rate} totalReviewers={totalReviewers} size='lg' />
-        <div className='grid grid-cols-1 gap-5 md:grid-cols-2'>
+        {/* <div className='grid grid-cols-1 gap-5 md:grid-cols-2'>
           <ReviewCard />
           <ReviewCard />
           <ReviewCard />
           <ReviewCard />
           <ReviewCard />
-        </div>
+        </div> */}
       </div>
     </div>
   );

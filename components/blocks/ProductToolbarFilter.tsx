@@ -21,14 +21,38 @@ export default function ProductToolbarFilter({ title, currentSort, currentBrand 
 
   const brands: Option[] = [
     { label: 'Thiên Long', value: 'thien-long' },
+    { label: 'Hồng Hà', value: 'hong-ha' },
     { label: 'Deli', value: 'deli' },
-    { label: 'Pilot', value: 'pilot' },
-    { label: 'Stabilo', value: 'stabilo' }
+    { label: 'Staedtler', value: 'staedtler' },
+    { label: 'Pronoti', value: 'pronoti' },
+    { label: 'Flexio', value: 'flexio' },
+    { label: 'IK Paper', value: 'ik-paper' },
+    { label: 'Double A', value: 'double-a' },
+    { label: 'Mickey', value: 'mickey' },
+    { label: 'Uni Ball', value: 'uni-ball' },
+    { label: 'Trà My', value: 'tra-my' },
+    { label: 'Kw Trio', value: 'kw-trio' },
+    { label: 'Shutter', value: 'shutter' },
+    { label: 'Flexoffice', value: 'flexoffice' },
+    { label: 'Casio', value: 'casio' },
+    { label: 'King Star', value: 'king-star' },
+    { label: 'Elephant', value: 'elephant' },
+    { label: 'Bảo Kiên', value: 'bao-kien' },
+    { label: 'Pentel', value: 'pentel' },
+    { label: 'Hải Tiến', value: 'hai-tien' },
+    { label: 'King Jim', value: 'king-jim' },
+    { label: 'Plus', value: 'plus' },
+    { label: 'Pagi', value: 'pagi' },
+    { label: 'Hyphen', value: 'hyphen' },
+    { label: 'Correction Pen', value: 'correction-pen' },
+    { label: 'Toppoint', value: 'toppoint' },
+    { label: 'Marvy', value: 'marvy' },
+    { label: 'Keyroad', value: 'keyroad' }
   ];
 
   const sortOptions: Option[] = [
     { label: 'Sắp xếp theo mới nhất', value: 'newest' },
-    { label: 'Sắp xếp theo cũ nhất', value: 'oldest' },
+    { label: 'Sắp xếp theo cũ nhất', value: 'created_at_desc' },
     { label: 'Sắp xếp theo giá tăng dần', value: 'price_asc' },
     { label: 'Sắp xếp theo giá giảm dần', value: 'price_desc' },
     { label: 'Sắp xếp theo tên A-Z', value: 'name_asc' },

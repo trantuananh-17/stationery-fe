@@ -28,7 +28,7 @@ async function getPenProducts() {
   const res = await getProducts({
     category: 'but-bi-but-bi-nuoc',
     page: 1,
-    limit: 5,
+    limit: 4,
     orderBy: 'price_asc'
   });
 
@@ -43,7 +43,7 @@ async function getPaperProducts() {
   const res = await getProducts({
     category: 'giay',
     page: 1,
-    limit: 5,
+    limit: 4,
     orderBy: 'price_asc'
   });
 

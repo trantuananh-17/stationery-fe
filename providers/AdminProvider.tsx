@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { NotificationItem, useNotificationStore } from '@/stores/notification.store';
 
 import { getNotifications, getUnReadCount } from '@/services/notification.service';
+import { toast } from 'sonner';
 
 export default function AdminProvider({ children }: { children: React.ReactNode }) {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -79,6 +80,11 @@ export default function AdminProvider({ children }: { children: React.ReactNode 
 
     const handleNotificationCreated = (data: NotificationItem) => {
       addNotification(data);
+
+      toast.success(data.title, {
+        description: data.message,
+        position: 'top-right'
+      });
     };
 
     notificationSocket.on('connect', handleConnect);

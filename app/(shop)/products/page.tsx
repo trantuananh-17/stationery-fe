@@ -24,7 +24,7 @@ const SORT_TO_ORDER_BY: Record<string, ProductOrderBy> = {
   name_desc: 'name_desc'
 };
 
-const DEFAULT_LIMIT = 1;
+const DEFAULT_LIMIT = 15;
 
 async function getProductList({
   page,

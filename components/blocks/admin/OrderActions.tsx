@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { updateOrderStatus } from '@/services/order.service';
+import { toast } from 'sonner';
 
 type OrderStatus = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
 type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
@@ -34,6 +35,14 @@ const getNextPaymentStatus = (orderStatus: OrderStatus, paymentMethod: string): 
   return 'PENDING';
 };
 
+const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
+  PENDING: 'Chờ xử lý',
+  PROCESSING: 'Đang xử lý',
+  SHIPPED: 'Đang giao',
+  DELIVERED: 'Đã giao',
+  CANCELLED: 'Đã huỷ'
+};
+
 export function OrderActions({ accessToken, orderId, status, paymentMethod, primaryAction, secondaryActions }: Props) {
   const router = useRouter();
 
@@ -52,10 +61,8 @@ export function OrderActions({ accessToken, orderId, status, paymentMethod, prim
         status: nextStatus
       });
 
-      console.log({
-        orderId,
-        nextStatus,
-        paymentStatus
+      toast.success('Cập nhật trạng thái thành công', {
+        description: `Đơn hàng đã được chuyển sang "${ORDER_STATUS_LABEL[nextStatus]}"`
       });
 
       startTransition(() => {

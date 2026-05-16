@@ -123,9 +123,9 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
                 )}
               </div>
 
-              <div>
+              <div className='max-w-80'>
                 <div className='text-sm font-medium'>{product.name}</div>
-                <div className='text-muted-foreground line-clamp-1 text-xs'>{product.description}</div>
+                <div className='text-muted-foreground truncate text-xs'>{product.description}</div>
               </div>
             </div>
           );

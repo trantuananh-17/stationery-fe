@@ -17,7 +17,7 @@ export default function Provider({
   initialAuth
 }: Readonly<{
   children: React.ReactNode;
-  initialAuth: InitialAuth;
+  initialAuth?: InitialAuth | null;
 }>) {
   const setAuth = useAuthStore((state) => state.setAuth);
   const resetAuth = useAuthStore((state) => state.resetAuth);
@@ -25,9 +25,13 @@ export default function Provider({
   const setAuthInitialized = useAuthStore((state) => state.setAuthInitialized);
 
   useEffect(() => {
+    if (initialAuth === undefined) {
+      return;
+    }
+
     setAuthLoading(false);
 
-    if (!initialAuth.user || initialAuth.shouldLogout) {
+    if (!initialAuth || !initialAuth.user || initialAuth.shouldLogout) {
       resetAuth();
       setAuthInitialized(true);
       return;

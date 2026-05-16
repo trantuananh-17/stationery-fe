@@ -1,6 +1,7 @@
 import ProductDetail from '@/components/blocks/ProductDetail';
 import { getProductBySlug } from '@/services/product.service';
 import { notFound } from 'next/navigation';
+import RelatedProduct from '@/components/blocks/RelatedProduct';
 
 interface PageProps {
   params: Promise<{
@@ -31,5 +32,10 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  return <ProductDetail product={product} />;
+  return (
+    <>
+      <ProductDetail product={product} />
+      <RelatedProduct />
+    </>
+  );
 }

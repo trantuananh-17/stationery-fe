@@ -75,7 +75,6 @@ export default function NotificationClient({ token, initialNotifications, initia
       if (nextPage === 1) {
         setNotifications(items);
       } else {
-        // Button bấm thì nối thêm item vào list cũ trong store
         const currentNotifications = useNotificationStore.getState().notifications;
         setNotifications([...currentNotifications, ...items]);
       }

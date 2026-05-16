@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'vanphongphamminaco.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'shoes-ecommerce.s3.ap-southeast-1.amazonaws.com',
+        port: '',
+        pathname: '/**'
       }
     ]
   }

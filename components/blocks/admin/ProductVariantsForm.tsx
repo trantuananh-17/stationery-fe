@@ -10,6 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Image from 'next/image';
+import { uploadImage } from '@/services/upload.service';
 
 type AttributeValue = {
   id: string;
@@ -58,30 +59,17 @@ export default function ProductVariantsForm({ value, onChange, attributes }: Pro
     try {
       setUploadingIndex(index);
 
-      const formData = new FormData();
-      formData.append('file', file);
+      const response = await uploadImage(file);
 
-      // const response = await fetch('/api/upload', {
-      //   method: 'POST',
-      //   body: formData
-      // });
+      const imageUrl = response.data?.data.url;
 
-      // if (!response.ok) {
-      //   throw new Error('Upload failed');
-      // }
+      if (!imageUrl) {
+        throw new Error('Upload ảnh thành công nhưng không nhận được URL ảnh');
+      }
 
-      // const data = await response.json();
-
-      const data = {
-        url: 'https://vanphongphamminaco.com/wp-content/uploads/2023/10/but-bi-bam-i-5-0-5-mm-radius-muc-den.webp'
-      };
-
-      // ví dụ server trả:
-      // { url: 'https://cdn.xxx.com/image.png' }
-
-      updateVariant(index, 'image', data.url);
+      updateVariant(index, 'image', imageUrl);
     } catch (error) {
-      console.error(error);
+      console.error('Upload variant image failed:', error);
     } finally {
       setUploadingIndex(null);
     }
@@ -583,7 +571,7 @@ export default function ProductVariantsForm({ value, onChange, attributes }: Pro
 
                       <TableCell>
                         <div className='flex items-center gap-4'>
-                          <label className='cursor-pointer'>
+                          <label className='block size-16 shrink-0 cursor-pointer'>
                             <input
                               type='file'
                               accept='image/*'
@@ -594,26 +582,30 @@ export default function ProductVariantsForm({ value, onChange, attributes }: Pro
                                 if (!file) return;
 
                                 await handleUploadVariantImage(index, file);
+
+                                e.target.value = '';
                               }}
                             />
 
-                            {uploadingIndex === index ? (
-                              <div className='flex size-16 items-center justify-center rounded-xl border'>
-                                <span className='text-xs'>...</span>
-                              </div>
-                            ) : variant.image ? (
-                              <Image
-                                src={variant.image}
-                                alt={variant.name}
-                                width={64}
-                                height={64}
-                                className='size-16 rounded-xl border object-cover'
-                              />
-                            ) : (
-                              <div className='text-primary flex size-16 items-center justify-center rounded-xl border border-dashed'>
-                                <ImagePlus className='size-5' />
-                              </div>
-                            )}
+                            <div className='relative size-16 shrink-0 overflow-hidden rounded-xl border'>
+                              {uploadingIndex === index ? (
+                                <div className='flex size-full items-center justify-center'>
+                                  <span className='text-xs'>...</span>
+                                </div>
+                              ) : variant.image ? (
+                                <Image
+                                  src={variant.image}
+                                  alt={variant.name || 'Variant image'}
+                                  fill
+                                  sizes='64px'
+                                  className='object-cover'
+                                />
+                              ) : (
+                                <div className='text-primary flex size-full items-center justify-center border border-dashed'>
+                                  <ImagePlus className='size-5' />
+                                </div>
+                              )}
+                            </div>
                           </label>
 
                           <span className='font-medium'>{variant.name}</span>

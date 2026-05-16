@@ -120,7 +120,7 @@ export default function ProductPurchaseForm({
     );
   }, [variants, selectedOptions]);
 
-  const maxQuantity = matchedVariant?.stock ?? 0;
+  const maxQuantity = (matchedVariant?.stock ?? 0) - (matchedVariant?.reservedStock ?? 0);
 
   const isOutOfStock = !matchedVariant || !matchedVariant.isAvailable || matchedVariant.stock <= 0;
 

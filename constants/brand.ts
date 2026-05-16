@@ -22,5 +22,9 @@ export const brands = [
   { id: 'cc8bed4b-7a54-4095-bb29-e5dababbafe3', name: 'King Jim' },
   { id: 'd2c20665-cf09-416c-92d2-d30475c77868', name: 'Plus' },
   { id: 'e9a6f4cf-5e84-4edf-b1d8-d76142e89442', name: 'Pagi' },
-  { id: 'f75e87ab-8e8f-4912-9663-949c8e871556', name: 'Hyphen' }
+  { id: 'f75e87ab-8e8f-4912-9663-949c8e871556', name: 'Hyphen' },
+  { id: '02779fec-ad74-461f-9cbc-044406b21edf', name: 'Correction Pen' },
+  { id: '4c4713a1-aa45-40f0-ad7d-3b5075492122', name: 'Toppoint' },
+  { id: '54b0776b-86a2-47b5-a24e-7e96ed29436c', name: 'Marvy' },
+  { id: 'b8f2424b-a37f-4c36-a126-5d47d74b8df5', name: 'Keyroad' }
 ];

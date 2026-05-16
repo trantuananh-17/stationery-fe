@@ -19,13 +19,31 @@ export const attributeVariants = [
       { id: 'a7d03a08-10ca-4482-9a44-45551a88f7f4', value: 'Xanh lá', slug: 'green' },
       { id: 'd27bbf8f-6276-4b86-af51-f639d0387632', value: 'Vàng', slug: 'yellow' },
       { id: 'fac35274-d456-4d35-9b5c-82692919569d', value: 'Tím', slug: 'purple' },
-      { id: '016edce2-4bdc-4236-a778-1dde55cda461', value: 'Cam', slug: 'orange' }
+      { id: '016edce2-4bdc-4236-a778-1dde55cda461', value: 'Cam', slug: 'orange' },
+      { id: '7465bd3e-ac9c-47b2-8647-a6a01e5f27a7', value: 'Trắng', slug: 'white' },
+      { id: 'e3d52e3c-141c-4490-b61f-6d8c5a6e3505', value: 'Hồng', slug: 'pink' },
+      { id: 'f4267b82-3ac0-431c-ab6a-e9325dad6ea3', value: 'Xám', slug: 'gray' },
+      { id: '46400a9b-2fa5-4bc5-bf5f-00861028aaf6', value: 'Combo', slug: 'combo' }
     ]
   },
   {
     id: 'c12ad319-a68c-4eae-bafd-fb9bac5d1aa7',
     name: 'Màu mực',
-    values: []
+    values: [
+      { id: '737aded9-9ce6-462f-838d-8f4a60be1853', value: 'Đen', slug: 'ink-black' },
+      { id: '894bfd80-b78d-4cda-b75f-52b1a923f927', value: 'Xanh dương', slug: 'ink-blue' },
+      { id: '67333f83-cd72-4c31-9482-0e21df7fd836', value: 'Đỏ', slug: 'ink-red' },
+      { id: 'bbac0403-36ff-4f0b-a83c-ef5b3bbfb3b5', value: 'Xanh lá', slug: 'ink-green' },
+      { id: '071a130f-2e55-447c-8e14-532b7bc1049c', value: 'Tím', slug: 'ink-purple' },
+      { id: 'ceeb79b6-bfc4-46d0-b276-3ac3e1eaf494', value: 'Hồng', slug: 'ink-pink' },
+      { id: '0e24b085-1cc6-46b0-836e-7e1abe0a6aaf', value: 'Nâu', slug: 'ink-brown' },
+      { id: '250176b5-4d67-41bd-a0cd-23bb73e2b0dc', value: 'Cam', slug: 'ink-orange' },
+      { id: '1a18748d-8ab7-4b95-a8ca-45d19074253e', value: 'Xanh navy', slug: 'ink-navy' },
+      { id: '91a4b8f3-6a85-49e9-b94c-fa3ae26af7e6', value: 'Xanh ngọc', slug: 'ink-teal' },
+      { id: '1f1dd8fa-39ba-4874-bea3-029b9cc59299', value: 'Trắng', slug: 'ink-white' },
+      { id: 'a18efbd7-f133-42d9-b3c3-33599a5a4233', value: 'Xám', slug: 'ink-gray' },
+      { id: '34b6be91-7c4c-4591-a3c7-1fc3c05a5b1e', value: 'Vàng', slug: 'ink-yellow' }
+    ]
   },
   {
     id: 'e0dbf7ae-272f-46e1-b187-e10e1b256d72',

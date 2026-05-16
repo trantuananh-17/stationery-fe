@@ -43,6 +43,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         <Button className='cursor-pointer'>
           <p className='hidden text-xs md:flex xl:text-sm'>Thêm giỏ hàng</p>
+
           <ShoppingCart />
         </Button>
       </div>

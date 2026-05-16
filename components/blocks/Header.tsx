@@ -94,7 +94,7 @@ export default function Header({ logo, navItems, primaryButton, secondaryButton 
   };
 
   return (
-    <header className='bg-background sticky top-0 z-5 py-2'>
+    <header className='bg-background sticky top-0 z-50 py-2'>
       <div className='flex items-center justify-between gap-2'>
         <SidebarTrigger className='md:hidden' />
         <div>{logo}</div>

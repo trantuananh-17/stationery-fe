@@ -14,42 +14,66 @@ export default function CategoryList() {
     {
       image: GEL_PENS,
       label: 'Bút bi - Bút bi nước',
-      link: { href: '#', target: '_self' as const }
+      link: {
+        href: '/products?category=but-bi-but-bi-nuoc',
+        target: '_self' as const
+      }
     },
     {
       image: HIGHLIGHTERS_AND_MARKERS,
       label: 'Bút dạ - Bút nhớ',
-      link: { href: '#', target: '_self' as const }
+      link: {
+        href: '/products?category=but-da-but-nho',
+        target: '_self' as const
+      }
     },
     {
       image: SIGNATURE_PENS,
       label: 'Bút ký',
-      link: { href: '#', target: '_self' as const }
+      link: {
+        href: '/products?category=but-ky',
+        target: '_self' as const
+      }
     },
     {
       image: MULTI_LAYER_FILE_FOLDERS,
       label: 'File nhiều ngăn',
-      link: { href: '#', target: '_self' as const }
+      link: {
+        href: '/products?category=file-nhieu-ngan-nhieu-tang',
+        target: '_self' as const
+      }
     },
     {
       image: PRINTING_PAPER,
       label: 'Giấy in',
-      link: { href: '#', target: '_self' as const }
+      link: {
+        href: '/products?category=giay-in-bia-mica',
+        target: '_self' as const
+      }
     },
     {
       image: STICKY_NOTES_AND_TABS,
       label: 'Giấy note - Phân trang',
-      link: { href: '#', target: '_self' as const }
+      link: {
+        href: '/products?category=giay-note-phan-trang',
+        target: '_self' as const
+      }
     },
     {
       image: CALCULATORS,
       label: 'Máy tính',
-      link: { href: '#', target: '_self' as const }
+      link: {
+        href: '/products?category=may-tinh',
+        target: '_self' as const
+      }
     },
     {
       image: SPIRAL_NOTEBOOKS,
       label: 'Sổ loxo',
-      link: { href: '#', target: '_self' as const }
+      link: {
+        href: '/products?category=so-lo-xo',
+        target: '_self' as const
+      }
     }
   ];
 

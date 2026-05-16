@@ -29,44 +29,68 @@ export const makeRefreshToken = async (refreshToken: string) => {
   return refreshTokenPromise;
 };
 
-export const getUser = cache(async () => {
-  const accessToken = await getToken();
+export const getUserByToken = async (accessToken: string | null) => {
+  if (!accessToken) {
+    return null;
+  }
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/users/get-profile`, {
     headers: {
       Authorization: `Bearer ${accessToken}`
-    }
+    },
+    cache: 'no-store'
   });
 
   if (!response.ok) {
-    // console.log('hello');
-
-    // // Gọi api refresh token để lấy token mới
-    // const newToken = await makeRefreshToken(refreshToken!);
-
-    // // Lưu token mới vào cookie
-    // await fetch(`http://localhost:3000/api/cookie?key=token`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     value: newToken.accessToken,
-    //     maxAge: 60 * 15
-    //   })
-    // });
-
-    return false;
+    return null;
   }
 
   const data = await response.json();
   return data.data;
+};
+
+export const getUser = cache(async () => {
+  const accessToken = await getToken();
+
+  return getUserByToken(accessToken);
 });
+
+// export const getUser = cache(async () => {
+//   const accessToken = await getToken();
+
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/users/get-profile`, {
+//     headers: {
+//       Authorization: `Bearer ${accessToken}`
+//     }
+//   });
+
+//   if (!response.ok) {
+//     // console.log('hello');
+
+//     // // Gọi api refresh token để lấy token mới
+//     // const newToken = await makeRefreshToken(refreshToken!);
+
+//     // // Lưu token mới vào cookie
+//     // await fetch(`http://localhost:3000/api/cookie?key=token`, {
+//     //   method: 'POST',
+//     //   headers: {
+//     //     'Content-Type': 'application/json'
+//     //   },
+//     //   body: JSON.stringify({
+//     //     value: newToken.accessToken,
+//     //     maxAge: 60 * 15
+//     //   })
+//     // });
+
+//     return false;
+//   }
+
+//   const data = await response.json();
+//   return data.data;
+// });
 
 export const getToken = async (): Promise<string | null> => {
   let data = null;
-
-  console.log('get token');
 
   if (isClient()) {
     const response = await fetch('/api/cookie?key=token');

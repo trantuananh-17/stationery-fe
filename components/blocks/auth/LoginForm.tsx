@@ -13,6 +13,7 @@ import { getUser } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/stores/auth-store';
+import { toast } from 'sonner';
 
 type LoginFormValues = {
   email: string;
@@ -41,9 +42,15 @@ export function LoginForm({ className, ...props }: Props) {
       const result = await handleLogin(values);
 
       if (!result.success) {
+        toast.error('Đăng nhập thất bại', {
+          description: result.message,
+          position: 'top-right'
+        });
+
         setError('root', {
           message: result.message
         });
+
         return;
       }
 
@@ -53,22 +60,31 @@ export function LoginForm({ className, ...props }: Props) {
         user: result.data.profile.data
       });
 
+      const fullName = [result.data.profile.data.firstName, result.data.profile.data.lastName]
+        .filter(Boolean)
+        .join(' ');
+
+      toast.success('Đăng nhập thành công', {
+        description: `Chào mừng ${fullName} quay trở lại`,
+        position: 'top-right'
+      });
+
       await queryClient.invalidateQueries({
         queryKey: ['profile']
       });
 
       const role = result.data.profile.data.role;
 
-      // if (role === 'ADMIN') {
-      //   router.replace('/admin/dashboard');
-      //   return;
-      // }
+      if (role === 'ADMIN') {
+        router.replace('/admin/dashboard');
+        return;
+      }
 
       router.replace('/');
+
       router.refresh();
     });
   };
-
   return (
     <div className={cn('flex flex-col', className)} {...props}>
       <Card>

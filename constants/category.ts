@@ -17,7 +17,6 @@ export const categories = [
   { id: '89672ed8-0fbb-451b-803a-44669786b4b7', name: 'Cặp hộp – Cặp 3 dây – Trình ký' },
   { id: '91cfad1a-df42-4543-be79-452930f7b4d9', name: 'Giấy fax – Film fax – Giấy than' },
   { id: '9af5aae2-cec9-4dc9-95d3-a6503e42213f', name: 'Giấy – Sản phẩm từ giấy' },
-  { id: '9f957b45-cd76-4b2e-bc4a-4909bebeabbc', name: 'Tẩy – Thước kẻ – Compa – Bút chì' },
   { id: 'a02a54aa-a5ce-4af4-9c42-19f530f0f6c2', name: 'Sổ lò xo' },
   { id: 'a09b2ab7-50b0-479b-b087-7c9f8681d85b', name: 'Bút ký' },
   { id: 'a3918a05-9e2f-4ffd-a08f-7e44280df946', name: 'File nhiều ngăn – Nhiều tầng' },

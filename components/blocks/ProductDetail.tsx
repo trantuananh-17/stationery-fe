@@ -5,7 +5,6 @@ import ProductDescription from '@/components/blocks/ProductDescription';
 import ProductInfo from '@/components/blocks/ProductInfo';
 import ProductReview from '@/components/blocks/ProductReview';
 import Reviews from '@/components/blocks/Reviews';
-import RelatedProduct from '@/components/blocks/RelatedProduct';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
@@ -86,8 +85,6 @@ export default async function ProductDetail({ product, className }: ProductDetai
           </div>
         </div>
       </section>
-
-      <RelatedProduct />
     </>
   );
 }

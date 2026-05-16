@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 type SignupFormValues = {
   firstName: string;
@@ -24,6 +26,7 @@ type Props = {
 
 export function SignupForm({ className, ...props }: Props) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const {
     register,
@@ -37,6 +40,11 @@ export function SignupForm({ className, ...props }: Props) {
       const result = await handleSignup(values);
 
       if (!result.success) {
+        toast.error('Đăng ký thất bại', {
+          description: result.message,
+          position: 'top-right'
+        });
+
         setError('root', {
           message: result.message
         });
@@ -44,7 +52,14 @@ export function SignupForm({ className, ...props }: Props) {
         return;
       }
 
-      console.log(result);
+      toast.success('Đăng ký thành công', {
+        description: 'Vui lòng xác thực email để tiếp tục',
+        position: 'top-right'
+      });
+
+      router.replace('/auth/sign-in');
+
+      router.refresh();
     });
   };
 
