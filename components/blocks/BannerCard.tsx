@@ -1,6 +1,6 @@
 import Image, { StaticImageData } from 'next/image';
 import { LinkType } from '@/types/type';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

@@ -14,7 +14,7 @@ import type { NotificationItem } from '@/stores/notification.store';
 import { useAuthStore } from '@/stores/auth-store';
 import { markNotificationAsRead } from '@/services/notification.service';
 import { Separator } from '@/components/ui/separator';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 function getNotificationIcon(type: string) {
   switch (type) {

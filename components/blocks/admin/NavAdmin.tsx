@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from '@/components/ui/sidebar';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { Collapsible } from '@/components/ui/collapsible';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';

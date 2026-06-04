@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 type Props = {
   firstName: string;
@@ -48,19 +48,18 @@ export function DropdownMenuAvatar({ firstName, lastName, email, avatar }: Props
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <BadgeCheckIcon className='mr-2 h-4 w-4' />
-            Account
+          <DropdownMenuItem asChild>
+            <Link href='/account'>
+              <BadgeCheckIcon className='mr-2 h-4 w-4' />
+              Quản lí hồ sơ
+            </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem>
-            <CreditCardIcon className='mr-2 h-4 w-4' />
-            Billing
-          </DropdownMenuItem>
-
-          <DropdownMenuItem>
-            <BellIcon className='mr-2 h-4 w-4' />
-            Notifications
+          <DropdownMenuItem asChild>
+            <Link href='/account/orders'>
+              <CreditCardIcon className='mr-2 h-4 w-4' />
+              Quản lí đơn hàng
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 

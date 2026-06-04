@@ -11,7 +11,7 @@ import CheckoutForm from './CheckoutForm';
 import CheckoutSumary from './CheckoutSumary';
 import { useAuthStore } from '@/stores/auth-store';
 import { createOrder } from '@/services/order.service';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { CartItem } from '@/stores/cart-store';
 import { CheckoutStockItem } from '@/types/order.type';
 import { toast } from 'sonner';
@@ -93,7 +93,7 @@ export default function CheckoutClient({ initialItems }: Props) {
     }
 
     if (res.data.data.success && payload.paymentMethod === 'stripe') {
-      toast.success('Đang chuyển sang trang thanh toán...');
+      toast.success('Đang chuyển sang trang thanh toán...', { position: 'top-right' });
 
       const order = res.data.data;
 
@@ -111,7 +111,7 @@ export default function CheckoutClient({ initialItems }: Props) {
 
     if (res.data.data.success && payload.paymentMethod === 'cod') {
       toast.success('Đặt hàng thành công');
-      router.push('/orders');
+      router.push('/account/orders');
     }
   }
 

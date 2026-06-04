@@ -96,7 +96,7 @@ export default function OrdersTable({ orders, currentSort, currentStatus }: Orde
   const searchParams = useSearchParams();
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-    actions: false,
+    // actions: false,
     product: false
   });
 

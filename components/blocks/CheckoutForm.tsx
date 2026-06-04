@@ -23,7 +23,7 @@ export default function CheckoutForm() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor='shipping-fullName'>Họ và tên</FieldLabel>
+                <FieldLabel htmlFor='shipping-fullName'>Họ</FieldLabel>
                 <Input {...field} id='shipping-fullName' placeholder='Nguyễn Văn' aria-invalid={fieldState.invalid} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
@@ -35,8 +35,8 @@ export default function CheckoutForm() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor='shipping-fullName'>Họ và tên</FieldLabel>
-                <Input {...field} id='shipping-fullName' placeholder='A' aria-invalid={fieldState.invalid} />
+                <FieldLabel htmlFor='shipping-fullName'>Tên</FieldLabel>
+                <Input {...field} id='shipping-fullName' placeholder='Văn A' aria-invalid={fieldState.invalid} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -116,7 +116,7 @@ export default function CheckoutForm() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor='shipping-city'>Tỉnh / Thành phố</FieldLabel>
-                <Input {...field} id='shipping-city' placeholder='Hồ Chí Minh' aria-invalid={fieldState.invalid} />
+                <Input {...field} id='shipping-city' placeholder='Hà Nội' aria-invalid={fieldState.invalid} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -128,7 +128,7 @@ export default function CheckoutForm() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor='shipping-district'>Quận / Huyện</FieldLabel>
-                <Input {...field} id='shipping-district' placeholder='Quận 1' aria-invalid={fieldState.invalid} />
+                <Input {...field} id='shipping-district' placeholder='Tây Tựu' aria-invalid={fieldState.invalid} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -140,7 +140,7 @@ export default function CheckoutForm() {
             render={({ field, fieldState }) => (
               <Field className='md:col-span-2' data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor='shipping-ward'>Phường / Xã</FieldLabel>
-                <Input {...field} id='shipping-ward' placeholder='Phường Bến Nghé' aria-invalid={fieldState.invalid} />
+                <Input {...field} id='shipping-ward' placeholder='Phường Tây Tựu' aria-invalid={fieldState.invalid} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

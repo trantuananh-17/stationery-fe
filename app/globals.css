@@ -2,6 +2,13 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+@import '../styles/presets/theme-amethyst-haze.css';
+@import '../styles/presets/theme-bold-tech.css';
+@import '../styles/presets/theme-caffeine.css';
+@import '../styles/presets/theme-vercel.css';
+@import '../styles/presets/theme-supabase.css';
+@import '../styles/presets/theme-light-green.css';
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { ProductItem } from '@/types/product.type';
 import { ArrowRightIcon } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 interface BestPriceSectionProps {
   title?: string;

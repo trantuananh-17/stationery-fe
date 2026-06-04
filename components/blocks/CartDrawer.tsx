@@ -73,7 +73,7 @@ import { Separator } from '@/components/ui/separator';
 
 import { ShoppingBag } from 'lucide-react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 
 import { useCartStore } from '@/stores/cart-store';
 import { useAuthStore } from '@/stores/auth-store';

@@ -3,14 +3,14 @@
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { handleSignup } from '@/app/(marketing)/auth/sign-up/action';
+import { handleSignup } from '@/app/[locale]/(marketing)/auth/sign-up/action';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 
 type SignupFormValues = {
   firstName: string;

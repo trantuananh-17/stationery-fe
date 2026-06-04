@@ -127,3 +127,11 @@ export async function createAdminProduct(data: ProductFormValues) {
 export async function updateAdminProduct(productId: string, data: UpdateProductFormValues) {
   return fetchWrapper.patch<ApiResponse<Product>>(`/products/${productId}`, data);
 }
+
+export async function restoreProduct(productId: string) {
+  return fetchWrapper.patch<ApiResponse<{ productId: string }>>(`/admin/products/${productId}/restore`);
+}
+
+export async function deleteProduct(productId: string) {
+  return fetchWrapper.delete<ApiResponse<{ productId: string }>>(`/admin/products/${productId}`);
+}

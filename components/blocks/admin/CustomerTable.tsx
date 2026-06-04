@@ -76,7 +76,7 @@ export default function CustomersTable({ customers, currentSort }: CustomersTabl
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     firstName: false,
     lastName: false,
-    actions: false,
+    // actions: false,
     address: false
   });
 

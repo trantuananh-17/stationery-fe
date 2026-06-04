@@ -8,12 +8,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { handleLogin } from '@/app/(marketing)/auth/sign-in/action';
+import { handleLogin } from '@/app/[locale]/(marketing)/auth/sign-in/action';
 import { getUser } from '@/lib/auth';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/stores/auth-store';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 type LoginFormValues = {
   email: string;
@@ -29,6 +30,8 @@ export function LoginForm({ className, ...props }: Props) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const t = useTranslations('LoginPage');
+  const tError = useTranslations('Error');
 
   const {
     register,
@@ -42,8 +45,8 @@ export function LoginForm({ className, ...props }: Props) {
       const result = await handleLogin(values);
 
       if (!result.success) {
-        toast.error('Đăng nhập thất bại', {
-          description: result.message,
+        toast.error(t('loginFailed'), {
+          description: tError(result.message) || result.message,
           position: 'top-right'
         });
 
@@ -64,8 +67,8 @@ export function LoginForm({ className, ...props }: Props) {
         .filter(Boolean)
         .join(' ');
 
-      toast.success('Đăng nhập thành công', {
-        description: `Chào mừng ${fullName} quay trở lại`,
+      toast.success(t('loginSuccess'), {
+        description: t('welcomeBackDescription', { fullName }),
         position: 'top-right'
       });
 
@@ -85,12 +88,13 @@ export function LoginForm({ className, ...props }: Props) {
       router.refresh();
     });
   };
+
   return (
     <div className={cn('flex flex-col', className)} {...props}>
       <Card>
         <CardHeader className='text-center'>
-          <CardTitle className='text-xl'>Welcome back</CardTitle>
-          <CardDescription>Login with your Apple or Google account</CardDescription>
+          <CardTitle className='text-xl'>{t('title')}</CardTitle>
+          <CardDescription>{t('subTitle')}</CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -98,12 +102,12 @@ export function LoginForm({ className, ...props }: Props) {
             <FieldGroup>
               <Field>
                 <Button variant='outline' type='button'>
-                  Login with Google
+                  {t('buttonLoginGoogle')}
                 </Button>
               </Field>
 
               <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>
-                Or continue with
+                {t('separator')}
               </FieldSeparator>
 
               <Field>
@@ -114,32 +118,34 @@ export function LoginForm({ className, ...props }: Props) {
                   placeholder='m@example.com'
                   disabled={isPending}
                   {...register('email', {
-                    required: 'Email không được để trống'
+                    required: t('emailEmpty')
                   })}
                 />
                 {errors.email && <p className='text-destructive text-sm'>{errors.email.message}</p>}
               </Field>
 
               <Field>
-                <FieldLabel htmlFor='password'>Password</FieldLabel>
+                <FieldLabel htmlFor='password'>{t('password')}</FieldLabel>
                 <Input
                   id='password'
                   type='password'
                   disabled={isPending}
                   {...register('password', {
-                    required: 'Password không được để trống'
+                    required: t('passwordEmpty')
                   })}
                 />
                 {errors.password && <p className='text-destructive text-sm'>{errors.password.message}</p>}
               </Field>
 
               <Field>
-                {errors.root && <p className='text-destructive text-center text-sm'>{errors.root.message}</p>}
+                {errors.root?.message && (
+                  <p className='text-destructive text-center text-sm'>{tError(errors.root.message)}</p>
+                )}
                 <Button type='submit' disabled={isPending}>
-                  {isPending ? 'Đang đăng nhập...' : 'Login'}
+                  {isPending ? 'Đang đăng nhập...' : `${t('buttonLogin')}`}
                 </Button>
                 <FieldDescription className='text-center'>
-                  Don&apos;t have an account? <a href='/auth/sign-up'>Sign up</a>
+                  {t('titleRegister')}? <a href='/auth/sign-up'>{t('buttonRegister')}</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

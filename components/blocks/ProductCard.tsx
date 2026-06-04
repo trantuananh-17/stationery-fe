@@ -5,7 +5,7 @@ import { Card, CardTitle } from '@/components/ui/card';
 import type { ProductItem } from '@/types/product.type';
 import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 interface ProductCardProps {
   product: ProductItem;

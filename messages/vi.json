@@ -1,0 +1,23 @@
+{
+  "LoginPage": {
+    "title": "Chào mừng trở lại",
+    "subTitle": "Đăng nhập bằng Google",
+    "buttonLoginGoogle": "Đăng nhập bằng Google",
+    "separator": "Hoặc tiếp tục với",
+    "password": "Mật khẩu",
+    "buttonLogin": "Đăng nhập",
+    "titleRegister": "Chưa có tài khoản? ",
+    "buttonRegister": "Đăng ký",
+    "emailEmpty": "Email không được để trống",
+    "passwordEmpty": "Mật khẩu không được để trống",
+    "loginFailed": "Đăng nhập thất bại",
+    "loginSuccess": "Đăng nhập thành công",
+    "welcomeBackDescription": "Chào mừng {fullName} quay trở lại"
+  },
+  "Error": {
+    "INVALID_CREDENTIALS": "Tài khoản hoặc mật khẩu không chính xác"
+  },
+  "Metadata": {
+    "title": "Stationery Store"
+  }
+}

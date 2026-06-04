@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 type Props = {
   firstName: string;
@@ -28,11 +28,11 @@ export function AdminDropdownMenu({ firstName, lastName, email, avatar }: Props)
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className='hover:bg-background' asChild>
-        <Button variant='ghost' className='data-[state=open]:bg-background flex items-center gap-2 px-2'>
+      <DropdownMenuTrigger className='' asChild>
+        <Button variant='ghost' className='flex items-center gap-2 px-2'>
           <Avatar className='size-8 p-1'>
             <AvatarImage src={avatar} alt={fullName} />
-            <AvatarFallback className='bg-background text-sm'>{initials}</AvatarFallback>
+            <AvatarFallback className='text-sm'>{initials}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -44,7 +44,7 @@ export function AdminDropdownMenu({ firstName, lastName, email, avatar }: Props)
             {email && <span className='text-muted-foreground text-xs'>{email}</span>}
           </div>
         </DropdownMenuLabel>
-
+        {/* 
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
@@ -62,7 +62,7 @@ export function AdminDropdownMenu({ firstName, lastName, email, avatar }: Props)
             <BellIcon className='mr-2 h-4 w-4' />
             Notifications
           </DropdownMenuItem>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
 
         <DropdownMenuSeparator />
 

@@ -24,12 +24,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-import { formatCurrency, formatDate, grpcTimestampToDate } from '@/lib/utils';
+import { cn, formatCurrency, formatDate, grpcTimestampToDate } from '@/lib/utils';
 import ProductStatusBadge from './ProductStatusBadge';
 import AdminTableToolbar from './AdminTableToolbar';
 import { ProductItem } from '@/types/product.type';
 import Image from 'next/image';
 import { StatusBadge } from './StatusBadge';
+import { deleteProduct, restoreProduct } from '@/services/product.service';
+import { toast } from 'sonner';
 
 export type AdminProductSort =
   | 'newest'
@@ -58,11 +60,12 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isTrashMode = currentStatus === 'deleted';
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     category: false,
-    status: false,
-    actions: false
+    status: false
+    // actions: false
   });
 
   function handleSort(sort: AdminProductSort) {
@@ -199,21 +202,47 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
       {
         id: 'actions',
         cell: ({ row }) => (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='ghost' size='icon'>
-                <MoreHorizontal className='h-4 w-4' />
-              </Button>
-            </DropdownMenuTrigger>
+          <div onClick={(e) => e.stopPropagation()}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant='ghost' size='icon'>
+                  <MoreHorizontal className='h-4 w-4' />
+                </Button>
+              </DropdownMenuTrigger>
 
-            <DropdownMenuContent align='end'>
+              {/* <DropdownMenuContent align='end'> */}
               {/* <DropdownMenuItem>Xem chi tiết</DropdownMenuItem> */}
-              <DropdownMenuItem onClick={() => router.push(`/admin/products/${row.original.id}/edit`)}>
+              {/* <DropdownMenuItem onClick={() => router.push(`/admin/products/${row.original.id}/edit`)}>
                 Chỉnh sửa
               </DropdownMenuItem>
               <DropdownMenuItem className='text-destructive'>Xóa</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </DropdownMenuContent> */}
+              <DropdownMenuContent align='end'>
+                {isTrashMode ? (
+                  <>
+                    <DropdownMenuItem onClick={() => handleRestore(row.original.id)}>Khôi phục</DropdownMenuItem>
+
+                    {/* <DropdownMenuItem
+        className='text-destructive'
+        onClick={() => handleForceDelete(row.original.id)}
+      >
+        Xóa vĩnh viễn
+      </DropdownMenuItem> */}
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem onClick={() => router.push(`/admin/products/${row.original.id}/edit`)}>
+                      Chỉnh sửa
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem className='text-destructive' onClick={() => handleDelete(row.original.id)}>
+                      Xóa
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         ),
         enableSorting: false
         // enableHiding: false
@@ -237,6 +266,46 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
 
   const rows = table.getRowModel().rows;
 
+  async function handleDelete(productId: string) {
+    try {
+      const response = await deleteProduct(productId);
+
+      toast.success('Xóa sản phẩm thành công', {
+        description: `Đã xóa sản phẩm ${productId} thành công`,
+        position: 'top-right'
+      });
+
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+
+      toast.error('Xóa sản phẩm thất bại', {
+        description: 'Vui lòng thử lại',
+        position: 'top-right'
+      });
+    }
+  }
+
+  async function handleRestore(productId: string) {
+    try {
+      const response = await restoreProduct(productId);
+
+      toast.success('Khôi phục sản phẩm thành công', {
+        description: `Đã khôi phục sản phẩm ${productId} thành công`,
+        position: 'top-right'
+      });
+
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+
+      toast.error('Khôi phục sản phẩm thất bại', {
+        description: 'Vui lòng thử lại',
+        position: 'top-right'
+      });
+    }
+  }
+
   return (
     <div>
       <AdminTableToolbar
@@ -259,7 +328,8 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
           { label: 'Tất cả', value: 'all' },
           { label: 'Đang bán', value: 'active' },
           { label: 'Nháp', value: 'draft' },
-          { label: 'Đã lưu trữ', value: 'archived' }
+          { label: 'Đã lưu trữ', value: 'archived' },
+          { label: 'Đã xóa', value: 'deleted' }
         ]}
       />
       <div className='bg-background rounded-xl border'>
@@ -281,9 +351,15 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
               rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  onClick={() => router.push(`/admin/products/${row.original.id}/edit`)}
-                  className='cursor-pointer'
+                  className={cn(
+                    !isTrashMode && 'hover:bg-muted/50 cursor-pointer',
+                    isTrashMode && 'cursor-not-allowed opacity-80'
+                  )}
+                  onClick={() => {
+                    if (isTrashMode) return;
+
+                    router.push(`/admin/products/${row.original.id}/edit`);
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>

@@ -1,6 +1,6 @@
 import Image, { StaticImageData } from 'next/image';
 import { Card } from '../ui/card';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { LinkType } from '@/types/type';
 
 interface Props {

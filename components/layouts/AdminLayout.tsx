@@ -31,7 +31,7 @@ export default async function AdminLayout(props: Props) {
       <AdminProvider>
         <TooltipProvider>
           <SidebarProvider defaultOpen>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
 
             <SidebarInset className='bg-background'>
               <Header user={user} />

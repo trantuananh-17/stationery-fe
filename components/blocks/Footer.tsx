@@ -1,5 +1,5 @@
 import { IconType, LinkType } from '@/types/type';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 interface Props {
   logo?: IconType;

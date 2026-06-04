@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { RotateCcw, ShieldCheck, ShoppingCart, Truck } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -65,7 +65,7 @@ export default function CartSummary({ totalItems, subtotal, shipping, total }: P
       </div>
 
       <Button asChild size='lg' className='mt-6 w-full'>
-        <Link href='/checkout'>Thanh toán</Link>
+        <Link href='/checkouts'>Thanh toán</Link>
       </Button>
 
       <p className='text-muted-foreground mt-4 text-center text-sm'>Thuế được tính khi thanh toán</p>

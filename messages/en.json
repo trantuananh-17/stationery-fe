@@ -1,0 +1,24 @@
+{
+  "LoginPage": {
+    "title": "Welcome back",
+    "subTitle": "Login with Google",
+    "buttonLoginGoogle": "Login with Google",
+    "separator": "Or continue with",
+    "password": "Password",
+    "buttonLogin": "Login",
+    "titleRegister": "Don't have an account",
+    "buttonRegister": "Register",
+    "emailEmpty": "Email is required",
+    "passwordEmpty": "Password is required",
+    "loginFailed": "Login failed",
+    "loginSuccess": "Login successful",
+    "welcomeBackDescription": "Welcome back, {fullName}"
+  },
+
+  "Error": {
+    "INVALID_CREDENTIALS": "Incorrect email or password"
+  },
+  "Metadata": {
+    "title": "Stationery Store"
+  }
+}

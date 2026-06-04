@@ -31,7 +31,15 @@ export default async function ProductDetail({ product, className }: ProductDetai
   return (
     <>
       <section className='py-4 md:py-8'>
-        <BreadcrumbSection />
+        <BreadcrumbSection
+          title={product.name}
+          breadcrumbs={{
+            parent: {
+              label: product.category.name,
+              href: `/products?category=${product.category.slug}`
+            }
+          }}
+        />
       </section>
 
       <section className={cn('', className)}>

@@ -37,8 +37,7 @@ export const getUserByToken = async (accessToken: string | null) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/users/get-profile`, {
     headers: {
       Authorization: `Bearer ${accessToken}`
-    },
-    cache: 'no-store'
+    }
   });
 
   if (!response.ok) {

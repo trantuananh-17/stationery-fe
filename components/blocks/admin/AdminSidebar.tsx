@@ -132,7 +132,15 @@ const data = {
   ]
 };
 
-export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AdminSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  user: {
+    name?: string | null;
+    email?: string | null;
+    avatar?: string | null;
+  };
+}
+
+export function AdminSidebar({ user, ...props }: AdminSidebarProps) {
   const unreadCount = useNotificationStore((state) => state.unreadCount);
 
   const navAdmin = React.useMemo(
@@ -164,7 +172,13 @@ export function AdminSidebar({ ...props }: React.ComponentProps<typeof Sidebar>)
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser
+          user={{
+            name: user.name ?? 'Admin',
+            email: user.email ?? '',
+            avatar: user.avatar ?? '/avatars/default.jpg'
+          }}
+        />
       </SidebarFooter>
 
       <SidebarRail />
