@@ -53,7 +53,9 @@ export default async function ProductDetail({ product, className }: ProductDetai
               <div className='space-y-4'>
                 <div className='flex flex-wrap items-start justify-between gap-4'>
                   <div className='flex-1'>
-                    <h1 className='text-xl font-bold tracking-tight lg:text-3xl'>{product.name}</h1>
+                    <h1 data-testid='product-name' className='text-xl font-bold tracking-tight lg:text-3xl'>
+                      {product.name}
+                    </h1>
 
                     <div className='mt-3 flex flex-wrap items-center gap-4'>
                       <Reviews rate={reviews.rate} totalReviewers={reviews.totalReviewers} />

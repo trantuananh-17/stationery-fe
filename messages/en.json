@@ -14,7 +14,25 @@
     "loginSuccess": "Login successful",
     "welcomeBackDescription": "Welcome back, {fullName}"
   },
-
+  "RegisterPage": {
+    "title": "Create an account",
+    "subTitle": "Enter your information below to create your account",
+    "buttonLoginGoogle": "Sign up with Google",
+    "separator": "Or continue with",
+    "fullNameInput": "Full name",
+    "fullNameEmpty": "Full name is required",
+    "emailInput": "Email",
+    "passwordInput": "Password",
+    "confirmPasswordInput": "Confirm password",
+    "buttonSignup": "Create account",
+    "titleLogin": "Already have an account? ",
+    "buttonLogin": "Sign in",
+    "emailEmpty": "Email is required",
+    "passwordEmpty": "Password is required",
+    "firstNameEmpty": "First name is required",
+    "lastNameEmpty": "Last name is required",
+    "confirmPasswordEmpty": "Confirm password is required"
+  },
   "Error": {
     "INVALID_CREDENTIALS": "Incorrect email or password"
   },

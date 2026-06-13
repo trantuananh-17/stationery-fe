@@ -14,6 +14,25 @@
     "loginSuccess": "Đăng nhập thành công",
     "welcomeBackDescription": "Chào mừng {fullName} quay trở lại"
   },
+  "RegisterPage": {
+    "title": "Tạo tài khoản mới",
+    "subTitle": "Vui lòng nhập thông tin của bạn bên dưới để tạo tài khoản",
+    "buttonLoginGoogle": "Đăng ký bằng Google",
+    "separator": "Hoặc tiếp tục với",
+    "fullNameInput": "Họ và tên",
+    "fullNameEmpty": "Họ và tên không được để trống",
+    "emailInput": "Email",
+    "passwordInput": "Mật khẩu",
+    "confirmPasswordInput": "Xác nhận mật khẩu",
+    "buttonSignup": "Tạo tài khoản",
+    "titleLogin": "Bạn đã có tài khoản? ",
+    "buttonLogin": "Đăng nhập",
+    "emailEmpty": "Email không được để trống",
+    "passwordEmpty": "Mật khẩu không được để trống",
+    "firstNameEmpty": "Tên không được để trống",
+    "lastNameEmpty": "Họ không được để trống",
+    "confirmPasswordEmpty": "Xác nhận mật khẩu không được để trống"
+  },
   "Error": {
     "INVALID_CREDENTIALS": "Tài khoản hoặc mật khẩu không chính xác"
   },

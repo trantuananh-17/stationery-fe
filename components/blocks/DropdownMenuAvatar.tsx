@@ -29,7 +29,11 @@ export function DropdownMenuAvatar({ firstName, lastName, email, avatar }: Props
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='hover:bg-background' asChild>
-        <Button variant='ghost' className='data-[state=open]:bg-background flex items-center gap-2 px-2'>
+        <Button
+          id='btn_avatar_dropdown'
+          variant='ghost'
+          className='data-[state=open]:bg-background flex items-center gap-2 px-2'
+        >
           <Avatar className='size-8 p-1'>
             <AvatarImage src={avatar} alt={fullName} />
             <AvatarFallback className='bg-background text-sm'>{initials}</AvatarFallback>
@@ -65,10 +69,10 @@ export function DropdownMenuAvatar({ firstName, lastName, email, avatar }: Props
 
         <DropdownMenuSeparator />
 
-        <Link href='/auth/log-out'>
+        <Link id='btn_logout' href='/auth/log-out'>
           <DropdownMenuItem>
             <LogOutIcon className='mr-2 h-4 w-4' />
-            Sign Out
+            Đăng xuất
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>

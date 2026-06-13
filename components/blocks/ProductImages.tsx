@@ -24,6 +24,7 @@ export default function ProductImages({ thumbnail, images = [], name }: ProductI
       <div className='rounded-xl border bg-white p-2 shadow-sm'>
         <AspectRatio ratio={1} className='bg-muted/30 overflow-hidden rounded-lg'>
           <Image
+            data-testid='product-price'
             src={selected}
             alt={name ?? 'Product image'}
             width={640}

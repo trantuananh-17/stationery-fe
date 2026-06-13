@@ -143,7 +143,7 @@ export function CartDrawer() {
   return (
     <Sheet open={isCartOpen} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
-        <Button variant='ghost' size='icon-sm' className='relative'>
+        <Button id='btn_cart_icon' variant='ghost' size='icon-sm' className='relative'>
           <ShoppingBag size={22} />
 
           {totalItems > 0 && (
@@ -182,7 +182,9 @@ export function CartDrawer() {
             <div className='mb-2 flex items-center justify-between px-3 pt-3 md:px-4 md:pt-4'>
               <span className='text-muted-foreground'>Tổng tiền:</span>
 
-              <span className='text-sm font-semibold md:text-lg'>{formatCurrency(cart.subtotal)}</span>
+              <span data-testid='cart-total' className='text-sm font-semibold md:text-lg'>
+                {formatCurrency(cart.subtotal)}
+              </span>
             </div>
 
             <div className='px-3 pb-3 md:px-4 md:pb-4'>

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useQueryClient } from '@tanstack/react-query';
-
+import { v4 as uuidv4 } from 'uuid';
 import { useAuthStore } from '@/stores/auth-store';
 import { useCartStore } from '@/stores/cart-store';
 
@@ -45,7 +45,7 @@ export default function Page() {
         resetCart();
 
         localStorage.removeItem('sessionId');
-        localStorage.setItem('sessionId', crypto.randomUUID());
+        localStorage.setItem('sessionId', uuidv4());
 
         queryClient.removeQueries({
           queryKey: ['profile']

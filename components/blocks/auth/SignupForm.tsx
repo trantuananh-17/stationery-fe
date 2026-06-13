@@ -1,6 +1,5 @@
 'use client';
 
-import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { handleSignup } from '@/app/[locale]/(marketing)/auth/sign-up/action';
@@ -10,11 +9,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { useRouter } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 
 type SignupFormValues = {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -25,94 +24,102 @@ type Props = {
 };
 
 export function SignupForm({ className, ...props }: Props) {
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const t = useTranslations('RegisterPage');
+  const tError = useTranslations('Error');
 
   const {
     register,
     handleSubmit,
     setError,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<SignupFormValues>();
 
-  const onSubmit = (values: SignupFormValues) => {
-    startTransition(async () => {
-      const result = await handleSignup(values);
+  const onSubmit = async (values: SignupFormValues) => {
+    const normalizedFullName = values.fullName.trim().replace(/\s+/g, ' ');
+    const nameParts = normalizedFullName.split(' ');
 
-      if (!result.success) {
-        toast.error('Đăng ký thất bại', {
-          description: result.message,
-          position: 'top-right'
-        });
+    if (nameParts.length < 2) {
+      setError('fullName', {
+        message: t('fullNameInvalid')
+      });
 
-        setError('root', {
-          message: result.message
-        });
+      return;
+    }
 
-        return;
-      }
+    const lastName = nameParts[0];
+    const firstName = nameParts.slice(1).join(' ');
 
-      toast.success('Đăng ký thành công', {
-        description: 'Vui lòng xác thực email để tiếp tục',
+    const result = await handleSignup({
+      firstName,
+      lastName,
+      email: values.email,
+      password: values.password,
+      confirmPassword: values.confirmPassword
+    });
+
+    if (!result.success) {
+      toast.error(t('signupFailed'), {
+        id: 'signup-failed',
+        description: tError(result.message) || result.message,
         position: 'top-right'
       });
 
-      router.replace('/auth/sign-in');
+      setError('root', {
+        message: result.message
+      });
 
-      router.refresh();
+      return;
+    }
+
+    toast.success(t('signupSuccess'), {
+      id: 'signup-success',
+      description: t('verifyEmailDescription'),
+      position: 'top-right'
     });
+
+    router.replace('/auth/sign-in');
+    router.refresh();
   };
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).+$/;
 
   return (
     <div className={cn('flex flex-col', className)} {...props}>
       <Card>
         <CardHeader className='text-center'>
-          <CardTitle className='text-xl'>Create an account</CardTitle>
-          <CardDescription>Enter your information below to create your account</CardDescription>
+          <CardTitle className='text-xl'>{t('title')}</CardTitle>
+          <CardDescription>{t('subTitle')}</CardDescription>
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup className='gap-4'>
               <Field>
                 <Button variant='outline' type='button'>
-                  Sign up with Google
+                  {t('buttonLoginGoogle')}
                 </Button>
               </Field>
 
               <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>
-                Or continue with
+                {t('separator')}
               </FieldSeparator>
 
-              <div className='grid grid-cols-2 gap-2'>
-                <Field>
-                  <FieldLabel htmlFor='firstName'>First Name</FieldLabel>
-                  <Input
-                    id='firstName'
-                    type='text'
-                    placeholder='John'
-                    disabled={isPending}
-                    {...register('firstName', {
-                      required: 'First name không được để trống'
-                    })}
-                  />
-                  {errors.firstName && <p className='text-destructive text-sm'>{errors.firstName.message}</p>}
-                </Field>
-
-                <Field>
-                  <FieldLabel htmlFor='lastName'>Last Name</FieldLabel>
-                  <Input
-                    id='lastName'
-                    type='text'
-                    placeholder='Doe'
-                    disabled={isPending}
-                    {...register('lastName', {
-                      required: 'Last name không được để trống'
-                    })}
-                  />
-                  {errors.lastName && <p className='text-destructive text-sm'>{errors.lastName.message}</p>}
-                </Field>
-              </div>
+              <Field>
+                <FieldLabel htmlFor='fullName'>{t('fullNameInput')}</FieldLabel>
+                <Input
+                  id='fullName'
+                  type='text'
+                  placeholder='Nguyễn Văn Nam'
+                  disabled={isSubmitting}
+                  {...register('fullName', {
+                    required: t('fullNameEmpty')
+                  })}
+                />
+                {errors.fullName && <p className='msg-error text-destructive text-sm'>{errors.fullName.message}</p>}
+              </Field>
 
               <Field>
                 <FieldLabel htmlFor='email'>Email</FieldLabel>
@@ -120,50 +127,70 @@ export function SignupForm({ className, ...props }: Props) {
                   id='email'
                   type='email'
                   placeholder='m@example.com'
-                  disabled={isPending}
+                  disabled={isSubmitting}
                   {...register('email', {
-                    required: 'Email không được để trống'
+                    required: t('emailEmpty'),
+                    pattern: {
+                      value: emailRegex,
+                      message: 'Email không đúng định dạng'
+                    }
                   })}
                 />
-                {errors.email && <p className='text-destructive text-sm'>{errors.email.message}</p>}
+                {errors.email && <p className='msg-error text-destructive text-sm'>{errors.email.message}</p>}
               </Field>
 
               <Field>
-                <FieldLabel htmlFor='password'>Password</FieldLabel>
+                <FieldLabel htmlFor='password'>{t('passwordInput')}</FieldLabel>
                 <Input
                   id='password'
                   type='password'
-                  disabled={isPending}
+                  placeholder='********'
+                  disabled={isSubmitting}
                   {...register('password', {
-                    required: 'Password không được để trống'
+                    required: t('passwordEmpty'),
+                    pattern: {
+                      value: passwordRegex,
+                      message: 'Mật khẩu phải có ít nhất 1 chữ cái và 1 số'
+                    }
                   })}
                 />
-                {errors.password && <p className='text-destructive text-sm'>{errors.password.message}</p>}
+                {errors.password && <p className='msg-error text-destructive text-sm'>{errors.password.message}</p>}
               </Field>
 
               <Field>
-                <FieldLabel htmlFor='confirmPassword'>Confirm Password</FieldLabel>
+                <FieldLabel htmlFor='confirmPassword'>{t('confirmPasswordInput')}</FieldLabel>
                 <Input
                   id='confirmPassword'
                   type='password'
-                  disabled={isPending}
+                  placeholder='********'
+                  disabled={isSubmitting}
                   {...register('confirmPassword', {
-                    required: 'Confirm password không được để trống',
-                    validate: (value, formValues) => value === formValues.password || 'Mật khẩu xác nhận không khớp'
+                    required: t('confirmPasswordEmpty'),
+                    pattern: {
+                      value: passwordRegex,
+                      message: 'Mật khẩu phải có ít nhất 1 chữ cái và 1 số'
+                    },
+                    validate: (value, formValues) => value === formValues.password || t('confirmPasswordNotMatch')
                   })}
                 />
-                {errors.confirmPassword && <p className='text-destructive text-sm'>{errors.confirmPassword.message}</p>}
+                {errors.confirmPassword && (
+                  <p className='msg-error text-destructive text-sm'>{errors.confirmPassword.message}</p>
+                )}
               </Field>
 
-              {errors.root && <p className='text-destructive text-center text-sm'>{errors.root.message}</p>}
+              {errors.root?.message && (
+                <p className='msg-error text-destructive text-center text-sm'>
+                  {tError(errors.root.message) || errors.root.message}
+                </p>
+              )}
 
               <Field>
-                <Button type='submit' disabled={isPending}>
-                  {isPending ? 'Đang tạo tài khoản...' : 'Create Account'}
+                <Button id='btn_submit_register' type='submit' disabled={isSubmitting}>
+                  {isSubmitting ? '...' : t('buttonSignup')}
                 </Button>
 
                 <FieldDescription className='px-6 text-center'>
-                  Already have an account? <a href='/auth/sign-in'>Sign in</a>
+                  {t('titleLogin')} <Link href='/auth/sign-in'>{t('buttonLogin')}</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

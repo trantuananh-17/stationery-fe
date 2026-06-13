@@ -1,10 +1,12 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export function getOrCreateSessionId() {
   if (typeof window === 'undefined') return null;
 
   let sessionId = localStorage.getItem('sessionId');
 
   if (!sessionId) {
-    sessionId = crypto.randomUUID();
+    sessionId = uuidv4();
     localStorage.setItem('sessionId', sessionId);
   }
 

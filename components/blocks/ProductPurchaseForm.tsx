@@ -39,6 +39,7 @@ interface VariantOptionButtonProps {
   label: string;
   value: string;
   disabled?: boolean;
+  selected?: boolean;
 }
 
 export default function ProductPurchaseForm({
@@ -169,16 +170,230 @@ export default function ProductPurchaseForm({
     await addItem(values.variantId, values.quantity);
   }
 
+  //   return (
+  //     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+  //       {matchedVariant && (
+  //         <ProductPrice
+  //           showBadge
+  //           hasInfo
+  //           price={matchedVariant.price}
+  //           compareAtPrice={matchedVariant.compareAtPrice}
+  //           className='text-xl'
+  //         />
+  //       )}
+
+  //       {variantOptions.map((option) => (
+  //         <Controller
+  //           key={option.attributeId}
+  //           control={form.control}
+  //           name={`selectedOptions.${option.attributeId}`}
+  //           render={({ field }) => (
+  //             <fieldset className='space-y-3'>
+  //               <legend className='text-base font-semibold'>{option.attributeName}</legend>
+
+  //               <RadioGroup
+  //                 value={field.value ?? ''}
+  //                 onValueChange={(value) => {
+  //                   field.onChange(value);
+  //                 }}
+  //                 className='flex flex-wrap gap-3'
+  //               >
+  //                 {option.values.map((value) => {
+  //                   const disabled = isOptionDisabled({
+  //                     variants,
+  //                     selectedOptions,
+  //                     attributeId: option.attributeId,
+  //                     attributeValueId: value.id
+  //                   });
+
+  //                   return (
+  //                     <VariantOptionButton
+  //                       key={value.id}
+  //                       id={`${option.attributeId}-${value.id}`}
+  //                       label={value.value}
+  //                       value={value.id}
+  //                       disabled={disabled}
+  //                     />
+  //                   );
+  //                 })}
+  //               </RadioGroup>
+  //             </fieldset>
+  //           )}
+  //         />
+  //       ))}
+
+  //       {matchedVariant && (
+  //         <div data-testid='product-stock' className='text-muted-foreground flex items-center gap-2 text-sm'>
+  //           <span>
+  //             Đã chọn: <span className='font-medium'>{matchedVariant.name}</span>
+  //           </span>
+
+  //           <span className='bg-border h-4 w-0.5' />
+
+  //           {isOutOfStock ? (
+  //             <span className='text-destructive'>Hết hàng</span>
+  //           ) : (
+  //             <span>Còn {matchedVariant.stock - matchedVariant.reservedStock} sản phẩm</span>
+  //           )}
+  //         </div>
+  //       )}
+
+  //       <div className='flex flex-col gap-3 sm:flex-row sm:items-end'>
+  //         <Controller
+  //           control={form.control}
+  //           name='quantity'
+  //           render={({ field }) => (
+  //             <div className='space-y-2'>
+  //               <legend className='text-base font-semibold'>Số lượng</legend>
+
+  //               <div className='flex h-10 w-fit items-center overflow-hidden rounded-md border'>
+  //                 <Button
+  //                   type='button'
+  //                   variant='ghost'
+  //                   size='icon'
+  //                   disabled={isOutOfStock || field.value <= 1}
+  //                   onClick={() => {
+  //                     field.onChange(Math.max(1, field.value - 1));
+  //                   }}
+  //                   className='h-11 rounded-none'
+  //                 >
+  //                   <Minus className='size-4' />
+  //                 </Button>
+
+  //                 <Input
+  //                   type='number'
+  //                   min={1}
+  //                   max={maxQuantity || 1}
+  //                   value={field.value}
+  //                   disabled={isOutOfStock}
+  //                   onChange={(event) => {
+  //                     const rawValue = Number(event.target.value);
+
+  //                     if (Number.isNaN(rawValue)) {
+  //                       field.onChange(1);
+  //                       return;
+  //                     }
+
+  //                     if (maxQuantity > 0 && rawValue > maxQuantity) {
+  //                       field.onChange(maxQuantity);
+  //                       return;
+  //                     }
+
+  //                     field.onChange(Math.max(1, rawValue));
+  //                   }}
+  //                   onBlur={() => {
+  //                     if (maxQuantity > 0 && field.value > maxQuantity) {
+  //                       field.onChange(maxQuantity);
+  //                       return;
+  //                     }
+
+  //                     if (field.value < 1) {
+  //                       field.onChange(1);
+  //                     }
+  //                   }}
+  //                   className='h-11 w-16 [appearance:textfield] rounded-none border-x border-y-0 text-center shadow-none focus-visible:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
+  //                 />
+
+  //                 <Button
+  //                   type='button'
+  //                   variant='ghost'
+  //                   size='icon'
+  //                   disabled={isOutOfStock || field.value >= maxQuantity}
+  //                   onClick={() => {
+  //                     field.onChange(Math.min(maxQuantity, field.value + 1));
+  //                   }}
+  //                   className='h-11 rounded-none'
+  //                 >
+  //                   <Plus className='size-4' />
+  //                 </Button>
+  //               </div>
+  //             </div>
+  //           )}
+  //         />
+
+  //         <div className='flex flex-1 gap-3'>
+  //           <Button
+  //             type='submit'
+  //             size={'lg'}
+  //             className='flex-1'
+  //             disabled={isSubmitDisabled || isItemPending(matchedVariant?.id ?? '')}
+  //           >
+  //             {isItemPending(matchedVariant?.id ?? '') ? <SpinnerButton /> : 'Thêm giỏ hàng'}
+  //           </Button>
+
+  //           <Button type='button' size='lg' variant='secondary' className='flex-1' disabled={isSubmitDisabled}>
+  //             Mua ngay
+  //           </Button>
+  //         </div>
+  //       </div>
+  //     </form>
+  //   );
+  // }
+
+  // function isOptionDisabled({
+  //   variants,
+  //   selectedOptions,
+  //   attributeId,
+  //   attributeValueId
+  // }: {
+  //   variants: ProductVariant[];
+  //   selectedOptions: Record<string, string>;
+  //   attributeId: string;
+  //   attributeValueId: string;
+  // }) {
+  //   const nextSelectedOptions = {
+  //     ...selectedOptions,
+  //     [attributeId]: attributeValueId
+  //   };
+
+  //   return !variants.some((variant) => {
+  //     const isMatched = variant.attributes.every((attr) => {
+  //       const selectedValue = nextSelectedOptions[attr.attributeId];
+
+  //       if (!selectedValue) return true;
+
+  //       return selectedValue === attr.attributeValueId;
+  //     });
+
+  //     return isMatched && variant.isAvailable && variant.stock > 0;
+  //   });
+  // }
+
+  // const VariantOptionButton = ({ id, label, value, disabled }: VariantOptionButtonProps) => {
+  //   return (
+  //     <label
+  //       htmlFor={id}
+  //       className='hover:bg-accent hover:text-accent-foreground has-checked:bg-primary has-checked:text-primary-foreground relative flex h-10 min-w-16 cursor-pointer items-center justify-center rounded-md border px-3 text-sm font-medium transition-colors has-disabled:pointer-events-none has-disabled:opacity-50'
+  //     >
+  //       <RadioGroupItem
+  //         id={id}
+  //         className='absolute size-px overflow-hidden opacity-0'
+  //         value={value}
+  //         disabled={disabled}
+  //       />
+
+  //       <span>{label}</span>
+
+  //       {disabled && (
+  //         <div className='absolute inset-0 flex items-center justify-center'>
+  //           <div className='bg-border h-px w-full rotate-45' />
+  //         </div>
+  //       )}
+  //     </label>
+  //   );
+  // };
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
       {matchedVariant && (
-        <ProductPrice
-          showBadge
-          hasInfo
-          price={matchedVariant.price}
-          compareAtPrice={matchedVariant.compareAtPrice}
-          className='text-xl'
-        />
+        <div data-testid='product-price'>
+          <ProductPrice
+            showBadge
+            hasInfo
+            price={matchedVariant.price}
+            compareAtPrice={matchedVariant.compareAtPrice}
+            className='text-xl'
+          />
+        </div>
       )}
 
       {variantOptions.map((option) => (
@@ -212,6 +427,7 @@ export default function ProductPurchaseForm({
                       label={value.value}
                       value={value.id}
                       disabled={disabled}
+                      selected={field.value === value.id}
                     />
                   );
                 })}
@@ -222,7 +438,7 @@ export default function ProductPurchaseForm({
       ))}
 
       {matchedVariant && (
-        <div className='text-muted-foreground flex items-center gap-2 text-sm'>
+        <div data-testid='product-stock' className='text-muted-foreground flex items-center gap-2 text-sm'>
           <span>
             Đã chọn: <span className='font-medium'>{matchedVariant.name}</span>
           </span>
@@ -230,7 +446,7 @@ export default function ProductPurchaseForm({
           <span className='bg-border h-4 w-0.5' />
 
           {isOutOfStock ? (
-            <span className='text-destructive'>Hết hàng</span>
+            <span>Hết hàng</span>
           ) : (
             <span>Còn {matchedVariant.stock - matchedVariant.reservedStock} sản phẩm</span>
           )}
@@ -247,6 +463,7 @@ export default function ProductPurchaseForm({
 
               <div className='flex h-10 w-fit items-center overflow-hidden rounded-md border'>
                 <Button
+                  data-testid='quantity-minus'
                   type='button'
                   variant='ghost'
                   size='icon'
@@ -260,6 +477,7 @@ export default function ProductPurchaseForm({
                 </Button>
 
                 <Input
+                  data-testid='product-quantity-input'
                   type='number'
                   min={1}
                   max={maxQuantity || 1}
@@ -294,6 +512,7 @@ export default function ProductPurchaseForm({
                 />
 
                 <Button
+                  data-testid='quantity-plus'
                   type='button'
                   variant='ghost'
                   size='icon'
@@ -312,6 +531,7 @@ export default function ProductPurchaseForm({
 
         <div className='flex flex-1 gap-3'>
           <Button
+            data-testid='btn-add-to-cart'
             type='submit'
             size={'lg'}
             className='flex-1'
@@ -358,11 +578,14 @@ function isOptionDisabled({
   });
 }
 
-const VariantOptionButton = ({ id, label, value, disabled }: VariantOptionButtonProps) => {
+const VariantOptionButton = ({ id, label, value, disabled, selected }: VariantOptionButtonProps) => {
   return (
     <label
+      data-testid='product-variant'
       htmlFor={id}
-      className='hover:bg-accent hover:text-accent-foreground has-checked:bg-primary has-checked:text-primary-foreground relative flex h-10 min-w-16 cursor-pointer items-center justify-center rounded-md border px-3 text-sm font-medium transition-colors has-disabled:pointer-events-none has-disabled:opacity-50'
+      className={`hover:bg-accent hover:text-accent-foreground has-checked:bg-primary has-checked:text-primary-foreground relative flex h-10 min-w-16 cursor-pointer items-center justify-center rounded-md border px-3 text-sm font-medium transition-colors has-disabled:pointer-events-none has-disabled:opacity-50 ${
+        selected ? 'selected' : ''
+      }`}
     >
       <RadioGroupItem
         id={id}

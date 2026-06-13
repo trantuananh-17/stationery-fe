@@ -88,20 +88,8 @@ export default async function Layout({ children, params }: Props) {
   const messages = (await import(`../../messages/${locale}.json`)).default;
 
   return (
-    <html
-      lang={locale}
-      data-theme-preset='global'
-      className={cn('h-full', 'antialiased', geistSans.variable, geistMono.variable, 'font-sans', inter.variable)}
-      suppressHydrationWarning
-    >
-      <body className='flex min-h-full flex-col'>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <QueryProvider>
-            {children}
-            <Toaster richColors />
-          </QueryProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <QueryProvider>{children}</QueryProvider>
+    </NextIntlClientProvider>
   );
 }

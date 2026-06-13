@@ -84,7 +84,7 @@ export function useCart() {
       setCartLoaded(true);
 
       toast.success('Thêm vào giỏ hàng thành công', {
-        position: 'top-right'
+        position: 'bottom-right'
       });
       openCart();
     } catch (error) {
@@ -92,7 +92,7 @@ export function useCart() {
 
       toast.error('Thêm vào giỏ hàng thất bại', {
         description: 'Vui lòng thử lại',
-        position: 'top-right'
+        position: 'bottom-right'
       });
     } finally {
       stopPending(variantId);
@@ -131,7 +131,7 @@ export function useCart() {
         if (response.status === 412) {
           toast.error('Không đủ tồn kho', {
             description: response.data?.message,
-            position: 'top-right'
+            position: 'bottom-right'
           });
 
           return;
@@ -144,13 +144,13 @@ export function useCart() {
 
       toast.success('Cập nhật số lượng thành công', {
         description: `Số lượng "${item.productNameSnapshot}" đã tăng lên ${item.quantity + 1}`,
-        position: 'top-right'
+        position: 'bottom-right'
       });
     } catch (error) {
       console.error(error);
 
       toast.error('Cập nhật số lượng thất bại', {
-        position: 'top-right'
+        position: 'bottom-right'
       });
     } finally {
       stopPending(variantId);
@@ -189,7 +189,7 @@ export function useCart() {
   //   try {
   //     await removeCartItem(item.id, accessToken, getSessionId());
   //     await refetchCart();
-  //     toast.success('Xóa sản phẩm khỏi giỏ hàng thành công', { position: 'top-right' });
+  //     toast.success('Xóa sản phẩm khỏi giỏ hàng thành công', { position: 'bottom-right' });
   //   } finally {
   //     stopPending(cartItemId);
   //   }
@@ -210,14 +210,14 @@ export function useCart() {
 
         toast.success('Xóa sản phẩm khỏi giỏ hàng thành công', {
           description: `"${item.productNameSnapshot}" đã được xóa`,
-          position: 'top-right'
+          position: 'bottom-right'
         });
       } else {
         await updateCartItemQuantity(item.variantId, item.quantity - 1, accessToken, getSessionId());
 
         toast.success('Cập nhật số lượng thành công', {
           description: `Số lượng "${item.productNameSnapshot}" đã giảm xuống ${item.quantity - 1}`,
-          position: 'top-right'
+          position: 'bottom-right'
         });
       }
 
@@ -226,7 +226,7 @@ export function useCart() {
       console.error(error);
 
       toast.error('Cập nhật giỏ hàng thất bại', {
-        position: 'top-right'
+        position: 'bottom-right'
       });
     } finally {
       stopPending(variantId);
@@ -249,13 +249,13 @@ export function useCart() {
 
       toast.success('Xóa sản phẩm khỏi giỏ hàng thành công', {
         description: `"${item.productNameSnapshot}" đã được xóa khỏi giỏ hàng`,
-        position: 'top-right'
+        position: 'bottom-right'
       });
     } catch (error) {
       console.error(error);
 
       toast.error('Xóa sản phẩm thất bại', {
-        position: 'top-right'
+        position: 'bottom-right'
       });
     } finally {
       stopPending(cartItemId);

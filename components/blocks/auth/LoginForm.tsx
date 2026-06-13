@@ -10,7 +10,7 @@ import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from 
 import { Input } from '@/components/ui/input';
 import { handleLogin } from '@/app/[locale]/(marketing)/auth/sign-in/action';
 import { getUser } from '@/lib/auth';
-import { useRouter } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/stores/auth-store';
 import { toast } from 'sonner';
@@ -26,7 +26,6 @@ type Props = {
 };
 
 export function LoginForm({ className, ...props }: Props) {
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const queryClient = useQueryClient();
   const setAuth = useAuthStore((state) => state.setAuth);
@@ -37,57 +36,58 @@ export function LoginForm({ className, ...props }: Props) {
     register,
     handleSubmit,
     setError,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<LoginFormValues>();
 
-  const onSubmit = (values: LoginFormValues) => {
-    startTransition(async () => {
-      const result = await handleLogin(values);
+  const onSubmit = async (values: LoginFormValues) => {
+    const result = await handleLogin(values);
 
-      if (!result.success) {
-        toast.error(t('loginFailed'), {
-          description: tError(result.message) || result.message,
-          position: 'top-right'
-        });
-
-        setError('root', {
-          message: result.message
-        });
-
-        return;
-      }
-
-      setAuth({
-        accessToken: result.data.accessToken,
-        refreshToken: result.data.refreshToken,
-        user: result.data.profile.data
+    if (!result.success) {
+      toast.error(t('loginFailed'), {
+        description: tError(result.message) || result.message,
+        position: 'top-right',
+        id: 'login-failed'
       });
 
-      const fullName = [result.data.profile.data.firstName, result.data.profile.data.lastName]
-        .filter(Boolean)
-        .join(' ');
-
-      toast.success(t('loginSuccess'), {
-        description: t('welcomeBackDescription', { fullName }),
-        position: 'top-right'
+      setError('root', {
+        message: result.message
       });
 
-      await queryClient.invalidateQueries({
-        queryKey: ['profile']
-      });
+      return;
+    }
 
-      const role = result.data.profile.data.role;
-
-      if (role === 'ADMIN') {
-        router.replace('/admin/dashboard');
-        return;
-      }
-
-      router.replace('/');
-
-      router.refresh();
+    setAuth({
+      accessToken: result.data.accessToken,
+      refreshToken: result.data.refreshToken,
+      user: result.data.profile.data
     });
+
+    const fullName = [result.data.profile.data.firstName, result.data.profile.data.lastName].filter(Boolean).join(' ');
+
+    toast.success(t('loginSuccess'), {
+      description: t('welcomeBackDescription', { fullName }),
+      position: 'top-center',
+      id: 'login-success'
+    });
+
+    await queryClient.invalidateQueries({
+      queryKey: ['profile']
+    });
+
+    const role = result.data.profile.data.role;
+
+    if (role === 'ADMIN') {
+      router.replace('/admin/dashboard');
+      return;
+    }
+
+    router.replace('/');
+    router.refresh();
   };
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).+$/;
 
   return (
     <div className={cn('flex flex-col', className)} {...props}>
@@ -98,7 +98,7 @@ export function LoginForm({ className, ...props }: Props) {
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Field>
                 <Button variant='outline' type='button'>
@@ -116,12 +116,16 @@ export function LoginForm({ className, ...props }: Props) {
                   id='email'
                   type='email'
                   placeholder='m@example.com'
-                  disabled={isPending}
+                  disabled={isSubmitting}
                   {...register('email', {
-                    required: t('emailEmpty')
+                    required: t('emailEmpty'),
+                    pattern: {
+                      value: emailRegex,
+                      message: 'Email không đúng định dạng'
+                    }
                   })}
                 />
-                {errors.email && <p className='text-destructive text-sm'>{errors.email.message}</p>}
+                {errors.email && <p className='msg-error text-destructive text-sm'>{errors.email.message}</p>}
               </Field>
 
               <Field>
@@ -129,23 +133,28 @@ export function LoginForm({ className, ...props }: Props) {
                 <Input
                   id='password'
                   type='password'
-                  disabled={isPending}
+                  placeholder='********'
+                  disabled={isSubmitting}
                   {...register('password', {
-                    required: t('passwordEmpty')
+                    required: t('passwordEmpty'),
+                    pattern: {
+                      value: passwordRegex,
+                      message: 'Mật khẩu phải có ít nhất 1 chữ cái và 1 số'
+                    }
                   })}
                 />
-                {errors.password && <p className='text-destructive text-sm'>{errors.password.message}</p>}
+                {errors.password && <p className='msg-error text-destructive text-sm'>{errors.password.message}</p>}
               </Field>
 
               <Field>
                 {errors.root?.message && (
-                  <p className='text-destructive text-center text-sm'>{tError(errors.root.message)}</p>
+                  <p className='msg-error text-destructive text-center text-sm'>{tError(errors.root.message)}</p>
                 )}
-                <Button type='submit' disabled={isPending}>
-                  {isPending ? 'Đang đăng nhập...' : `${t('buttonLogin')}`}
+                <Button id='btn_submit_login' type='submit' disabled={isSubmitting}>
+                  {isSubmitting ? 'Đang đăng nhập...' : `${t('buttonLogin')}`}
                 </Button>
                 <FieldDescription className='text-center'>
-                  {t('titleRegister')}? <a href='/auth/sign-up'>{t('buttonRegister')}</a>
+                  {t('titleRegister')} <Link href='/auth/sign-up'>{t('buttonRegister')}</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

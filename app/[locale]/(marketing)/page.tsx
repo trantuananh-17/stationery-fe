@@ -1,7 +1,16 @@
 import Banner from '@/components/blocks/Banner';
+import BestPriceSection from '@/components/blocks/BestPriceSection';
+import BrandCollection from '@/components/blocks/BrandCollection';
+import CategoryList from '@/components/blocks/CategoryList';
+import PaymentToast from '@/components/blocks/PaymentToast';
+import ProductShowCase from '@/components/blocks/ProductShowCase';
+import StoreDescriptionSection from '@/components/blocks/StoreDescriptionSection';
 import { routing } from '@/i18n/routing';
 import { getProducts } from '@/services/product.service';
 import { setRequestLocale } from 'next-intl/server';
+import { Suspense } from 'react';
+import PEN from '@/assets/images/pen-banner-img.jpg';
+import SHELF from '@/assets/images/ke-banner-img.webp';
 
 type Props = {
   params: Promise<{
@@ -82,13 +91,13 @@ export default async function Home({ params }: Props) {
 
   return (
     <>
-      {/* <Suspense fallback={null}>
+      <Suspense fallback={null}>
         <PaymentToast />
-      </Suspense> */}
+      </Suspense>
 
       <Banner />
 
-      {/* <CategoryList />
+      <CategoryList />
 
       <ProductShowCase
         image={PEN}
@@ -120,7 +129,7 @@ export default async function Home({ params }: Props) {
         }}
       />
 
-      <StoreDescriptionSection /> */}
+      <StoreDescriptionSection />
     </>
   );
 }
