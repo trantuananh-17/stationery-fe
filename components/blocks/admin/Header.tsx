@@ -10,14 +10,12 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { NotificationMenu } from '@/components/blocks/admin/NotificationMenu';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AdminDropdownMenu } from './AdminDropdownMenu';
-import { UserProfile } from '@/services/auth.service';
+import { useAuthStore } from '@/stores/auth-store';
 
-interface Props {
-  user: UserProfile;
-}
-export default function Header({ user }: Props) {
+export default function Header() {
   const [open, setOpen] = useState(false);
   const isMobile = useIsMobile();
+  const user = useAuthStore((state) => state.user);
 
   return (
     <>
@@ -44,9 +42,9 @@ export default function Header({ user }: Props) {
         <div className='flex gap-2'>
           <NotificationMenu />
           <AdminDropdownMenu
-            firstName={user.firstName}
-            lastName={user.lastName}
-            email={user.email}
+            firstName={user?.firstName ?? ''}
+            lastName={user?.lastName ?? ''}
+            email={user?.email ?? ''}
             avatar={undefined}
           />
         </div>

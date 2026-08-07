@@ -1,8 +1,10 @@
 import AdminPagination from '@/components/blocks/admin/AdminPagination';
 import ProductsDataTable from '@/components/blocks/admin/ProductsDataTable';
 import TitlePage from '@/components/blocks/admin/TitlePage';
+import { routing } from '@/i18n/routing';
 import { getValidLimit, getValidPage } from '@/lib/utils';
 import { AdminProductStatus, getAdminProducts } from '@/services/product.service';
+import { setRequestLocale } from 'next-intl/server';
 
 export type AdminProductOrderBy =
   | 'name_asc'
@@ -14,29 +16,15 @@ export type AdminProductOrderBy =
   | 'created_at_asc'
   | 'created_at_desc';
 
-interface Props {
-  searchParams: Promise<{
-    page?: string;
-    status?: string;
-    sort?: string;
-    search?: string;
-    limit?: string;
-  }>;
-}
-
 const SORT_TO_ORDER_BY: Record<string, AdminProductOrderBy> = {
   newest: 'created_at_desc',
   oldest: 'created_at_asc',
-
   name_asc: 'name_asc',
   name_desc: 'name_desc',
-
   stock_asc: 'stock_asc',
   stock_desc: 'stock_desc',
-
   price_asc: 'price_asc',
   price_desc: 'price_desc',
-
   created_at_asc: 'created_at_asc',
   created_at_desc: 'created_at_desc'
 };
@@ -65,31 +53,29 @@ async function getProductList({
     status: isProductStatus(status) ? status : undefined,
     search: search || undefined
   });
-
-  if (!res?.ok || !res?.data?.data) {
-    return {
-      items: [],
-      total: 0,
-      page,
-      limit,
-      totalPages: 1
-    };
-  }
-
-  console.log(res.data.data);
-
+  if (!res?.ok || !res?.data?.data) return { items: [], total: 0, page, limit, totalPages: 1 };
   return res.data.data;
 }
 
-export default async function Page({ searchParams }: Props) {
-  const params = await searchParams;
+interface Props {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ page?: string; status?: string; sort?: string; search?: string; limit?: string }>;
+}
 
-  const currentPage = getValidPage(params.page);
-  const currentLimit = getValidLimit(params.limit);
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
-  const currentStatus = params.status ?? 'all';
-  const currentSort = params.sort ?? 'newest';
-  const currentSearch = params.search ?? '';
+export default async function Page({ params, searchParams }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const sp = await searchParams;
+  const currentPage = getValidPage(sp.page);
+  const currentLimit = getValidLimit(sp.limit);
+  const currentStatus = sp.status ?? 'all';
+  const currentSort = sp.sort ?? 'newest';
+  const currentSearch = sp.search ?? '';
 
   const productsData = await getProductList({
     page: currentPage,
@@ -104,14 +90,9 @@ export default async function Page({ searchParams }: Props) {
       <TitlePage
         title='Quản lý sản phẩm'
         subtitle='Theo dõi và quản lý toàn bộ sản phẩm, tồn kho và trạng thái hiển thị.'
-        button={{
-          label: 'Thêm sản phẩm',
-          href: '/admin/products/create'
-        }}
+        button={{ label: 'Thêm sản phẩm', href: '/admin/products/create' }}
       />
-
       <ProductsDataTable products={productsData.items ?? []} currentSort={currentSort} currentStatus={currentStatus} />
-
       <AdminPagination
         pagination={{
           page: currentPage,

@@ -1,6 +1,7 @@
 'use client';
 
-import { BadgeCheckIcon, BellIcon, CreditCardIcon, LogOutIcon } from 'lucide-react';
+import { BadgeCheckIcon, CreditCardIcon, LogOutIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export function DropdownMenuAvatar({ firstName, lastName, email, avatar }: Props) {
+  const t = useTranslations('Auth');
   const fullName = `${firstName} ${lastName}`;
   const initials = `${firstName[0] ?? ''}${lastName[0] ?? ''}`.toUpperCase();
 
@@ -55,14 +57,14 @@ export function DropdownMenuAvatar({ firstName, lastName, email, avatar }: Props
           <DropdownMenuItem asChild>
             <Link href='/account'>
               <BadgeCheckIcon className='mr-2 h-4 w-4' />
-              Quản lí hồ sơ
+              {t('manageProfile')}
             </Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
             <Link href='/account/orders'>
               <CreditCardIcon className='mr-2 h-4 w-4' />
-              Quản lí đơn hàng
+              {t('manageOrders')}
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -72,7 +74,7 @@ export function DropdownMenuAvatar({ firstName, lastName, email, avatar }: Props
         <Link id='btn_logout' href='/auth/log-out'>
           <DropdownMenuItem>
             <LogOutIcon className='mr-2 h-4 w-4' />
-            Đăng xuất
+            {t('signOut')}
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>

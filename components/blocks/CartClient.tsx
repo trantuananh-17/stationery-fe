@@ -10,22 +10,17 @@ import { useCart } from '@/hooks/use-cart';
 import { grpcTimestampToDate } from '@/lib/utils';
 import { useAuthStore } from '@/stores/auth-store';
 
-interface Props {
-  token?: string | null;
-}
-export default function CartClient({ token }: Props) {
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+export default function CartClient() {
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const isAuthInitialized = useAuthStore((state) => state.isAuthInitialized);
 
   const { cart, items, isCartLoaded, isItemPending, fetchCart, increaseItem, decreaseItem, removeItem } = useCart();
 
   useEffect(() => {
-    if (token) {
-      setAccessToken(token);
-    }
-
-    fetchCart(token);
+    if (!isAuthInitialized) return;
+    fetchCart(accessToken);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuthInitialized]);
 
   if (!isCartLoaded) {
     return (

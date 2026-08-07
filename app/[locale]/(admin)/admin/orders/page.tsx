@@ -1,10 +1,11 @@
 import AdminPagination from '@/components/blocks/admin/AdminPagination';
 import OrdersTable from '@/components/blocks/admin/OrdersTable';
-import { QueryTabs } from '@/components/blocks/admin/QueryTabs';
 import TitlePage from '@/components/blocks/admin/TitlePage';
+import { routing } from '@/i18n/routing';
 import { getToken } from '@/lib/auth';
 import { getValidLimit, getValidPage } from '@/lib/utils';
 import { getOrders } from '@/services/order.service';
+import { setRequestLocale } from 'next-intl/server';
 import { OrderStatus } from '@/types/order.type';
 
 export type OrderSort = 'price_asc' | 'price_desc' | 'created_at_asc' | 'created_at_desc';
@@ -12,10 +13,8 @@ export type OrderSort = 'price_asc' | 'price_desc' | 'created_at_asc' | 'created
 const SORT_TO_ORDER_BY: Record<string, OrderSort> = {
   newest: 'created_at_desc',
   oldest: 'created_at_asc',
-
   price_asc: 'price_asc',
   price_desc: 'price_desc',
-
   created_at_asc: 'created_at_asc',
   created_at_desc: 'created_at_desc'
 };
@@ -28,16 +27,6 @@ function isOrderStatus(value?: string): value is OrderStatus {
     value === 'delivered' ||
     value === 'cancelled'
   );
-}
-
-interface Props {
-  searchParams: Promise<{
-    page?: string;
-    status?: string;
-    sort?: string;
-    search?: string;
-    limit?: string;
-  }>;
 }
 
 async function getOrdersList(
@@ -63,31 +52,31 @@ async function getOrdersList(
     status: isOrderStatus(status) ? status : undefined,
     search: search || undefined
   });
-  if (!res?.ok || !res?.data?.data) {
-    return {
-      data: [],
-      total: 0,
-      page,
-      limit,
-      totalPages: 1
-    };
-  }
-
-  console.log(res.data.data);
-
+  if (!res?.ok || !res?.data?.data) return { data: [], total: 0, page, limit, totalPages: 1 };
   return res.data.data;
 }
 
-export default async function Page({ searchParams }: Props) {
+interface Props {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ page?: string; status?: string; sort?: string; search?: string; limit?: string }>;
+}
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function Page({ params, searchParams }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const token = await getToken();
-  const params = await searchParams;
+  const sp = await searchParams;
 
-  const currentPage = getValidPage(params.page);
-  const currentLimit = getValidLimit(params.limit);
-
-  const currentStatus = params.status ?? 'all';
-  const currentSort = params.sort ?? 'newest';
-  const currentSearch = params.search ?? '';
+  const currentPage = getValidPage(sp.page);
+  const currentLimit = getValidLimit(sp.limit);
+  const currentStatus = sp.status ?? 'all';
+  const currentSort = sp.sort ?? 'newest';
+  const currentSearch = sp.search ?? '';
 
   const ordersData = await getOrdersList(token!, {
     page: currentPage,
@@ -100,9 +89,7 @@ export default async function Page({ searchParams }: Props) {
   return (
     <div className='space-y-4'>
       <TitlePage title='Quản lý đơn hàng' subtitle='Kiểm soát đơn hàng, thanh toán và quá trình xử lý giao hàng.' />
-
       <OrdersTable orders={ordersData.data ?? []} currentSort={currentSort} currentStatus={currentStatus} />
-
       <AdminPagination
         pagination={{
           page: currentPage,

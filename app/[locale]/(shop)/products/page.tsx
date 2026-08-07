@@ -3,9 +3,12 @@ import PaginationSection from '@/components/blocks/PaginationSection';
 import ProductList from '@/components/blocks/ProductList';
 import ProductResultInfo from '@/components/blocks/ProductsResultInfo';
 import ProductToolbarFilter from '@/components/blocks/ProductToolbarFilter';
+import { routing } from '@/i18n/routing';
 import { getProducts, type ProductOrderBy } from '@/services/product.service';
+import { setRequestLocale } from 'next-intl/server';
 
 interface Props {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{
     page?: string;
     sort?: string;
@@ -49,26 +52,26 @@ async function getProductList({
   });
 
   if (!res?.ok || !res?.data?.data) {
-    return {
-      items: [],
-      total: 0,
-      page,
-      limit: DEFAULT_LIMIT,
-      totalPages: 1
-    };
+    return { items: [], total: 0, page, limit: DEFAULT_LIMIT, totalPages: 1 };
   }
 
   return res.data.data;
 }
 
-export default async function Page({ searchParams }: Props) {
-  const params = await searchParams;
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
-  const currentPage = Number(params.page ?? 1);
-  const currentSort = params.sort ?? 'newest';
-  const currentBrand = params.brand ?? '';
-  const currentCategory = params.category ?? '';
-  const currentSearch = params.search ?? '';
+export default async function Page({ params, searchParams }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const sp = await searchParams;
+  const currentPage = Number(sp.page ?? 1);
+  const currentSort = sp.sort ?? 'newest';
+  const currentBrand = sp.brand ?? '';
+  const currentCategory = sp.category ?? '';
+  const currentSearch = sp.search ?? '';
 
   const productsData = await getProductList({
     page: currentPage,
@@ -88,7 +91,6 @@ export default async function Page({ searchParams }: Props) {
     <>
       <section className='flex flex-col gap-4 py-4 md:flex-row md:justify-between md:py-8'>
         <BreadcrumbSection />
-
         <ProductResultInfo page={productsData.page} limit={productsData.limit} total={productsData.total} />
       </section>
 
@@ -100,7 +102,7 @@ export default async function Page({ searchParams }: Props) {
         currentPage={productsData.page}
         totalPages={productsData.totalPages}
         basePath='/products'
-        searchParams={params}
+        searchParams={sp}
       />
     </>
   );

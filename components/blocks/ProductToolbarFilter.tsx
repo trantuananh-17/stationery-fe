@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
@@ -18,6 +19,7 @@ export default function ProductToolbarFilter({ title, currentSort, currentBrand 
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const t = useTranslations('ProductFilter');
 
   const brands: Option[] = [
     { label: 'Thiên Long', value: 'thien-long' },
@@ -51,27 +53,23 @@ export default function ProductToolbarFilter({ title, currentSort, currentBrand 
   ];
 
   const sortOptions: Option[] = [
-    { label: 'Sắp xếp theo mới nhất', value: 'newest' },
-    { label: 'Sắp xếp theo cũ nhất', value: 'created_at_desc' },
-    { label: 'Sắp xếp theo giá tăng dần', value: 'price_asc' },
-    { label: 'Sắp xếp theo giá giảm dần', value: 'price_desc' },
-    { label: 'Sắp xếp theo tên A-Z', value: 'name_asc' },
-    { label: 'Sắp xếp theo tên Z-A', value: 'name_desc' }
+    { label: t('sortOptions.newest'), value: 'newest' },
+    { label: t('sortOptions.oldest'), value: 'created_at_desc' },
+    { label: t('sortOptions.price_asc'), value: 'price_asc' },
+    { label: t('sortOptions.price_desc'), value: 'price_desc' },
+    { label: t('sortOptions.name_asc'), value: 'name_asc' },
+    { label: t('sortOptions.name_desc'), value: 'name_desc' }
   ];
 
   const updateQuery = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-
     if (value) {
       params.set(key, value);
     } else {
       params.delete(key);
     }
-
     params.set('page', '1');
-
     const queryString = params.toString();
-
     router.push(queryString ? `${pathname}?${queryString}` : pathname);
   };
 
@@ -85,12 +83,11 @@ export default function ProductToolbarFilter({ title, currentSort, currentBrand 
           onValueChange={(value) => updateQuery('brand', value === '__all__' ? '' : value)}
         >
           <SelectTrigger className='w-60 rounded-full sm:w-45'>
-            <SelectValue placeholder='Lọc theo thương hiệu' />
+            <SelectValue placeholder={t('filterByBrand')} />
           </SelectTrigger>
 
           <SelectContent position='popper'>
-            <SelectItem value='__all__'>Tất cả thương hiệu</SelectItem>
-
+            <SelectItem value='__all__'>{t('allBrands')}</SelectItem>
             {brands.map((brand) => (
               <SelectItem key={brand.value} value={brand.value}>
                 {brand.label}
@@ -101,7 +98,7 @@ export default function ProductToolbarFilter({ title, currentSort, currentBrand 
 
         <Select value={currentSort || 'newest'} onValueChange={(value) => updateQuery('sort', value)}>
           <SelectTrigger className='w-60 rounded-full sm:w-56'>
-            <SelectValue placeholder='Sắp xếp theo mới nhất' />
+            <SelectValue placeholder={t('sortNewest')} />
           </SelectTrigger>
 
           <SelectContent position='popper'>

@@ -2,48 +2,31 @@
 
 import { Link } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { MapPin, Package, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const navItems = [
-  {
-    href: '/account',
-    label: 'Hồ sơ của tôi',
-    icon: User
-  },
-  {
-    href: '/account/orders',
-    label: 'Đơn mua',
-    icon: Package
-  },
-  {
-    href: '/account/address',
-    label: 'Địa chỉ',
-    icon: MapPin
-  }
-  // {
-  //   href: '/account/settings',
-  //   label: 'Cài đặt',
-  //   icon: Settings
-  // }
-];
-
 export function AccountSidebar() {
   const pathname = usePathname();
+  const t = useTranslations('AccountSidebar');
+
+  const navItems = [
+    { href: '/account', label: t('profile'), icon: User },
+    { href: '/account/orders', label: t('orders'), icon: Package },
+    { href: '/account/address', label: t('address'), icon: MapPin }
+  ];
 
   return (
     <aside className='bg-background min-h-[75svh]'>
       <div className='flex h-full flex-col p-4'>
         <div className='mb-6 px-2'>
-          <h2 className='text-lg font-semibold'>Tài khoản của tôi</h2>
-
-          <p className='text-muted-foreground text-sm'>Manage your profile and orders</p>
+          <h2 className='text-lg font-semibold'>{t('heading')}</h2>
+          <p className='text-muted-foreground text-sm'>{t('subheading')}</p>
         </div>
 
         <nav className='flex flex-col gap-1'>
           {navItems.map((item) => {
             const isActive = pathname === item.href;
-
             const Icon = item.icon;
 
             return (
@@ -58,7 +41,6 @@ export function AccountSidebar() {
                 )}
               >
                 <Icon className='h-4 w-4' />
-
                 <span>{item.label}</span>
               </Link>
             );

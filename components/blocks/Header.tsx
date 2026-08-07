@@ -15,6 +15,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { IconType, LinkType } from '@/types/type';
 import { VariantProps } from 'class-variance-authority';
 import { Menu, User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { CartDrawer } from './CartDrawer';
 import { DropdownMenuAvatar } from './DropdownMenuAvatar';
@@ -58,6 +59,8 @@ export default function HeaderClient({
 }: Props) {
   const pathname = usePathname();
   const isAuthPage = pathname.startsWith('/auth');
+  const tNav = useTranslations('Nav');
+  const tAuth = useTranslations('Auth');
 
   const accessToken = useAuthStore((state) => state.accessToken);
   const user = useAuthStore((state) => state.user);
@@ -71,7 +74,7 @@ export default function HeaderClient({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button id='btn_account' variant='ghost' size='icon' aria-label='Tài khoản'>
+          <Button id='btn_account' variant='ghost' size='icon' aria-label={tAuth('account')}>
             <User className='size-5' />
           </Button>
         </DropdownMenuTrigger>
@@ -142,7 +145,7 @@ export default function HeaderClient({
             <SheetTrigger asChild className='md:hidden'>
               <Button variant='ghost' size='icon'>
                 <Menu className='h-5 w-5' />
-                <span className='sr-only'>Toggle menu</span>
+                <span className='sr-only'>{tNav('toggleMenu')}</span>
               </Button>
             </SheetTrigger>
 
@@ -150,8 +153,8 @@ export default function HeaderClient({
               side='right'
               className='data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right w-70 duration-250 ease-out sm:w-[320px]'
             >
-              <SheetTitle className='sr-only'>Menu mobile</SheetTitle>
-              <SheetDescription className='sr-only'>Menu mobile.</SheetDescription>
+              <SheetTitle className='sr-only'>{tNav('menuTitle')}</SheetTitle>
+              <SheetDescription className='sr-only'>{tNav('menuTitle')}.</SheetDescription>
 
               <div className='mt-6 flex flex-col gap-6 px-4'>
                 <Link href='/' className='flex items-center' aria-label='Home'>

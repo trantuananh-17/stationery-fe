@@ -1,6 +1,5 @@
 'use client';
 
-import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { cn } from '@/lib/utils';
@@ -82,7 +81,6 @@ export function LoginForm({ className, ...props }: Props) {
     }
 
     router.replace('/');
-    router.refresh();
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -151,10 +149,13 @@ export function LoginForm({ className, ...props }: Props) {
                   <p className='msg-error text-destructive text-center text-sm'>{tError(errors.root.message)}</p>
                 )}
                 <Button id='btn_submit_login' type='submit' disabled={isSubmitting}>
-                  {isSubmitting ? 'Đang đăng nhập...' : `${t('buttonLogin')}`}
+                  {isSubmitting ? t('loading') || 'Đang đăng nhập...' : `${t('buttonLogin')}`}
                 </Button>
                 <FieldDescription className='text-center'>
-                  {t('titleRegister')} <Link href='/auth/sign-up'>{t('buttonRegister')}</Link>
+                  {t('titleRegister')}
+                  <Link href='/auth/sign-up' className='font-medium hover:underline'>
+                    {t('buttonRegister')}
+                  </Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

@@ -1,6 +1,7 @@
 import React from 'react';
 import LOGO from '@/assets/images/logo.webp';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 
 import Header from '../blocks/Header';
 import { TooltipProvider } from '../ui/tooltip';
@@ -17,7 +18,11 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function Layout(props: Props) {
+export default async function Layout(props: Props) {
+  const tNav = await getTranslations('Nav');
+  const tAuth = await getTranslations('Auth');
+  const tFooter = await getTranslations('Footer');
+
   const headerProps = {
     logo: (
       <Image
@@ -32,26 +37,26 @@ export default function Layout(props: Props) {
     primaryButton: {
       icon: null,
       link: { href: '/auth/sign-up', target: '_self' as const },
-      label: 'Đăng ký',
+      label: tAuth('signUp'),
       variant: 'default' as const
     },
     secondaryButton: {
       icon: null,
       link: { href: '/auth/sign-in', target: '_self' as const },
-      label: 'Đăng nhập',
+      label: tAuth('signIn'),
       variant: 'ghost' as const
     },
     navItems: [
-      { link: { href: '/', target: '_self' as const }, label: 'Trang chủ' },
-      { link: { href: '/products', target: '_self' as const }, label: 'Sản phẩm' },
-      { link: { href: '/about', target: '_self' as const }, label: 'Về chúng tôi' },
-      { link: { href: '/contact', target: '_self' as const }, label: 'Liên hệ' }
+      { link: { href: '/', target: '_self' as const }, label: tNav('home') },
+      { link: { href: '/products', target: '_self' as const }, label: tNav('products') },
+      { link: { href: '/about', target: '_self' as const }, label: tNav('about') },
+      { link: { href: '/contact', target: '_self' as const }, label: tNav('contact') }
     ]
   };
 
   const footerProps = {
     logo: <Image src={LOGO} alt='Logo' className='h-auto w-45 rounded-xl object-contain' priority />,
-    copyright: '© 2026. Bản quyền thuộc về Tuấn Anh - Văn phòng phẩm Minaco.',
+    copyright: tFooter('copyright'),
     description:
       'Helping businesses grow with innovative solutions and dedicated support. Your success is our mission.',
     address: [
@@ -65,24 +70,24 @@ export default function Layout(props: Props) {
     ],
     navSections: [
       {
+        title: tFooter('sections.info.title'),
         links: [
-          { link: { href: '/about', target: '_self' as const }, label: 'Giới thiệu về Minaco' },
-          { link: { href: '/services', target: '_self' as const }, label: 'Minaco Blog' },
-          { link: { href: '/#', target: '_self' as const }, label: 'Tuyển dụng' },
-          { link: { href: '/contact', target: '_self' as const }, label: 'Tư vấn gói doanh nghiệp' },
-          { link: { href: '/contact', target: '_self' as const }, label: 'Liên hệ' }
-        ],
-        title: 'Thông tin'
+          { link: { href: '/about', target: '_self' as const }, label: tFooter('sections.info.about') },
+          { link: { href: '/services', target: '_self' as const }, label: tFooter('sections.info.blog') },
+          { link: { href: '/#', target: '_self' as const }, label: tFooter('sections.info.careers') },
+          { link: { href: '/contact', target: '_self' as const }, label: tFooter('sections.info.enterprise') },
+          { link: { href: '/contact', target: '_self' as const }, label: tFooter('sections.info.contact') }
+        ]
       },
       {
+        title: tFooter('sections.policy.title'),
         links: [
-          { link: { href: '/services', target: '_self' as const }, label: 'Chính sách bảo mật' },
-          { link: { href: '/services', target: '_self' as const }, label: 'Quy định sử dụng' },
-          { link: { href: '/services', target: '_self' as const }, label: 'Chính sách đổi trả' },
-          { link: { href: '/services', target: '_self' as const }, label: 'Chính sách giao - nhận' },
-          { link: { href: '/services', target: '_self' as const }, label: 'Chính sách thanh toán' }
-        ],
-        title: 'Chính sách và điều khoản'
+          { link: { href: '/services', target: '_self' as const }, label: tFooter('sections.policy.privacy') },
+          { link: { href: '/services', target: '_self' as const }, label: tFooter('sections.policy.terms') },
+          { link: { href: '/services', target: '_self' as const }, label: tFooter('sections.policy.returns') },
+          { link: { href: '/services', target: '_self' as const }, label: tFooter('sections.policy.shipping') },
+          { link: { href: '/services', target: '_self' as const }, label: tFooter('sections.policy.payment') }
+        ]
       }
     ]
   };

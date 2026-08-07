@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { v4 as uuidv4 } from 'uuid';
 import { useAuthStore } from '@/stores/auth-store';
@@ -27,6 +28,7 @@ const removeToken = async () => {
 export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const t = useTranslations('LogOut');
 
   const resetAuth = useAuthStore((state) => state.resetAuth);
   const setAuthLoading = useAuthStore((state) => state.setAuthLoading);
@@ -65,5 +67,5 @@ export default function Page() {
     logout();
   }, [router, queryClient, resetAuth, resetCart, setAuthLoading, setAuthInitialized]);
 
-  return <div className='flex min-h-screen items-center justify-center'>Đang đăng xuất...</div>;
+  return <div className='flex min-h-screen items-center justify-center'>{t('loading')}</div>;
 }

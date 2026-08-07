@@ -24,6 +24,7 @@ import NavHeader from '@/components/blocks/NavHeader';
 import { NavUser } from '@/components/blocks/NavUser';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar';
 import { useNotificationStore } from '@/stores/notification.store';
+import { useAuthStore } from '@/stores/auth-store';
 
 // This is sample data.
 const data = {
@@ -132,15 +133,10 @@ const data = {
   ]
 };
 
-interface AdminSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  user: {
-    name?: string | null;
-    email?: string | null;
-    avatar?: string | null;
-  };
-}
+interface AdminSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 
-export function AdminSidebar({ user, ...props }: AdminSidebarProps) {
+export function AdminSidebar({ ...props }: AdminSidebarProps) {
+  const user = useAuthStore((state) => state.user);
   const unreadCount = useNotificationStore((state) => state.unreadCount);
 
   const navAdmin = React.useMemo(
@@ -174,9 +170,9 @@ export function AdminSidebar({ user, ...props }: AdminSidebarProps) {
       <SidebarFooter>
         <NavUser
           user={{
-            name: user.name ?? 'Admin',
-            email: user.email ?? '',
-            avatar: user.avatar ?? '/avatars/default.jpg'
+            name: user ? `${user.firstName} ${user.lastName}`.trim() : 'Admin',
+            email: user?.email ?? '',
+            avatar: '/avatars/default.jpg'
           }}
         />
       </SidebarFooter>

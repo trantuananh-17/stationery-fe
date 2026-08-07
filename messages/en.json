@@ -6,7 +6,8 @@
     "separator": "Or continue with",
     "password": "Password",
     "buttonLogin": "Login",
-    "titleRegister": "Don't have an account",
+    "loading": "Logging in...",
+    "titleRegister": "Don't have an account? ",
     "buttonRegister": "Register",
     "emailEmpty": "Email is required",
     "passwordEmpty": "Password is required",
@@ -25,6 +26,7 @@
     "passwordInput": "Password",
     "confirmPasswordInput": "Confirm password",
     "buttonSignup": "Create account",
+    "loading": "Creating account...",
     "titleLogin": "Already have an account? ",
     "buttonLogin": "Sign in",
     "emailEmpty": "Email is required",
@@ -38,5 +40,132 @@
   },
   "Metadata": {
     "title": "Stationery Store"
+  },
+  "Account": {
+    "title": "My Profile",
+    "description": "Manage profile information to secure your account",
+    "address": {
+      "title": "My Addresses",
+      "description": "Manage your shipping addresses"
+    }
+  },
+  "Cart": {
+    "title": "Shopping Cart"
+  },
+  "Checkout": {
+    "title": "Checkout"
+  },
+  "Payment": {
+    "title": "Payment"
+  },
+  "LogOut": {
+    "loading": "Signing out..."
+  },
+  "AdminProducts": {
+    "createTitle": "Add Product",
+    "editTitle": "Edit Product"
+  },
+  "AdminInventories": {
+    "title": "Inventories",
+    "description": "Manage product stock"
+  },
+  "Nav": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About Us",
+    "contact": "Contact",
+    "toggleMenu": "Toggle menu",
+    "menuTitle": "Navigation menu"
+  },
+  "Auth": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signOut": "Sign out",
+    "account": "Account",
+    "manageProfile": "Manage profile",
+    "manageOrders": "Manage orders"
+  },
+  "Footer": {
+    "copyright": "© 2026. All rights reserved by Tuan Anh - Minaco Stationery.",
+    "hotline": "Hotline",
+    "cskh": "Support",
+    "email": "Email",
+    "sections": {
+      "info": {
+        "title": "Information",
+        "about": "About Minaco",
+        "blog": "Minaco Blog",
+        "careers": "Careers",
+        "enterprise": "Enterprise Solutions",
+        "contact": "Contact"
+      },
+      "policy": {
+        "title": "Policies & Terms",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Use",
+        "returns": "Return Policy",
+        "shipping": "Shipping Policy",
+        "payment": "Payment Policy"
+      }
+    }
+  },
+  "CartDrawer": {
+    "title": "Cart ({count})",
+    "total": "Total:",
+    "viewCart": "View Cart"
+  },
+  "CartEmpty": {
+    "title": "Your cart is empty",
+    "description": "You have no items in your cart. Add some products to continue shopping.",
+    "continueShopping": "Continue Shopping"
+  },
+  "EmptyCart": {
+    "title": "Your cart is empty",
+    "description": "Looks like you haven't added anything to your cart yet.",
+    "continueShopping": "Continue Shopping"
+  },
+  "CartSummary": {
+    "title": "Order Summary",
+    "subtotal": "Subtotal:",
+    "shipping": "Shipping:",
+    "shippingFree": "Free",
+    "total": "Total:",
+    "checkout": "Checkout",
+    "taxNote": "Taxes calculated at checkout",
+    "trustPayment": "Secure payment.",
+    "trustReturn": "Free returns within 30 days.",
+    "trustShipping": "Free shipping on orders over 100,000 VND."
+  },
+  "AccountSidebar": {
+    "heading": "My Account",
+    "subheading": "Manage your profile and orders",
+    "profile": "My Profile",
+    "orders": "My Orders",
+    "address": "Addresses"
+  },
+  "Breadcrumb": {
+    "home": "Home",
+    "products": "Products",
+    "openMenu": "Open breadcrumb",
+    "page": "Page {number}"
+  },
+  "ProductFilter": {
+    "allBrands": "All brands",
+    "filterByBrand": "Filter by brand",
+    "sortNewest": "Sort by newest",
+    "sortOptions": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low",
+      "name_asc": "Name: A to Z",
+      "name_desc": "Name: Z to A"
+    }
+  },
+  "ProductResultInfo": {
+    "showing": "Showing {from}–{to} of {total} products"
+  },
+  "AdminInventories": {
+    "title": "Inventories"
   }
 }

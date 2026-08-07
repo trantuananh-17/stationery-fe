@@ -1,15 +1,28 @@
 import React from 'react';
-import { redirect } from 'next/navigation';
-
+import { setRequestLocale } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
 import Provider from '@/components/layouts/Provider';
-import { initAuth } from '@/services/auth.service';
+import AuthInitializer from '@/components/layouts/AuthInitializer';
 
-export default async function ProtectedShopLayout({ children }: { children: React.ReactNode }) {
-  const auth = await initAuth();
+type Props = {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+};
 
-  if (auth.shouldLogout || !auth.user) {
-    redirect('/auth/sign-in');
-  }
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
-  return <Provider initialAuth={auth}>{children}</Provider>;
+export default async function ProtectedShopLayout({ children, params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  // Auth guard is handled by middleware (proxy.ts).
+  // Auth state is initialized client-side via AuthInitializer → /api/auth/session.
+  return (
+    <Provider>
+      <AuthInitializer redirectOnFail />
+      {children}
+    </Provider>
+  );
 }

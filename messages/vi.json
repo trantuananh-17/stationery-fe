@@ -6,6 +6,7 @@
     "separator": "Hoặc tiếp tục với",
     "password": "Mật khẩu",
     "buttonLogin": "Đăng nhập",
+    "loading": "Đang đăng nhập...",
     "titleRegister": "Chưa có tài khoản? ",
     "buttonRegister": "Đăng ký",
     "emailEmpty": "Email không được để trống",
@@ -25,6 +26,7 @@
     "passwordInput": "Mật khẩu",
     "confirmPasswordInput": "Xác nhận mật khẩu",
     "buttonSignup": "Tạo tài khoản",
+    "loading": "Đang tạo tài khoản...",
     "titleLogin": "Bạn đã có tài khoản? ",
     "buttonLogin": "Đăng nhập",
     "emailEmpty": "Email không được để trống",
@@ -38,5 +40,132 @@
   },
   "Metadata": {
     "title": "Stationery Store"
+  },
+  "Account": {
+    "title": "Hồ Sơ Của Tôi",
+    "description": "Quản lý thông tin hồ sơ để bảo mật tài khoản",
+    "address": {
+      "title": "Địa Chỉ Của Tôi",
+      "description": "Quản lý địa chỉ giao hàng"
+    }
+  },
+  "Cart": {
+    "title": "Giỏ Hàng"
+  },
+  "Checkout": {
+    "title": "Thanh Toán"
+  },
+  "Payment": {
+    "title": "Thanh Toán"
+  },
+  "LogOut": {
+    "loading": "Đang đăng xuất..."
+  },
+  "AdminProducts": {
+    "createTitle": "Thêm sản phẩm",
+    "editTitle": "Chỉnh sửa sản phẩm"
+  },
+  "AdminInventories": {
+    "title": "Kho hàng",
+    "description": "Quản lý tồn kho sản phẩm"
+  },
+  "Nav": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "about": "Về chúng tôi",
+    "contact": "Liên hệ",
+    "toggleMenu": "Mở menu",
+    "menuTitle": "Menu điều hướng"
+  },
+  "Auth": {
+    "signIn": "Đăng nhập",
+    "signUp": "Đăng ký",
+    "signOut": "Đăng xuất",
+    "account": "Tài khoản",
+    "manageProfile": "Quản lý hồ sơ",
+    "manageOrders": "Quản lý đơn hàng"
+  },
+  "Footer": {
+    "copyright": "© 2026. Bản quyền thuộc về Tuấn Anh - Văn phòng phẩm Minaco.",
+    "hotline": "Hotline",
+    "cskh": "CSKH",
+    "email": "Email",
+    "sections": {
+      "info": {
+        "title": "Thông tin",
+        "about": "Giới thiệu về Minaco",
+        "blog": "Minaco Blog",
+        "careers": "Tuyển dụng",
+        "enterprise": "Tư vấn gói doanh nghiệp",
+        "contact": "Liên hệ"
+      },
+      "policy": {
+        "title": "Chính sách và điều khoản",
+        "privacy": "Chính sách bảo mật",
+        "terms": "Quy định sử dụng",
+        "returns": "Chính sách đổi trả",
+        "shipping": "Chính sách giao - nhận",
+        "payment": "Chính sách thanh toán"
+      }
+    }
+  },
+  "CartDrawer": {
+    "title": "Giỏ hàng ({count})",
+    "total": "Tổng tiền:",
+    "viewCart": "Xem giỏ hàng"
+  },
+  "CartEmpty": {
+    "title": "Giỏ hàng trống",
+    "description": "Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy thêm sản phẩm để tiếp tục mua sắm.",
+    "continueShopping": "Tiếp tục mua sắm"
+  },
+  "EmptyCart": {
+    "title": "Giỏ hàng của bạn còn trống",
+    "description": "Có vẻ như bạn chưa thêm sản phẩm nào vào giỏ hàng.",
+    "continueShopping": "Tiếp tục mua sắm"
+  },
+  "CartSummary": {
+    "title": "Tóm tắt đơn hàng",
+    "subtotal": "Tạm tính:",
+    "shipping": "Phí vận chuyển:",
+    "shippingFree": "Miễn phí",
+    "total": "Tổng tiền:",
+    "checkout": "Thanh toán",
+    "taxNote": "Thuế được tính khi thanh toán",
+    "trustPayment": "Thanh toán an toàn.",
+    "trustReturn": "Đổi trả miễn phí trong 30 ngày.",
+    "trustShipping": "Miễn phí vận chuyển cho đơn hàng trên 100.000VNĐ."
+  },
+  "AccountSidebar": {
+    "heading": "Tài khoản của tôi",
+    "subheading": "Quản lý hồ sơ và đơn hàng của bạn",
+    "profile": "Hồ sơ của tôi",
+    "orders": "Đơn mua",
+    "address": "Địa chỉ"
+  },
+  "Breadcrumb": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "openMenu": "Mở breadcrumb",
+    "page": "Trang {number}"
+  },
+  "ProductFilter": {
+    "allBrands": "Tất cả thương hiệu",
+    "filterByBrand": "Lọc theo thương hiệu",
+    "sortNewest": "Sắp xếp theo mới nhất",
+    "sortOptions": {
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất",
+      "price_asc": "Giá tăng dần",
+      "price_desc": "Giá giảm dần",
+      "name_asc": "Tên A-Z",
+      "name_desc": "Tên Z-A"
+    }
+  },
+  "ProductResultInfo": {
+    "showing": "Hiển thị {from}–{to} trong {total} sản phẩm"
+  },
+  "AdminInventories": {
+    "title": "Kho hàng"
   }
 }

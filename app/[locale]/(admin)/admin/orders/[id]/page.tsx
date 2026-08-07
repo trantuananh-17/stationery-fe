@@ -4,8 +4,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { routing } from '@/i18n/routing';
 import { getToken } from '@/lib/auth';
 import { getOrderById } from '@/services/order.service';
+import { setRequestLocale } from 'next-intl/server';
 import { OrderDetail, OrderStatusUpper, PaymentStatus } from '@/types/order.type';
 import {
   ArrowLeft,
@@ -234,13 +236,19 @@ async function getOrderInfo(token: string, orderId: string): Promise<OrderDetail
 
 type Props = {
   params: Promise<{
+    locale: string;
     id: string;
   }>;
 };
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default async function OrderDetailPage({ params }: Props) {
   const token = await getToken();
-  const { id } = await params;
+  const { locale, id } = await params;
+  setRequestLocale(locale);
 
   const order = await getOrderInfo(token!, id);
 

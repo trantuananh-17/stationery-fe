@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import {
   Breadcrumb,
@@ -32,12 +33,14 @@ interface Props {
 }
 
 export default function BreadcrumbSection({ title, breadcrumbs, paginationPage }: Props) {
+  const t = useTranslations('Breadcrumb');
+
   return (
     <Breadcrumb>
       <BreadcrumbList className='gap-1 text-sm'>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href='/'>Trang chủ</Link>
+            <Link href='/'>{t('home')}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
 
@@ -50,18 +53,18 @@ export default function BreadcrumbSection({ title, breadcrumbs, paginationPage }
                 <DropdownMenuTrigger asChild>
                   <Button size='icon-sm' variant='ghost'>
                     <BreadcrumbEllipsis />
-                    <span className='sr-only'>Mở breadcrumb</span>
+                    <span className='sr-only'>{t('openMenu')}</span>
                   </Button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align='start' className='min-w-60'>
                   <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                      <Link href='/products'>Sản phẩm</Link>
+                      <Link href='/products'>{t('products')}</Link>
                     </DropdownMenuItem>
 
                     {breadcrumbs.parent && (
-                      <DropdownMenuItem className='' asChild>
+                      <DropdownMenuItem asChild>
                         <Link href={breadcrumbs.parent.href}>{breadcrumbs.parent.label}</Link>
                       </DropdownMenuItem>
                     )}
@@ -91,7 +94,7 @@ export default function BreadcrumbSection({ title, breadcrumbs, paginationPage }
               <>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Trang {paginationPage}</BreadcrumbPage>
+                  <BreadcrumbPage>{t('page', { number: paginationPage })}</BreadcrumbPage>
                 </BreadcrumbItem>
               </>
             )}
@@ -102,7 +105,7 @@ export default function BreadcrumbSection({ title, breadcrumbs, paginationPage }
 
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href='/products'>Sản phẩm</Link>
+                <Link href='/products'>{t('products')}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
 
@@ -130,7 +133,7 @@ export default function BreadcrumbSection({ title, breadcrumbs, paginationPage }
               <>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Trang {paginationPage}</BreadcrumbPage>
+                  <BreadcrumbPage>{t('page', { number: paginationPage })}</BreadcrumbPage>
                 </BreadcrumbItem>
               </>
             )}

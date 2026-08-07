@@ -79,7 +79,6 @@ export function SignupForm({ className, ...props }: Props) {
     });
 
     router.replace('/auth/sign-in');
-    router.refresh();
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -186,11 +185,14 @@ export function SignupForm({ className, ...props }: Props) {
 
               <Field>
                 <Button id='btn_submit_register' type='submit' disabled={isSubmitting}>
-                  {isSubmitting ? '...' : t('buttonSignup')}
+                  {isSubmitting ? t('loading') || '...' : t('buttonSignup')}
                 </Button>
 
                 <FieldDescription className='px-6 text-center'>
-                  {t('titleLogin')} <Link href='/auth/sign-in'>{t('buttonLogin')}</Link>
+                  {t('titleLogin')}
+                  <Link href='/auth/sign-in' className='font-medium hover:underline'>
+                    {t('buttonLogin')}
+                  </Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

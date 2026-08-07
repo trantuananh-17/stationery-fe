@@ -1,6 +1,8 @@
 import { LoginForm } from '@/components/blocks/auth/LoginForm';
 import { setRequestLocale } from 'next-intl/server';
 
+export const dynamic = 'force-dynamic';
+
 type Props = {
   params: Promise<{
     locale: string;

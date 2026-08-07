@@ -1,6 +1,7 @@
 'use client';
 
 import { ShoppingBag, ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
@@ -8,6 +9,8 @@ import { useCartStore } from '@/stores/cart-store';
 
 export function CartEmpty() {
   const closeCart = useCartStore((state) => state.closeCart);
+  const t = useTranslations('CartEmpty');
+
   return (
     <Empty className='py-auto'>
       <EmptyHeader>
@@ -15,16 +18,14 @@ export function CartEmpty() {
           <ShoppingBag />
         </EmptyMedia>
 
-        <EmptyTitle>Giỏ hàng trống</EmptyTitle>
+        <EmptyTitle>{t('title')}</EmptyTitle>
 
-        <EmptyDescription>
-          Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy thêm sản phẩm để tiếp tục mua sắm.
-        </EmptyDescription>
+        <EmptyDescription>{t('description')}</EmptyDescription>
       </EmptyHeader>
 
       <EmptyContent className='flex-row justify-center gap-2'>
         <Button onClick={closeCart}>
-          Tiếp tục mua sắm <ArrowRight />
+          {t('continueShopping')} <ArrowRight />
         </Button>
       </EmptyContent>
     </Empty>
