@@ -1,0 +1,50 @@
+# Triển khai lại một version đã build sẵn — cũng là nút quay lui.
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Môi trường đích
+        required: true
+        type: choice
+        options: [staging, production]
+      version:
+        description: Tag version cần deploy, ví dụ v1.2.0 hoặc v1.2.0rc1
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+    steps:
+      - name: Resolve image reference
+        id: meta
+        run: |
+          IMAGE="ghcr.io/$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')"
+          echo "image=$IMAGE:${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Ảnh có trên GHCR chưa?
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          if ! docker manifest inspect "${{ steps.meta.outputs.image }}" > /dev/null 2>&1; then
+            echo "::error::${{ steps.meta.outputs.image }} không tồn tại. ${{ inputs.version }} đã từng được release chưa?"
+            exit 1
+          fi
+
+  deploy:
+    needs: resolve
+    uses: ./.github/workflows/deploy-template.yml
+    with:
+      environment: ${{ inputs.environment }}
+      version: ${{ inputs.version }}
+      image: ${{ needs.resolve.outputs.image }}
+      tag_var: IMAGE_TAG_FRONTEND
+      services: fe
+    secrets: inherit
