@@ -21,10 +21,11 @@ jobs:
           version: 9.8.0
           run_install: false
 
+      # Không bật cache: 'pnpm' — setup-node gọi `pnpm store path`, lệnh này
+      # fail vì pnpm-workspace.yaml của repo không khai field `packages`.
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
 
