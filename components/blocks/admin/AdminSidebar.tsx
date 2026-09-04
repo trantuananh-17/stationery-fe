@@ -137,7 +137,7 @@ const data = {
   ]
 };
 
-interface AdminSidebarProps extends React.ComponentProps<typeof Sidebar> {}
+type AdminSidebarProps = React.ComponentProps<typeof Sidebar>;
 
 export function AdminSidebar({ ...props }: AdminSidebarProps) {
   const user = useAuthStore((state) => state.user);

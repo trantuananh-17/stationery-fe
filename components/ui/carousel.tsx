@@ -95,6 +95,8 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return
+    // Đồng bộ trạng thái ban đầu từ embla — nguồn dữ liệu nằm ngoài React nên buộc phải set trong effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     onSelect(api)
     api.on("reInit", onSelect)
     api.on("select", onSelect)

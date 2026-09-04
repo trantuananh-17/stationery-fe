@@ -58,7 +58,6 @@ export const POST = async (req: NextRequest) => {
 
 export const DELETE = async (req: NextRequest) => {
   const key = req.nextUrl.searchParams.get('key');
-  console.log(key);
 
   if (!key) {
     return NextResponse.json({

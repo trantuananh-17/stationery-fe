@@ -1,5 +1,4 @@
 import ProductDetail from '@/components/blocks/ProductDetail';
-import RelatedProduct from '@/components/blocks/RelatedProduct';
 import { routing } from '@/i18n/routing';
 import { getProductBySlug } from '@/services/product.service';
 import { setRequestLocale } from 'next-intl/server';
@@ -35,7 +34,6 @@ export default async function Page({ params }: Props) {
   return (
     <>
       <ProductDetail product={product} />
-      <RelatedProduct />
     </>
   );
 }

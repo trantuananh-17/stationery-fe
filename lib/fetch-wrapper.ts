@@ -1,5 +1,7 @@
 import { ACCESS_TOKEN_MAX_AGE, isClient, makeRefreshToken } from './auth';
 
+const REQUEST_TIMEOUT_MS = 10_000;
+
 export class FetchWrapper {
   #baseUrl: string = '';
   #headers: { [key: string]: string } = {};
@@ -16,56 +18,6 @@ export class FetchWrapper {
     this.#refreshToken = refreshToken;
   }
 
-  // async #send<T>(
-  //   path: string,
-  //   method: string,
-  //   data: null | { [key: string]: unknown },
-  //   options: { headers?: { [key: string]: string } } = {}
-  // ): Promise<Response & { data?: T }> {
-  //   const requestInit: RequestInit = {
-  //     method,
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       ...this.#headers,
-  //       ...options.headers
-  //     }
-  //   };
-
-  //   if (data) {
-  //     requestInit.body = JSON.stringify(data);
-  //   }
-
-  //   const response: Response & { data?: T } = await fetch(`${this.#baseUrl}${path}`, requestInit);
-
-  //   if (response.status === 401 && this.#refreshToken && isClient()) {
-  //     const newToken = await makeRefreshToken(this.#refreshToken);
-
-  //     if (newToken) {
-  //       await fetch('/api/cookie?key=token', {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify({
-  //           value: newToken.accessToken,
-  //           maxAge: 60 * 15
-  //         })
-  //       });
-  //       this.#headers.Authorization = `Bearer ${newToken.accessToken}`;
-  //       return this.#send<T>(path, method, data, options);
-  //     }
-
-  //     if (window.location.href !== '/auth/log-out') {
-  //       window.location.href = '/auth/log-out';
-  //     }
-  //   }
-
-  //   response.data = await response.json();
-
-  //   console.log(response);
-
-  //   return response;
-  // }
   async #send<T>(
     path: string,
     method: string,
@@ -78,7 +30,9 @@ export class FetchWrapper {
         'Content-Type': 'application/json',
         ...this.#headers,
         ...options.headers
-      }
+      },
+      // BFF treo thì Server Component treo theo cho tới timeout mặc định của Node.
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
     };
 
     if (data) {

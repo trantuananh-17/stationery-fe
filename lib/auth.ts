@@ -71,40 +71,6 @@ export const getUser = cache(async () => {
   return getUserByToken(accessToken);
 });
 
-// export const getUser = cache(async () => {
-//   const accessToken = await getToken();
-
-//   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/users/get-profile`, {
-//     headers: {
-//       Authorization: `Bearer ${accessToken}`
-//     }
-//   });
-
-//   if (!response.ok) {
-//     // console.log('hello');
-
-//     // // Gọi api refresh token để lấy token mới
-//     // const newToken = await makeRefreshToken(refreshToken!);
-
-//     // // Lưu token mới vào cookie
-//     // await fetch(`http://localhost:3000/api/cookie?key=token`, {
-//     //   method: 'POST',
-//     //   headers: {
-//     //     'Content-Type': 'application/json'
-//     //   },
-//     //   body: JSON.stringify({
-//     //     value: newToken.accessToken,
-//     //     maxAge: 60 * 15
-//     //   })
-//     // });
-
-//     return false;
-//   }
-
-//   const data = await response.json();
-//   return data.data;
-// });
-
 export const getToken = async (): Promise<string | null> => {
   let data = null;
 

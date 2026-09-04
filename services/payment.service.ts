@@ -19,8 +19,6 @@ export type CreatePaymentIntentResponse = {
 };
 
 export async function createPaymentIntent(accessToken: string, payload: CreatePaymentIntentPayload) {
-  console.log('hello');
-
   return fetchWrapper.post<ApiResponse<CreatePaymentIntentResponse>>('/payments/create-intent', payload, {
     headers: {
       Authorization: `Bearer ${accessToken}`

@@ -123,7 +123,7 @@ export default function ProductForm({ mode = 'create', productId, initialData }:
 
   return (
     <form
-      onSubmit={form.handleSubmit(onSubmit, (errors) => console.log('errors', errors))}
+      onSubmit={form.handleSubmit(onSubmit)}
       className='grid w-full grid-cols-1 gap-4 md:grid-cols-[2fr_1fr]'
     >
       <div className='flex flex-col gap-4'>

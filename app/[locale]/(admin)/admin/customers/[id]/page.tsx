@@ -18,7 +18,6 @@ import { Separator } from '@/components/ui/separator';
 import { orderStatusConfig, paymentStatusConfig } from '../../orders/[id]/page';
 import { formatCurrency, formatDate, getDaysSinceText, GrpcTimestamp, grpcTimestampToDate } from '@/lib/utils';
 import { getUserById } from '@/services/user.service';
-import { routing } from '@/i18n/routing';
 import { getToken } from '@/lib/auth';
 import { setRequestLocale } from 'next-intl/server';
 import NotFound from '@/app/[locale]/(shop)/products/[slug]/not-found';
@@ -88,7 +87,6 @@ async function getUserInfo(token: string, userId: string) {
     return null;
   }
 
-  console.log(res.data.data);
 
   return res.data.data;
 }
@@ -98,10 +96,6 @@ type Props = {
     id: string;
   }>;
 };
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
 
 export default async function Page({ params }: Props) {
   const token = await getToken();

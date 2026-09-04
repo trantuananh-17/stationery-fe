@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { FormProvider, SubmitErrorHandler, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import EmptyCart from '@/components/blocks/EmptyCart';
@@ -95,9 +95,6 @@ export default function CheckoutClient({ initialItems }: Props) {
       router.refresh();
     }
 
-    console.log('submit data:', data);
-    console.log('payload:', payload);
-
     const res = await createOrder(accessToken, payload);
 
     if (!res.data) return;
@@ -107,8 +104,6 @@ export default function CheckoutClient({ initialItems }: Props) {
         string,
         CheckoutStockItem
       >;
-
-      console.log(map);
 
       setStockErrors(map);
       return;
@@ -137,17 +132,13 @@ export default function CheckoutClient({ initialItems }: Props) {
     }
   }
 
-  const onError: SubmitErrorHandler<CheckoutFormValues> = (errors) => {
-    console.log('form errors:', errors);
-  };
-
   if (items.length === 0) {
     return <EmptyCart />;
   }
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit, onError)} className='grid grid-cols-1 gap-8 lg:grid-cols-2'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='grid grid-cols-1 gap-8 lg:grid-cols-2'>
         <div className='lg:col-span-1'>
           <CheckoutForm />
         </div>

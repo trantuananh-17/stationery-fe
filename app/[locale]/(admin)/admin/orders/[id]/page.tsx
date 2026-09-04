@@ -4,7 +4,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { routing } from '@/i18n/routing';
 import { getToken } from '@/lib/auth';
 import { getOrderById } from '@/services/order.service';
 import { setRequestLocale } from 'next-intl/server';
@@ -261,7 +260,6 @@ async function getOrderInfo(token: string, orderId: string): Promise<OrderDetail
     return null;
   }
 
-  console.log(res.data.data);
 
   return res.data.data;
 }
@@ -272,10 +270,6 @@ type Props = {
     id: string;
   }>;
 };
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
 
 export default async function OrderDetailPage({ params }: Props) {
   const token = await getToken();
