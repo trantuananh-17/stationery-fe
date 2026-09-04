@@ -31,9 +31,13 @@ jobs:
 
       - run: pnpm lint
 
-      - run: pnpm typecheck
-
       # .env bi gitignore; build chi can cac bien NEXT_PUBLIC_* ton tai, khong can gia tri that.
       - run: cp .env.example .env
 
+      # Build truoc typecheck: next-env.d.ts bi gitignore va no reference
+      # .next/types/routes.d.ts — ca hai chi ton tai sau khi `next build` chay,
+      # nen chay typecheck trong CI truoc build se bao thieu module cho moi
+      # import anh va route.
       - run: pnpm build
+
+      - run: pnpm typecheck
