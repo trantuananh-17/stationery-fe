@@ -1,5 +1,30 @@
 {
+  "ForgotPassword": {
+    "title": "Quên mật khẩu",
+    "description": "Nhập email đã đăng ký, chúng tôi sẽ gửi link đặt lại mật khẩu.",
+    "sentDescription": "Nếu email tồn tại trong hệ thống, link đặt lại mật khẩu đã được gửi. Link có hiệu lực 15 phút.",
+    "email": "Email",
+    "submit": "Gửi link đặt lại",
+    "submitting": "Đang gửi...",
+    "error": "Không gửi được, vui lòng thử lại",
+    "backToSignIn": "Quay lại đăng nhập"
+  },
+  "ResetPassword": {
+    "title": "Đặt lại mật khẩu",
+    "description": "Nhập mật khẩu mới cho tài khoản của bạn.",
+    "newPassword": "Mật khẩu mới",
+    "confirmPassword": "Nhập lại mật khẩu",
+    "submit": "Đặt lại mật khẩu",
+    "submitting": "Đang xử lý...",
+    "success": "Đổi mật khẩu thành công, hãy đăng nhập lại",
+    "error": "Link không hợp lệ hoặc đã hết hạn",
+    "tooShort": "Mật khẩu phải có ít nhất {min} ký tự",
+    "mismatch": "Hai mật khẩu không khớp",
+    "missingToken": "Link không hợp lệ — thiếu mã xác thực.",
+    "requestNew": "Gửi lại link đặt lại mật khẩu"
+  },
   "LoginPage": {
+    "forgotPassword": "Quên mật khẩu?",
     "title": "Chào mừng trở lại",
     "subTitle": "Đăng nhập bằng Google",
     "buttonLoginGoogle": "Đăng nhập bằng Google",
@@ -38,8 +63,90 @@
   "Error": {
     "INVALID_CREDENTIALS": "Tài khoản hoặc mật khẩu không chính xác"
   },
+  "Status": {
+    "PENDING": "Chờ xử lý",
+    "PROCESSING": "Đang xử lý",
+    "SHIPPED": "Đang vận chuyển",
+    "DELIVERED": "Hoàn thành",
+    "CANCELLED": "Đã hủy",
+    "EXPIRED": "Đã hết hạn",
+    "RETURNED": "Đã trả hàng",
+    "PAYMENT_PENDING": "Chưa thanh toán",
+    "PAID": "Đã thanh toán",
+    "FAILED": "Thanh toán lỗi",
+    "REFUNDED": "Đã hoàn tiền",
+    "ACTIVE": "Đang bán",
+    "DRAFT": "Bản nháp",
+    "ARCHIVED": "Đã lưu trữ",
+    "ACTIVE_TRUE": "Hoạt động",
+    "ACTIVE_FALSE": "Không hoạt động",
+    "VERIFIED_TRUE": "Đã xác minh",
+    "VERIFIED_FALSE": "Chưa xác minh"
+  },
+  "OrderActions": {
+    "updateSuccess": "Cập nhật trạng thái thành công",
+    "updateSuccessDesc": "Đơn hàng đã được chuyển sang \"{status}\""
+  },
+  "OrderFilter": {
+    "placeholder": "Tất cả đơn hàng",
+    "all": "Tất cả",
+    "pending": "Chờ xử lý",
+    "processing": "Đang xử lý",
+    "shipped": "Đang vận chuyển",
+    "delivered": "Đã giao",
+    "cancelled": "Đã hủy",
+    "expired": "Đã hết hạn",
+    "returned": "Đã trả hàng"
+  },
+  "Forbidden": {
+    "title": "Bạn không có quyền truy cập",
+    "description": "Trang này chỉ dành cho quản trị viên. Nếu bạn cho rằng đây là nhầm lẫn, hãy liên hệ quản trị viên.",
+    "backHome": "Về trang chủ"
+  },
   "Metadata": {
     "title": "Stationery Store"
+  },
+  "Address": {
+    "addNew": "Thêm địa chỉ",
+    "editTitle": "Sửa địa chỉ",
+    "default": "Mặc định",
+    "setAsDefault": "Đặt làm mặc định",
+    "edit": "Sửa",
+    "delete": "Xoá",
+    "save": "Lưu",
+    "saving": "Đang lưu...",
+    "cancel": "Huỷ",
+    "fullName": "Họ và tên",
+    "phone": "Số điện thoại",
+    "address1": "Địa chỉ",
+    "address2": "Địa chỉ bổ sung (tuỳ chọn)",
+    "ward": "Phường/Xã",
+    "district": "Quận/Huyện",
+    "city": "Tỉnh/Thành phố",
+    "emptyTitle": "Chưa có địa chỉ nào",
+    "emptyDescription": "Thêm địa chỉ để thanh toán nhanh hơn ở lần mua sau.",
+    "createSuccess": "Đã thêm địa chỉ",
+    "createError": "Thêm địa chỉ thất bại",
+    "updateSuccess": "Đã cập nhật địa chỉ",
+    "updateError": "Cập nhật địa chỉ thất bại",
+    "deleteSuccess": "Đã xoá địa chỉ",
+    "deleteError": "Xoá địa chỉ thất bại",
+    "setDefaultSuccess": "Đã đặt làm địa chỉ mặc định",
+    "setDefaultError": "Đặt địa chỉ mặc định thất bại",
+    "savedAddresses": "Địa chỉ đã lưu",
+    "useNewAddress": "Nhập địa chỉ mới"
+  },
+  "Wishlist": {
+    "title": "Sản phẩm yêu thích",
+    "subtitle": "Những sản phẩm bạn đã lưu lại để mua sau.",
+    "add": "Thêm vào yêu thích",
+    "remove": "Bỏ khỏi yêu thích",
+    "added": "Đã thêm vào yêu thích",
+    "removed": "Đã bỏ khỏi yêu thích",
+    "error": "Thao tác thất bại, vui lòng thử lại",
+    "needLogin": "Bạn cần đăng nhập để dùng danh sách yêu thích",
+    "emptyTitle": "Chưa có sản phẩm yêu thích",
+    "emptyDescription": "Bấm vào biểu tượng trái tim ở trang sản phẩm để lưu lại."
   },
   "Account": {
     "title": "Hồ Sơ Của Tôi",
@@ -52,22 +159,144 @@
   "Cart": {
     "title": "Giỏ Hàng"
   },
+  "Coupon": {
+    "placeholder": "Nhập mã giảm giá",
+    "apply": "Áp dụng",
+    "checking": "Đang kiểm tra...",
+    "applied": "Đã áp dụng mã giảm giá",
+    "invalid": "Mã giảm giá không hợp lệ",
+    "title": "Mã giảm giá",
+    "subtitle": "Tạo và quản lý mã giảm giá cho đơn hàng.",
+    "code": "Mã",
+    "type": "Loại",
+    "value": "Giá trị",
+    "typePercent": "Phần trăm",
+    "typeFixed": "Số tiền cố định",
+    "minOrderAmount": "Đơn tối thiểu",
+    "maxDiscount": "Giảm tối đa",
+    "startsAt": "Bắt đầu",
+    "expiresAt": "Kết thúc",
+    "usage": "Lượt dùng",
+    "usageLimit": "Giới hạn lượt (0 = không giới hạn)",
+    "status": "Trạng thái",
+    "active": "Đang bật",
+    "inactive": "Đã tắt",
+    "actions": "Thao tác",
+    "addNew": "Thêm mã",
+    "editTitle": "Sửa mã giảm giá",
+    "edit": "Sửa",
+    "delete": "Xoá",
+    "save": "Lưu",
+    "saving": "Đang lưu...",
+    "cancel": "Huỷ",
+    "empty": "Chưa có mã giảm giá nào.",
+    "searchPlaceholder": "Tìm theo mã",
+    "createSuccess": "Đã tạo mã giảm giá",
+    "createError": "Tạo mã giảm giá thất bại",
+    "updateSuccess": "Đã cập nhật mã giảm giá",
+    "updateError": "Cập nhật mã giảm giá thất bại",
+    "deleteSuccess": "Đã xoá mã giảm giá",
+    "deleteError": "Xoá mã giảm giá thất bại"
+  },
   "Checkout": {
     "title": "Thanh Toán"
   },
   "Payment": {
-    "title": "Thanh Toán"
+    "title": "Thanh Toán",
+    "receiverEmail": "Email người nhận",
+    "subtotal": "Tạm tính",
+    "shippingFee": "Phí vận chuyển",
+    "shippingFree": "Miễn phí",
+    "total": "Tổng thanh toán",
+    "cannotCreate": "Không thể tạo thanh toán",
+    "submit": "Thanh toán",
+    "processing": "Đang xử lý...",
+    "redirecting": "Đang chuyển hướng xác nhận thanh toán...",
+    "failed": "Thanh toán thất bại. Vui lòng thử lại.",
+    "toastSuccess": "Thanh toán thành công",
+    "toastFailed": "Thanh toán thất bại",
+    "toastCancelled": "Bạn đã hủy thanh toán"
   },
   "LogOut": {
     "loading": "Đang đăng xuất..."
   },
+  "Discovery": {
+    "similarTitle": "Sản phẩm tương tự",
+    "semanticTitle": "Kết quả tìm theo ngữ nghĩa",
+    "semanticHint": "Mô tả nhu cầu bằng lời, ví dụ: bút viết trơn cho học sinh cấp 2",
+    "semanticPlaceholder": "Bạn đang cần gì?",
+    "search": "Tìm",
+    "searching": "Đang tìm...",
+    "noResult": "Không tìm thấy sản phẩm phù hợp.",
+    "reindex": "Cập nhật chỉ mục tìm kiếm",
+    "reindexing": "Đang cập nhật...",
+    "reindexSuccess": "Đã index {count} sản phẩm",
+    "reindexError": "Cập nhật chỉ mục thất bại"
+  },
+  "Compare": {
+    "title": "So sánh sản phẩm",
+    "product": "Sản phẩm",
+    "price": "Giá",
+    "brand": "Thương hiệu",
+    "empty": "Chưa chọn sản phẩm nào để so sánh.",
+    "limit": "Chỉ so sánh được tối đa {max} sản phẩm",
+    "compareCount": "So sánh ({count})"
+  },
+  "RecentlyViewed": {
+    "title": "Sản phẩm đã xem"
+  },
+  "ProductReview": {
+    "title": "Đánh giá sản phẩm",
+    "writeReview": "Viết đánh giá của bạn",
+    "commentPlaceholder": "Chia sẻ cảm nhận của bạn về sản phẩm này",
+    "submit": "Gửi đánh giá",
+    "submitting": "Đang gửi...",
+    "submitSuccess": "Cảm ơn bạn đã đánh giá",
+    "submitError": "Gửi đánh giá thất bại",
+    "ratingRequired": "Vui lòng chọn số sao",
+    "commentRequired": "Vui lòng nhập nội dung đánh giá",
+    "starLabel": "{value} sao",
+    "empty": "Chưa có đánh giá nào cho sản phẩm này.",
+    "deleteSuccess": "Đã xoá đánh giá",
+    "deleteError": "Xoá đánh giá thất bại",
+    "previous": "Trước",
+    "next": "Sau"
+  },
   "AdminProducts": {
+    "createSuccess": "Tạo sản phẩm thành công",
+    "createSuccessDesc": "Sản phẩm \"{name}\" đã được tạo",
+    "createError": "Tạo sản phẩm thất bại",
+    "updateSuccess": "Cập nhật sản phẩm thành công",
+    "updateSuccessDesc": "Sản phẩm \"{name}\" đã được cập nhật",
+    "updateError": "Cập nhật sản phẩm thất bại",
+    "deleteSuccess": "Xóa sản phẩm thành công",
+    "deleteSuccessDesc": "Đã xóa sản phẩm {id} thành công",
+    "deleteError": "Xóa sản phẩm thất bại",
+    "restoreSuccess": "Khôi phục sản phẩm thành công",
+    "restoreSuccessDesc": "Đã khôi phục sản phẩm {id} thành công",
+    "restoreError": "Khôi phục sản phẩm thất bại",
+    "tryAgain": "Vui lòng thử lại",
     "createTitle": "Thêm sản phẩm",
     "editTitle": "Chỉnh sửa sản phẩm"
   },
   "AdminInventories": {
     "title": "Kho hàng",
-    "description": "Quản lý tồn kho sản phẩm"
+    "description": "Quản lý tồn kho sản phẩm",
+    "subtitle": "Theo dõi tồn kho theo từng biến thể và điều chỉnh số lượng.",
+    "searchPlaceholder": "Tìm theo tên sản phẩm, biến thể hoặc SKU",
+    "lowStockOnly": "Chỉ hàng sắp hết",
+    "product": "Sản phẩm",
+    "sku": "SKU",
+    "stock": "Tồn kho",
+    "reserved": "Đang giữ",
+    "available": "Khả dụng",
+    "actions": "Thao tác",
+    "edit": "Sửa",
+    "empty": "Không có biến thể nào khớp bộ lọc.",
+    "adjustSuccess": "Đã cập nhật tồn kho",
+    "adjustError": "Cập nhật tồn kho thất bại",
+    "invalidStock": "Tồn kho phải là số nguyên không âm",
+    "belowReserved": "Không thể đặt thấp hơn {reserved} đang giữ cho đơn chưa hoàn tất"
   },
   "Nav": {
     "home": "Trang chủ",
@@ -114,7 +343,7 @@
     "total": "Tổng tiền:",
     "viewCart": "Xem giỏ hàng"
   },
-  "CartEmpty": {
+  "CartDrawerEmpty": {
     "title": "Giỏ hàng trống",
     "description": "Bạn chưa có sản phẩm nào trong giỏ hàng. Hãy thêm sản phẩm để tiếp tục mua sắm.",
     "continueShopping": "Tiếp tục mua sắm"
@@ -141,7 +370,8 @@
     "subheading": "Quản lý hồ sơ và đơn hàng của bạn",
     "profile": "Hồ sơ của tôi",
     "orders": "Đơn mua",
-    "address": "Địa chỉ"
+    "address": "Địa chỉ",
+    "wishlist": "Yêu thích"
   },
   "Breadcrumb": {
     "home": "Trang chủ",
@@ -164,8 +394,5 @@
   },
   "ProductResultInfo": {
     "showing": "Hiển thị {from}–{to} trong {total} sản phẩm"
-  },
-  "AdminInventories": {
-    "title": "Kho hàng"
   }
 }

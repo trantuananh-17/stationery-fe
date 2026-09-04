@@ -99,3 +99,11 @@ export async function initAuth() {
     shouldLogout: false
   };
 }
+
+export async function forgotPassword(email: string) {
+  return fetchWrapper.post<ApiResponse<{ sent: boolean }>>('/auths/forgot-password', { email });
+}
+
+export async function resetPassword(token: string, password: string) {
+  return fetchWrapper.post<ApiResponse<{ reset: boolean }>>('/auths/reset-password', { token, password });
+}

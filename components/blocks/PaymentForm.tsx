@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -12,6 +13,8 @@ type PaymentFormProps = {
 export default function PaymentForm({ clientSecret }: PaymentFormProps) {
   const stripe = useStripe();
   const elements = useElements();
+  const locale = useLocale();
+  const t = useTranslations('Payment');
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -29,12 +32,12 @@ export default function PaymentForm({ clientSecret }: PaymentFormProps) {
     const result = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: 'http://localhost:3000?success'
+        return_url: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}?success`
       }
     });
 
     if (result.error) {
-      const message = result.error.message || 'Thanh toán thất bại. Vui lòng thử lại.';
+      const message = result.error.message || t('failed');
 
       setErrorMessage(message);
       toast.error(message, { position: 'top-right' });
@@ -42,7 +45,7 @@ export default function PaymentForm({ clientSecret }: PaymentFormProps) {
       return;
     }
 
-    toast.success('Đang chuyển hướng xác nhận thanh toán...', { position: 'top-center' });
+    toast.success(t('redirecting'), { position: 'top-center' });
   };
 
   return (
@@ -56,7 +59,7 @@ export default function PaymentForm({ clientSecret }: PaymentFormProps) {
       )}
 
       <Button onClick={handleSubmit} disabled={loading || !stripe} className='w-full'>
-        {loading ? 'Đang xử lý...' : 'Thanh toán'}
+        {loading ? t('processing') : t('submit')}
       </Button>
     </div>
   );

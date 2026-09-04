@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { useEffect, useMemo, useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -21,6 +22,7 @@ import TiptapEditor from './TiptapEditor';
 import { categories } from '@/constants/category';
 import { brands } from '@/constants/brand';
 import { createAdminProduct, updateAdminProduct } from '@/services/product.service';
+import { getToken } from '@/lib/auth';
 import { attributeVariants } from '@/constants/attribute_variant';
 import { specification } from '@/constants/specification';
 import { toast } from 'sonner';
@@ -73,6 +75,7 @@ function mergeDefaultValues(initialData?: ProductFormValues): ProductFormValues 
 }
 
 export default function ProductForm({ mode = 'create', productId, initialData }: Props) {
+  const t = useTranslations('AdminProducts');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -90,24 +93,25 @@ export default function ProductForm({ mode = 'create', productId, initialData }:
   function onSubmit(values: ProductFormValues) {
     startTransition(async () => {
       const isEdit = mode === 'edit' && productId;
+      const accessToken = await getToken();
 
-      const res = isEdit ? await updateAdminProduct(productId, values) : await createAdminProduct(values);
+      const res = isEdit
+        ? await updateAdminProduct(accessToken, productId, values)
+        : await createAdminProduct(accessToken, values);
 
       if (!res?.ok) {
-        console.log('submit error', res);
-
-        toast.error(isEdit ? 'Cập nhật sản phẩm thất bại' : 'Tạo sản phẩm thất bại', {
-          description: 'Vui lòng thử lại',
+        toast.error(isEdit ? t('updateError') : t('createError'), {
+          description: t('tryAgain'),
           position: 'top-right'
         });
 
         return;
       }
 
-      toast.success(isEdit ? 'Cập nhật sản phẩm thành công' : 'Tạo sản phẩm thành công', {
+      toast.success(isEdit ? t('updateSuccess') : t('createSuccess'), {
         description: isEdit
-          ? `Sản phẩm "${values.product.name}" đã được cập nhật`
-          : `Sản phẩm "${values.product.name}" đã được tạo`,
+          ? t('updateSuccessDesc', { name: values.product.name })
+          : t('createSuccessDesc', { name: values.product.name }),
         position: 'top-right'
       });
 

@@ -3,6 +3,7 @@ import PaginationSection from '@/components/blocks/PaginationSection';
 import ProductList from '@/components/blocks/ProductList';
 import ProductResultInfo from '@/components/blocks/ProductsResultInfo';
 import ProductToolbarFilter from '@/components/blocks/ProductToolbarFilter';
+import SemanticSearch from '@/components/blocks/SemanticSearch';
 import { routing } from '@/i18n/routing';
 import { getProducts, type ProductOrderBy } from '@/services/product.service';
 import { setRequestLocale } from 'next-intl/server';
@@ -93,6 +94,8 @@ export default async function Page({ params, searchParams }: Props) {
         <BreadcrumbSection />
         <ProductResultInfo page={productsData.page} limit={productsData.limit} total={productsData.total} />
       </section>
+
+      <SemanticSearch className='mb-6' />
 
       <ProductToolbarFilter title={title} currentSort={currentSort} currentBrand={currentBrand} />
 

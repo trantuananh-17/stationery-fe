@@ -1,4 +1,4 @@
-import { isClient, makeRefreshToken } from './auth';
+import { ACCESS_TOKEN_MAX_AGE, isClient, makeRefreshToken } from './auth';
 
 export class FetchWrapper {
   #baseUrl: string = '';
@@ -120,7 +120,7 @@ export class FetchWrapper {
           },
           body: JSON.stringify({
             value: newToken.accessToken,
-            maxAge: 60 * 15
+            maxAge: ACCESS_TOKEN_MAX_AGE
           })
         });
 

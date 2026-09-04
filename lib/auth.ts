@@ -1,32 +1,49 @@
 import { cache } from 'react';
 
-let refreshTokenPromise: Promise<{
-  accessToken: string;
-  refreshToken: string;
-}> | null = null;
-export const makeRefreshToken = async (refreshToken: string) => {
-  const requestRefreshToken = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/auths/refresh-token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ refreshToken })
-    });
+// Phai khop han thuc te cua JWT do auth-service phat hanh
+// (token.service.ts: accessToken '1d', refreshToken '7d').
+// Cookie het han truoc JWT thi mat phien som; het han sau thi user cam token da chet.
+export const ACCESS_TOKEN_MAX_AGE = Number(process.env.NEXT_PUBLIC_ACCESS_TOKEN_EXPIRES) || 86400;
+export const REFRESH_TOKEN_MAX_AGE = Number(process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRES) || 604800;
 
-    if (!response.ok) {
-      return false;
-    }
+type RefreshTokenResult = { accessToken: string; refreshToken: string } | false;
 
-    const data = await response.json();
-    return data.data;
-  };
+const requestRefreshToken = async (refreshToken: string): Promise<RefreshTokenResult> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/auths/refresh-token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ refreshToken })
+  });
 
-  if (!refreshTokenPromise) {
-    refreshTokenPromise = requestRefreshToken();
+  if (!response.ok) {
+    return false;
   }
 
-  return refreshTokenPromise;
+  const data = await response.json();
+  return data.data;
+};
+
+// Key theo chinh refreshToken: gop cac lan goi trung nhau cua CUNG mot user,
+// nhung khong bao gio tra token cua user nay cho user khac.
+// proxy.ts chay server-side nen module state dung chung cho moi request.
+const inflightRefresh = new Map<string, Promise<RefreshTokenResult>>();
+
+export const makeRefreshToken = async (refreshToken: string): Promise<RefreshTokenResult> => {
+  const inflight = inflightRefresh.get(refreshToken);
+
+  if (inflight) {
+    return inflight;
+  }
+
+  const promise = requestRefreshToken(refreshToken).finally(() => {
+    inflightRefresh.delete(refreshToken);
+  });
+
+  inflightRefresh.set(refreshToken, promise);
+
+  return promise;
 };
 
 export const getUserByToken = async (accessToken: string | null) => {
@@ -140,28 +157,22 @@ export const isClient = () => {
 };
 
 export const saveToken = async (accessToken: string, refreshToken: string) => {
-  console.log('save');
-
   if (!isClient()) {
-    console.log('save client');
-
     const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
 
     cookieStore.set('token', accessToken, {
       httpOnly: true,
       path: '/',
-      maxAge: process.env.NEXT_PUBLIC_ACCESS_TOKEN_EXPIRES as unknown as number
+      maxAge: ACCESS_TOKEN_MAX_AGE
     });
 
     cookieStore.set('refresh_token', refreshToken, {
       httpOnly: true,
       path: '/',
-      maxAge: process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRES as unknown as number
+      maxAge: REFRESH_TOKEN_MAX_AGE
     });
   } else {
-    console.log('save server');
-
     await fetch('/api/cookie?key=token', {
       method: 'POST',
       headers: {
@@ -169,7 +180,7 @@ export const saveToken = async (accessToken: string, refreshToken: string) => {
       },
       body: JSON.stringify({
         value: accessToken,
-        maxAge: process.env.NEXT_PUBLIC_ACCESS_TOKEN_EXPIRES as unknown as number
+        maxAge: ACCESS_TOKEN_MAX_AGE
       })
     });
     await fetch('/api/cookie?key=refresh_token', {
@@ -178,8 +189,8 @@ export const saveToken = async (accessToken: string, refreshToken: string) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        value: accessToken,
-        maxAge: process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRES as unknown as number
+        value: refreshToken,
+        maxAge: REFRESH_TOKEN_MAX_AGE
       })
     });
   }

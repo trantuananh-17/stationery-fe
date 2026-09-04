@@ -1,17 +1,11 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const filterItems = [
-  { label: 'Tất cả', value: 'all' },
-  { label: 'Chờ xử lý', value: 'pending' },
-  { label: 'Đang xử lý', value: 'processing' },
-  { label: 'Đang vận chuyển', value: 'shipped' },
-  { label: 'Đã giao', value: 'delivered' },
-  { label: 'Đã hủy', value: 'cancelled' }
-];
+const filterValues = ['all', 'pending', 'processing', 'shipped', 'delivered', 'cancelled', 'expired', 'returned'] as const;
 
 interface OrderFilterProps {
   currentValue?: string;
@@ -19,6 +13,7 @@ interface OrderFilterProps {
 }
 
 export default function OrderFilter({ currentValue, queryKey = 'status' }: OrderFilterProps) {
+  const t = useTranslations('OrderFilter');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -42,13 +37,13 @@ export default function OrderFilter({ currentValue, queryKey = 'status' }: Order
   return (
     <Select value={currentValue || 'all'} onValueChange={handleFilterChange}>
       <SelectTrigger className='h-11 w-full rounded-md sm:w-44'>
-        <SelectValue placeholder='Tất cả đơn hàng' />
+        <SelectValue placeholder={t('placeholder')} />
       </SelectTrigger>
 
       <SelectContent position='popper'>
-        {filterItems.map((item) => (
-          <SelectItem key={item.value} value={item.value}>
-            {item.label}
+        {filterValues.map((value) => (
+          <SelectItem key={value} value={value}>
+            {t(value)}
           </SelectItem>
         ))}
       </SelectContent>

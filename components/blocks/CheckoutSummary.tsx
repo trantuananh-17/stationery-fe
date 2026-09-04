@@ -10,14 +10,16 @@ interface Props {
   totalItems: number;
   subtotal: number;
   shipping: number;
+  discount?: number;
   total: number;
   stockErrors?: Record<string, CheckoutStockItem>;
 }
 
-export default function CheckoutSumary({
+export default function CheckoutSummary({
   totalItems,
   subtotal,
   shipping,
+  discount = 0,
   total,
   initialItems,
   stockErrors = {}
@@ -61,8 +63,15 @@ export default function CheckoutSumary({
 
         <div className='flex items-center justify-between text-base'>
           <span className='text-muted-foreground'>Phí vận chuyển: </span>
-          <span>Miễn phí</span>
+          <span>{shipping > 0 ? formatVND(shipping) : 'Miễn phí'}</span>
         </div>
+
+        {discount > 0 && (
+          <div className='flex items-center justify-between text-base text-emerald-600'>
+            <span>Giảm giá: </span>
+            <span>-{formatVND(discount)}</span>
+          </div>
+        )}
 
         <Separator />
 

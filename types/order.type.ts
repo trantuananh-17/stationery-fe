@@ -1,6 +1,20 @@
 import { GrpcTimestamp } from '@/lib/utils';
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-export type OrderStatusUpper = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+export type OrderStatus =
+  | 'pending'
+  | 'processing'
+  | 'shipped'
+  | 'delivered'
+  | 'cancelled'
+  | 'expired'
+  | 'returned';
+export type OrderStatusUpper =
+  | 'PENDING'
+  | 'PROCESSING'
+  | 'SHIPPED'
+  | 'DELIVERED'
+  | 'CANCELLED'
+  | 'EXPIRED'
+  | 'RETURNED';
 export type OrderAddress = {
   fullName: string;
   email: string;

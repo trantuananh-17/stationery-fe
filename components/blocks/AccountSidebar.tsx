@@ -3,7 +3,7 @@
 import { Link } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { MapPin, Package, User } from 'lucide-react';
+import { Heart, MapPin, Package, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function AccountSidebar() {
@@ -13,7 +13,8 @@ export function AccountSidebar() {
   const navItems = [
     { href: '/account', label: t('profile'), icon: User },
     { href: '/account/orders', label: t('orders'), icon: Package },
-    { href: '/account/address', label: t('address'), icon: MapPin }
+    { href: '/account/address', label: t('address'), icon: MapPin },
+    { href: '/account/wishlist', label: t('wishlist'), icon: Heart }
   ];
 
   return (

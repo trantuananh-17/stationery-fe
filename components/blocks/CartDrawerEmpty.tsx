@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { useCartStore } from '@/stores/cart-store';
 
-export function CartEmpty() {
+export function CartDrawerEmpty() {
   const closeCart = useCartStore((state) => state.closeCart);
-  const t = useTranslations('CartEmpty');
+  const t = useTranslations('CartDrawerEmpty');
 
   return (
     <Empty className='py-auto'>

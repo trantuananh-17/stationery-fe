@@ -15,6 +15,7 @@ import {
   ShieldUser,
   ShoppingBag,
   Star,
+  TicketPercent,
   Users2
 } from 'lucide-react';
 import * as React from 'react';
@@ -90,9 +91,12 @@ const data = {
         {
           title: 'Kho hàng',
           url: '/admin/inventories',
-          icon: <Boxes />,
-          disabled: true,
-          badge: 'Soon'
+          icon: <Boxes />
+        },
+        {
+          title: 'Mã giảm giá',
+          url: '/admin/coupons',
+          icon: <TicketPercent />
         }
       ]
     },

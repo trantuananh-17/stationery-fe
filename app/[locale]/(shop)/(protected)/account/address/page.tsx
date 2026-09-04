@@ -1,11 +1,10 @@
-import { routing } from '@/i18n/routing';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-type Props = { params: Promise<{ locale: string }> };
+import AddressBook from '@/components/blocks/AddressBook';
+import { getToken } from '@/lib/auth';
+import { getAddresses } from '@/services/address.service';
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
+type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
@@ -19,12 +18,18 @@ export default async function Page({ params }: Props) {
 
   const t = await getTranslations({ locale, namespace: 'Account' });
 
+  const token = await getToken();
+  const response = await getAddresses(token);
+  const addresses = response.data?.data ?? [];
+
   return (
-    <section className='px-6 py-4'>
+    <section className='space-y-4 px-6 py-4'>
       <div className='space-y-1'>
         <h1 className='text-xl font-medium'>{t('address.title')}</h1>
         <p className='text-muted-foreground'>{t('address.description')}</p>
       </div>
+
+      <AddressBook accessToken={token} addresses={addresses} />
     </section>
   );
 }
