@@ -394,5 +394,16 @@
   },
   "ProductResultInfo": {
     "showing": "Showing {from}–{to} of {total} products"
+  },
+  "ErrorBoundary": {
+    "title": "Something went wrong",
+    "description": "This page failed to load. Try again, or go back to the home page.",
+    "digest": "Error code: {digest}",
+    "retry": "Try again",
+    "backHome": "Back to home"
+  },
+  "ProductsPage": {
+    "title": "All products",
+    "description": "Stationery, pens, paper, notebooks and school supplies — good prices, fast delivery."
   }
 }

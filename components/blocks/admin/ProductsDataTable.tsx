@@ -31,6 +31,7 @@ import AdminTableToolbar from './AdminTableToolbar';
 import { ProductItem } from '@/types/product.type';
 import Image from 'next/image';
 import { StatusBadge } from './StatusBadge';
+import { revalidateProducts } from '@/app/actions/revalidate';
 import { deleteProduct, restoreProduct } from '@/services/product.service';
 import { getToken } from '@/lib/auth';
 import { toast } from 'sonner';
@@ -279,6 +280,8 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
         position: 'top-right'
       });
 
+      await revalidateProducts();
+
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -299,6 +302,8 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
         description: t('restoreSuccessDesc', { id: productId }),
         position: 'top-right'
       });
+
+      await revalidateProducts();
 
       router.refresh();
     } catch (error) {

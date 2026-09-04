@@ -161,6 +161,7 @@ export default function AccountForm() {
               src='https://vanphongphamminaco.com/wp-content/uploads/2023/10/giay-danh-dau-hinh-huou-cao-co-9587.webp'
               alt='avatar'
               fill
+              sizes='112px'
               className='object-cover'
             />
           </div>

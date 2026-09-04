@@ -11,7 +11,6 @@ import { Card } from '@/components/ui/card';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '@/components/ui/select';
-// import { createAdminProduct, updateAdminProduct } from '@/services/product.service';
 import { ProductFormValues, ProductSchema } from '@/types/product.type';
 
 import ProductCombobox from './ProductCombobox';
@@ -21,6 +20,7 @@ import ProductVariantsForm from './ProductVariantsForm';
 import TiptapEditor from './TiptapEditor';
 import { categories } from '@/constants/category';
 import { brands } from '@/constants/brand';
+import { revalidateProducts } from '@/app/actions/revalidate';
 import { createAdminProduct, updateAdminProduct } from '@/services/product.service';
 import { getToken } from '@/lib/auth';
 import { attributeVariants } from '@/constants/attribute_variant';
@@ -116,6 +116,8 @@ export default function ProductForm({ mode = 'create', productId, initialData }:
       });
 
       router.push('/admin/products');
+
+      await revalidateProducts();
 
       router.refresh();
     });

@@ -19,6 +19,7 @@ export default function CategoryItem({ image, label, link }: Props) {
               src={image}
               alt='Category item img'
               fill
+              sizes='110px'
               className='object-cover transition-transform duration-500 group-hover:scale-110'
             />
           </div>

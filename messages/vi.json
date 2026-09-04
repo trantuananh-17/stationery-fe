@@ -394,5 +394,16 @@
   },
   "ProductResultInfo": {
     "showing": "Hiển thị {from}–{to} trong {total} sản phẩm"
+  },
+  "ErrorBoundary": {
+    "title": "Đã xảy ra lỗi",
+    "description": "Trang này gặp sự cố khi tải. Bạn thử lại, hoặc quay về trang chủ.",
+    "digest": "Mã lỗi: {digest}",
+    "retry": "Thử lại",
+    "backHome": "Về trang chủ"
+  },
+  "ProductsPage": {
+    "title": "Tất cả sản phẩm",
+    "description": "Văn phòng phẩm, bút, giấy, sổ và dụng cụ học tập — giá tốt, giao nhanh."
   }
 }

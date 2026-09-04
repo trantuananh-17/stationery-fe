@@ -210,7 +210,14 @@ export default function ProductMediaPicker({
             >
               {thumbnail ? (
                 <>
-                  <Image src={thumbnail} alt='thumbnail' fill unoptimized className='object-contain p-0' />
+                  <Image
+                    src={thumbnail}
+                    alt='thumbnail'
+                    fill
+                    sizes='(max-width: 640px) 168px, 200px'
+                    unoptimized
+                    className='object-contain p-0'
+                  />
 
                   {selectedManageUrls.includes(thumbnail) && (
                     <span className='bg-primary text-primary-foreground absolute top-3 left-3 z-10 flex size-5 items-center justify-center rounded'>
@@ -231,7 +238,14 @@ export default function ProductMediaPicker({
                   type='button'
                   className='bg-background relative size-20 cursor-grab overflow-hidden rounded-lg border active:cursor-grabbing sm:hidden sm:size-24'
                 >
-                  <Image src={imageItems[0]} alt='Product media' fill unoptimized className='object-contain p-0' />
+                  <Image
+                    src={imageItems[0]}
+                    alt='Product media'
+                    fill
+                    sizes='80px'
+                    unoptimized
+                    className='object-contain p-0'
+                  />
 
                   {imageItems.length > 1 && (
                     <div className='absolute inset-0 flex items-center justify-center bg-black/45 text-2xl font-semibold text-white'>
@@ -258,7 +272,14 @@ export default function ProductMediaPicker({
                     selectedManageUrls.includes(url) && 'ring-primary ring-2'
                   )}
                 >
-                  <Image src={url} alt='item image' fill unoptimized className='object-contain p-0' />
+                  <Image
+                    src={url}
+                    alt='item image'
+                    fill
+                    sizes='96px'
+                    unoptimized
+                    className='object-contain p-0'
+                  />
 
                   {selectedManageUrls.includes(url) && (
                     <span className='bg-primary text-primary-foreground absolute top-2 left-2 z-10 flex size-5 items-center justify-center rounded'>

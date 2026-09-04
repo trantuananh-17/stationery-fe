@@ -22,6 +22,7 @@ export default function BannerCard({ image, label, description, primary, buttonL
           src={image}
           alt='Banner deli min'
           fill
+          sizes='(max-width: 1024px) 50vw, 33vw'
           className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-110'
         />
 

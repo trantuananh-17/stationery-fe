@@ -2,6 +2,12 @@ import { ACCESS_TOKEN_MAX_AGE, isClient, makeRefreshToken } from './auth';
 
 const REQUEST_TIMEOUT_MS = 10_000;
 
+export type RequestOptions = {
+  headers?: Record<string, string | undefined>;
+  /** Chỉ có tác dụng khi fetch chạy phía server. Đừng dùng cho route cần token. */
+  next?: NextFetchRequestConfig;
+};
+
 export class FetchWrapper {
   #baseUrl: string = '';
   #headers: { [key: string]: string } = {};
@@ -22,17 +28,26 @@ export class FetchWrapper {
     path: string,
     method: string,
     data: null | { [key: string]: unknown },
-    options: { headers?: { [key: string]: string } } = {}
+    options: RequestOptions = {}
   ): Promise<Response & { data?: T }> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...this.#headers
+    };
+
+    // Nhiều service dựng header theo nhánh nên có key mang giá trị undefined.
+    for (const [key, value] of Object.entries(options.headers ?? {})) {
+      if (value !== undefined) {
+        headers[key] = value;
+      }
+    }
+
     const requestInit: RequestInit = {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...this.#headers,
-        ...options.headers
-      },
+      headers,
       // BFF treo thì Server Component treo theo cho tới timeout mặc định của Node.
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      next: options.next
     };
 
     if (data) {
@@ -118,23 +133,23 @@ export class FetchWrapper {
     return response;
   }
 
-  async get<T>(path: string, options = {}) {
+  async get<T>(path: string, options: RequestOptions = {}) {
     return this.#send<T>(path, 'GET', null, options);
   }
 
-  async post<T>(path: string, data: null | { [key: string]: unknown } = null, options = {}) {
+  async post<T>(path: string, data: null | { [key: string]: unknown } = null, options: RequestOptions = {}) {
     return this.#send<T>(path, 'POST', data, options);
   }
 
-  async put<T>(path: string, data: null | { [key: string]: unknown } = null, options = {}) {
+  async put<T>(path: string, data: null | { [key: string]: unknown } = null, options: RequestOptions = {}) {
     return this.#send<T>(path, 'PUT', data, options);
   }
 
-  async patch<T>(path: string, data: null | { [key: string]: unknown } = null, options = {}) {
+  async patch<T>(path: string, data: null | { [key: string]: unknown } = null, options: RequestOptions = {}) {
     return this.#send<T>(path, 'PATCH', data, options);
   }
 
-  async delete<T>(path: string, options = {}) {
+  async delete<T>(path: string, options: RequestOptions = {}) {
     return this.#send<T>(path, 'DELETE', null, options);
   }
 }

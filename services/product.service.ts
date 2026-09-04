@@ -4,6 +4,18 @@ import { ApiResponse } from '@/types/type';
 
 const fetchWrapper = new FetchWrapper(process.env.NEXT_PUBLIC_SERVER_API as string);
 
+/**
+ * Cache cho hai route sản phẩm công khai. Admin sửa sản phẩm thì gọi
+ * `revalidateProducts()` để làm mới ngay, không phải chờ hết 5 phút.
+ * Không dùng cho route nhận accessToken.
+ */
+export const PRODUCT_CACHE_TAG = 'products';
+
+const publicProductCache: NextFetchRequestConfig = {
+  revalidate: 300,
+  tags: [PRODUCT_CACHE_TAG]
+};
+
 export type ProductOrderBy =
   | 'price_asc'
   | 'price_desc'
@@ -50,7 +62,7 @@ export type GetProductsResponse = {
 };
 
 export async function getProductBySlug(slug: string) {
-  return fetchWrapper.get<ApiResponse<Product>>(`/products/slug/${slug}`, {});
+  return fetchWrapper.get<ApiResponse<Product>>(`/products/slug/${slug}`, { next: publicProductCache });
 }
 
 export async function getProducts(params?: GetProductsParams) {
@@ -82,7 +94,9 @@ export async function getProducts(params?: GetProductsParams) {
 
   const queryString = searchParams.toString();
 
-  return fetchWrapper.get<ApiResponse<GetProductsResponse>>(`/products${queryString ? `?${queryString}` : ''}`, {});
+  return fetchWrapper.get<ApiResponse<GetProductsResponse>>(`/products${queryString ? `?${queryString}` : ''}`, {
+    next: publicProductCache
+  });
 }
 
 export async function getAdminProducts(accessToken: string | null, params?: GetAdminProductsParams) {

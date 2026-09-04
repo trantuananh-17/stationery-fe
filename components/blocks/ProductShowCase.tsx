@@ -45,6 +45,7 @@ export default function ProductShowCase({
             <Image
               src={image}
               fill
+              sizes='(max-width: 1024px) 100vw, 25vw'
               className='rounded-xl object-cover transition-transform duration-500 group-hover:scale-110'
               priority
               alt={title}

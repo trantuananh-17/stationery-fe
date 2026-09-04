@@ -53,9 +53,21 @@ export default function CheckoutItem({ item, isPaymentPage, stockError }: Props)
         <Card className='w-full shrink-0 p-0 sm:w-24'>
           <AspectRatio ratio={1} className='bg-muted relative overflow-hidden rounded-lg'>
             {item.imageVariantSnapshot ? (
-              <Image src={item.imageVariantSnapshot} alt={item.productNameSnapshot} fill className='object-cover' />
+              <Image
+                src={item.imageVariantSnapshot}
+                alt={item.productNameSnapshot}
+                fill
+                sizes='(max-width: 640px) 100vw, 96px'
+                className='object-cover'
+              />
             ) : (
-              <Image src={item.productThumbnailSnapshot} alt={item.productNameSnapshot} fill className='object-cover' />
+              <Image
+                src={item.productThumbnailSnapshot}
+                alt={item.productNameSnapshot}
+                fill
+                sizes='(max-width: 640px) 100vw, 96px'
+                className='object-cover'
+              />
             )}
           </AspectRatio>
         </Card>

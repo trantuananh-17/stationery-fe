@@ -6,7 +6,8 @@ import ProductToolbarFilter from '@/components/blocks/ProductToolbarFilter';
 import SemanticSearch from '@/components/blocks/SemanticSearch';
 import { routing } from '@/i18n/routing';
 import { getProducts, type ProductOrderBy } from '@/services/product.service';
-import { setRequestLocale } from 'next-intl/server';
+import type { Metadata } from 'next';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -17,6 +18,20 @@ interface Props {
     category?: string;
     search?: string;
   }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+
+  const t = await getTranslations({ locale, namespace: 'ProductsPage' });
+
+  return {
+    title: t('title'),
+    description: t('description'),
+    alternates: {
+      canonical: '/products'
+    }
+  };
 }
 
 const SORT_TO_ORDER_BY: Record<string, ProductOrderBy> = {
