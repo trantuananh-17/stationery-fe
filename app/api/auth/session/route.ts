@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server';
 
-import { getRefreshToken, getToken, getUserByToken, makeRefreshToken } from '@/lib/auth';
+import {
+  ACCESS_TOKEN_MAX_AGE,
+  REFRESH_TOKEN_MAX_AGE,
+  getRefreshToken,
+  getToken,
+  getUserByToken,
+  makeRefreshToken
+} from '@/lib/auth';
 
 export async function GET() {
   const accessToken = await getToken();
@@ -78,13 +85,13 @@ export async function GET() {
   response.cookies.set('token', newToken.accessToken, {
     httpOnly: true,
     path: '/',
-    maxAge: 60 * 15
+    maxAge: ACCESS_TOKEN_MAX_AGE
   });
 
   response.cookies.set('refresh_token', newToken.refreshToken, {
     httpOnly: true,
     path: '/',
-    maxAge: 86400 * 7
+    maxAge: REFRESH_TOKEN_MAX_AGE
   });
 
   return response;

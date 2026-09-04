@@ -1,7 +1,9 @@
 import AdminPagination from '@/components/blocks/admin/AdminPagination';
 import ProductsDataTable from '@/components/blocks/admin/ProductsDataTable';
 import TitlePage from '@/components/blocks/admin/TitlePage';
+import ReindexButton from '@/components/blocks/admin/ReindexButton';
 import { routing } from '@/i18n/routing';
+import { getToken } from '@/lib/auth';
 import { getValidLimit, getValidPage } from '@/lib/utils';
 import { AdminProductStatus, getAdminProducts } from '@/services/product.service';
 import { setRequestLocale } from 'next-intl/server';
@@ -46,7 +48,9 @@ async function getProductList({
   status: string;
   search?: string;
 }) {
-  const res = await getAdminProducts({
+  const token = await getToken();
+
+  const res = await getAdminProducts(token, {
     page,
     limit,
     orderBy: SORT_TO_ORDER_BY[sort] ?? SORT_TO_ORDER_BY.newest,
@@ -92,6 +96,10 @@ export default async function Page({ params, searchParams }: Props) {
         subtitle='Theo dõi và quản lý toàn bộ sản phẩm, tồn kho và trạng thái hiển thị.'
         button={{ label: 'Thêm sản phẩm', href: '/admin/products/create' }}
       />
+      <div className='flex justify-end'>
+        <ReindexButton />
+      </div>
+
       <ProductsDataTable products={productsData.items ?? []} currentSort={currentSort} currentStatus={currentStatus} />
       <AdminPagination
         pagination={{

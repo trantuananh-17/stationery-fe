@@ -5,29 +5,29 @@ import { useRouter } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import { updateOrderStatus } from '@/services/order.service';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
-type OrderStatus = 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
-type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
+import type { OrderStatusUpper, PaymentStatus } from '@/types/order.type';
 
 type Props = {
   accessToken: string | null;
   orderId: string;
-  status: OrderStatus;
+  status: OrderStatusUpper;
   paymentMethod: string;
 
   primaryAction?: {
     label: string;
-    nextStatus: OrderStatus;
+    nextStatus: OrderStatusUpper;
   };
 
   secondaryActions?: {
     label: string;
-    nextStatus: OrderStatus;
+    nextStatus: OrderStatusUpper;
     destructive?: boolean;
   }[];
 };
 
-const getNextPaymentStatus = (orderStatus: OrderStatus, paymentMethod: string): PaymentStatus => {
+const getNextPaymentStatus = (orderStatus: OrderStatusUpper, paymentMethod: string): PaymentStatus => {
   if (paymentMethod === 'cod' && orderStatus === 'DELIVERED') {
     return 'PAID';
   }
@@ -35,15 +35,9 @@ const getNextPaymentStatus = (orderStatus: OrderStatus, paymentMethod: string): 
   return 'PENDING';
 };
 
-const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
-  PENDING: 'Chờ xử lý',
-  PROCESSING: 'Đang xử lý',
-  SHIPPED: 'Đang giao',
-  DELIVERED: 'Đã giao',
-  CANCELLED: 'Đã huỷ'
-};
-
 export function OrderActions({ accessToken, orderId, status, paymentMethod, primaryAction, secondaryActions }: Props) {
+  const t = useTranslations('Status');
+  const tOrder = useTranslations('OrderActions');
   const router = useRouter();
 
   const [isRefreshing, startTransition] = useTransition();
@@ -51,7 +45,7 @@ export function OrderActions({ accessToken, orderId, status, paymentMethod, prim
 
   const loading = isUpdating || isRefreshing;
 
-  const handleUpdateStatus = async (nextStatus: OrderStatus) => {
+  const handleUpdateStatus = async (nextStatus: OrderStatusUpper) => {
     try {
       setIsUpdating(true);
 
@@ -61,8 +55,8 @@ export function OrderActions({ accessToken, orderId, status, paymentMethod, prim
         status: nextStatus
       });
 
-      toast.success('Cập nhật trạng thái thành công', {
-        description: `Đơn hàng đã được chuyển sang "${ORDER_STATUS_LABEL[nextStatus]}"`
+      toast.success(tOrder('updateSuccess'), {
+        description: tOrder('updateSuccessDesc', { status: t(nextStatus) })
       });
 
       startTransition(() => {

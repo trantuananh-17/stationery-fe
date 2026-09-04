@@ -85,7 +85,7 @@ export async function getProducts(params?: GetProductsParams) {
   return fetchWrapper.get<ApiResponse<GetProductsResponse>>(`/products${queryString ? `?${queryString}` : ''}`, {});
 }
 
-export async function getAdminProducts(params?: GetAdminProductsParams) {
+export async function getAdminProducts(accessToken: string | null, params?: GetAdminProductsParams) {
   const searchParams = new URLSearchParams();
 
   if (params?.search) {
@@ -110,28 +110,53 @@ export async function getAdminProducts(params?: GetAdminProductsParams) {
 
   const queryString = searchParams.toString();
 
-  return fetchWrapper.get<ApiResponse<GetProductsResponse>>(
-    `/admin/products${queryString ? `?${queryString}` : ''}`,
-    {}
-  );
+  return fetchWrapper.get<ApiResponse<GetProductsResponse>>(`/admin/products${queryString ? `?${queryString}` : ''}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
 }
 
-export async function getAdminProductById(id: string) {
-  return fetchWrapper.get<ApiResponse<Product>>(`/products/id/${id}`, {});
+export async function getAdminProductById(accessToken: string | null, id: string) {
+  return fetchWrapper.get<ApiResponse<Product>>(`/products/id/${id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
 }
 
-export async function createAdminProduct(data: ProductFormValues) {
-  return fetchWrapper.post<ApiResponse<Product>>(`/products`, data);
+export async function createAdminProduct(accessToken: string | null, data: ProductFormValues) {
+  return fetchWrapper.post<ApiResponse<Product>>(`/products`, data, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
 }
 
-export async function updateAdminProduct(productId: string, data: UpdateProductFormValues) {
-  return fetchWrapper.patch<ApiResponse<Product>>(`/products/${productId}`, data);
+export async function updateAdminProduct(
+  accessToken: string | null,
+  productId: string,
+  data: UpdateProductFormValues
+) {
+  return fetchWrapper.patch<ApiResponse<Product>>(`/products/${productId}`, data, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
 }
 
-export async function restoreProduct(productId: string) {
-  return fetchWrapper.patch<ApiResponse<{ productId: string }>>(`/admin/products/${productId}/restore`);
+export async function restoreProduct(accessToken: string | null, productId: string) {
+  return fetchWrapper.patch<ApiResponse<{ productId: string }>>(`/admin/products/${productId}/restore`, null, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
 }
 
-export async function deleteProduct(productId: string) {
-  return fetchWrapper.delete<ApiResponse<{ productId: string }>>(`/admin/products/${productId}`);
+export async function deleteProduct(accessToken: string | null, productId: string) {
+  return fetchWrapper.delete<ApiResponse<{ productId: string }>>(`/admin/products/${productId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  });
 }

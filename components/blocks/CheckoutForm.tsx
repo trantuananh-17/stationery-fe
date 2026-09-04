@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { InputGroup, InputGroupTextarea } from '@/components/ui/input-group';
 import type { CheckoutFormValues } from '@/types/checkout.type';
 
+import CheckoutAddressPicker from './CheckoutAddressPicker';
+
 export default function CheckoutForm() {
   const form = useFormContext<CheckoutFormValues>();
 
@@ -16,6 +18,8 @@ export default function CheckoutForm() {
         <div>
           <h2 className='text-lg font-semibold md:text-xl'>Thông tin nhận hàng</h2>
         </div>
+
+        <CheckoutAddressPicker />
 
         <FieldGroup className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           <Controller

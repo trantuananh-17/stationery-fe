@@ -10,6 +10,7 @@ import {
   type VisibilityState
 } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, Package } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
@@ -31,6 +32,7 @@ import { ProductItem } from '@/types/product.type';
 import Image from 'next/image';
 import { StatusBadge } from './StatusBadge';
 import { deleteProduct, restoreProduct } from '@/services/product.service';
+import { getToken } from '@/lib/auth';
 import { toast } from 'sonner';
 
 export type AdminProductSort =
@@ -57,6 +59,7 @@ function getNextSort(currentSort: string, asc: AdminProductSort, desc: AdminProd
 }
 
 export default function ProductsDataTable({ products, currentSort, currentStatus }: ProductsDataTableProps) {
+  const t = useTranslations('AdminProducts');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -268,10 +271,11 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
 
   async function handleDelete(productId: string) {
     try {
-      const response = await deleteProduct(productId);
+      const accessToken = await getToken();
+      await deleteProduct(accessToken, productId);
 
-      toast.success('Xóa sản phẩm thành công', {
-        description: `Đã xóa sản phẩm ${productId} thành công`,
+      toast.success(t('deleteSuccess'), {
+        description: t('deleteSuccessDesc', { id: productId }),
         position: 'top-right'
       });
 
@@ -279,8 +283,8 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
     } catch (error) {
       console.error(error);
 
-      toast.error('Xóa sản phẩm thất bại', {
-        description: 'Vui lòng thử lại',
+      toast.error(t('deleteError'), {
+        description: t('tryAgain'),
         position: 'top-right'
       });
     }
@@ -288,10 +292,11 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
 
   async function handleRestore(productId: string) {
     try {
-      const response = await restoreProduct(productId);
+      const accessToken = await getToken();
+      await restoreProduct(accessToken, productId);
 
-      toast.success('Khôi phục sản phẩm thành công', {
-        description: `Đã khôi phục sản phẩm ${productId} thành công`,
+      toast.success(t('restoreSuccess'), {
+        description: t('restoreSuccessDesc', { id: productId }),
         position: 'top-right'
       });
 
@@ -299,8 +304,8 @@ export default function ProductsDataTable({ products, currentSort, currentStatus
     } catch (error) {
       console.error(error);
 
-      toast.error('Khôi phục sản phẩm thất bại', {
-        description: 'Vui lòng thử lại',
+      toast.error(t('restoreError'), {
+        description: t('tryAgain'),
         position: 'top-right'
       });
     }

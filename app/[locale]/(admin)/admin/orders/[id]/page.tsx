@@ -136,7 +136,15 @@ export const orderStatusConfig: Record<
 
     badgeClassName: 'bg-emerald-100 text-emerald-800 hover:bg-emerald-100 border-emerald-200',
 
-    cardClassName: 'bg-emerald-100 text-emerald-900 text-xs!'
+    cardClassName: 'bg-emerald-100 text-emerald-900 text-xs!',
+
+    secondaryActions: [
+      {
+        label: 'Trả hàng',
+        nextStatus: 'RETURNED',
+        destructive: true
+      }
+    ]
   },
 
   CANCELLED: {
@@ -149,6 +157,30 @@ export const orderStatusConfig: Record<
     badgeClassName: 'bg-red-100 text-red-800 hover:bg-red-100 border-red-200',
 
     cardClassName: 'bg-red-100 text-red-900 text-xs!'
+  },
+
+  RETURNED: {
+    label: 'Đã trả hàng',
+
+    description: 'Đơn hàng đã được trả lại và hoàn kho.',
+
+    icon: RotateCcw,
+
+    badgeClassName: 'bg-slate-200 text-slate-800 hover:bg-slate-200 border-slate-300',
+
+    cardClassName: 'bg-slate-200 text-slate-900 text-xs!'
+  },
+
+  EXPIRED: {
+    label: 'Đã hết hạn',
+
+    description: 'Đơn hàng đã quá hạn thanh toán.',
+
+    icon: Clock,
+
+    badgeClassName: 'bg-orange-100 text-orange-800 hover:bg-orange-100 border-orange-200',
+
+    cardClassName: 'bg-orange-100 text-orange-900 text-xs!'
   }
 };
 

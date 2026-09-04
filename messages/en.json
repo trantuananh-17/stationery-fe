@@ -1,5 +1,30 @@
 {
+  "ForgotPassword": {
+    "title": "Forgot password",
+    "description": "Enter your registered email and we will send a reset link.",
+    "sentDescription": "If that email exists, a reset link has been sent. The link is valid for 15 minutes.",
+    "email": "Email",
+    "submit": "Send reset link",
+    "submitting": "Sending...",
+    "error": "Could not send, please try again",
+    "backToSignIn": "Back to sign in"
+  },
+  "ResetPassword": {
+    "title": "Reset password",
+    "description": "Enter a new password for your account.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "submit": "Reset password",
+    "submitting": "Processing...",
+    "success": "Password changed, please sign in again",
+    "error": "The link is invalid or has expired",
+    "tooShort": "Password must be at least {min} characters",
+    "mismatch": "Passwords do not match",
+    "missingToken": "Invalid link — missing token.",
+    "requestNew": "Request a new reset link"
+  },
   "LoginPage": {
+    "forgotPassword": "Forgot password?",
     "title": "Welcome back",
     "subTitle": "Login with Google",
     "buttonLoginGoogle": "Login with Google",
@@ -38,8 +63,90 @@
   "Error": {
     "INVALID_CREDENTIALS": "Incorrect email or password"
   },
+  "Status": {
+    "PENDING": "Pending",
+    "PROCESSING": "Processing",
+    "SHIPPED": "Shipping",
+    "DELIVERED": "Completed",
+    "CANCELLED": "Cancelled",
+    "EXPIRED": "Expired",
+    "RETURNED": "Returned",
+    "PAYMENT_PENDING": "Unpaid",
+    "PAID": "Paid",
+    "FAILED": "Payment failed",
+    "REFUNDED": "Refunded",
+    "ACTIVE": "Active",
+    "DRAFT": "Draft",
+    "ARCHIVED": "Archived",
+    "ACTIVE_TRUE": "Active",
+    "ACTIVE_FALSE": "Inactive",
+    "VERIFIED_TRUE": "Verified",
+    "VERIFIED_FALSE": "Unverified"
+  },
+  "OrderActions": {
+    "updateSuccess": "Status updated",
+    "updateSuccessDesc": "The order has been moved to \"{status}\""
+  },
+  "OrderFilter": {
+    "placeholder": "All orders",
+    "all": "All",
+    "pending": "Pending",
+    "processing": "Processing",
+    "shipped": "Shipping",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled",
+    "expired": "Expired",
+    "returned": "Returned"
+  },
+  "Forbidden": {
+    "title": "You do not have access",
+    "description": "This page is for administrators only. If you think this is a mistake, please contact an administrator.",
+    "backHome": "Back to home"
+  },
   "Metadata": {
     "title": "Stationery Store"
+  },
+  "Address": {
+    "addNew": "Add address",
+    "editTitle": "Edit address",
+    "default": "Default",
+    "setAsDefault": "Set as default",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "fullName": "Full name",
+    "phone": "Phone number",
+    "address1": "Address",
+    "address2": "Apartment, suite (optional)",
+    "ward": "Ward",
+    "district": "District",
+    "city": "City / Province",
+    "emptyTitle": "No addresses yet",
+    "emptyDescription": "Add an address to check out faster next time.",
+    "createSuccess": "Address added",
+    "createError": "Could not add address",
+    "updateSuccess": "Address updated",
+    "updateError": "Could not update address",
+    "deleteSuccess": "Address deleted",
+    "deleteError": "Could not delete address",
+    "setDefaultSuccess": "Default address updated",
+    "setDefaultError": "Could not set default address",
+    "savedAddresses": "Saved addresses",
+    "useNewAddress": "Enter a new address"
+  },
+  "Wishlist": {
+    "title": "Wishlist",
+    "subtitle": "Products you saved for later.",
+    "add": "Add to wishlist",
+    "remove": "Remove from wishlist",
+    "added": "Added to wishlist",
+    "removed": "Removed from wishlist",
+    "error": "Action failed, please try again",
+    "needLogin": "Sign in to use your wishlist",
+    "emptyTitle": "Your wishlist is empty",
+    "emptyDescription": "Tap the heart icon on a product page to save it."
   },
   "Account": {
     "title": "My Profile",
@@ -52,22 +159,144 @@
   "Cart": {
     "title": "Shopping Cart"
   },
+  "Coupon": {
+    "placeholder": "Enter coupon code",
+    "apply": "Apply",
+    "checking": "Checking...",
+    "applied": "Coupon applied",
+    "invalid": "Invalid coupon code",
+    "title": "Coupons",
+    "subtitle": "Create and manage order discount codes.",
+    "code": "Code",
+    "type": "Type",
+    "value": "Value",
+    "typePercent": "Percentage",
+    "typeFixed": "Fixed amount",
+    "minOrderAmount": "Minimum order",
+    "maxDiscount": "Max discount",
+    "startsAt": "Starts at",
+    "expiresAt": "Expires at",
+    "usage": "Usage",
+    "usageLimit": "Usage limit (0 = unlimited)",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "actions": "Actions",
+    "addNew": "Add coupon",
+    "editTitle": "Edit coupon",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "empty": "No coupons yet.",
+    "searchPlaceholder": "Search by code",
+    "createSuccess": "Coupon created",
+    "createError": "Could not create coupon",
+    "updateSuccess": "Coupon updated",
+    "updateError": "Could not update coupon",
+    "deleteSuccess": "Coupon deleted",
+    "deleteError": "Could not delete coupon"
+  },
   "Checkout": {
     "title": "Checkout"
   },
   "Payment": {
+    "receiverEmail": "Recipient email",
+    "subtotal": "Subtotal",
+    "shippingFee": "Shipping fee",
+    "shippingFree": "Free",
+    "total": "Total",
+    "cannotCreate": "Unable to create payment",
+    "submit": "Pay",
+    "processing": "Processing...",
+    "redirecting": "Redirecting to confirm your payment...",
+    "failed": "Payment failed. Please try again.",
+    "toastSuccess": "Payment successful",
+    "toastFailed": "Payment failed",
+    "toastCancelled": "You cancelled the payment",
     "title": "Payment"
   },
   "LogOut": {
     "loading": "Signing out..."
   },
+  "Discovery": {
+    "similarTitle": "Similar products",
+    "semanticTitle": "Semantic search results",
+    "semanticHint": "Describe what you need, e.g. a smooth pen for secondary school",
+    "semanticPlaceholder": "What do you need?",
+    "search": "Search",
+    "searching": "Searching...",
+    "noResult": "No matching products found.",
+    "reindex": "Rebuild search index",
+    "reindexing": "Rebuilding...",
+    "reindexSuccess": "Indexed {count} products",
+    "reindexError": "Could not rebuild the index"
+  },
+  "Compare": {
+    "title": "Compare products",
+    "product": "Product",
+    "price": "Price",
+    "brand": "Brand",
+    "empty": "No products selected for comparison.",
+    "limit": "You can compare at most {max} products",
+    "compareCount": "Compare ({count})"
+  },
+  "RecentlyViewed": {
+    "title": "Recently viewed"
+  },
+  "ProductReview": {
+    "title": "Product reviews",
+    "writeReview": "Write your review",
+    "commentPlaceholder": "Share your thoughts about this product",
+    "submit": "Submit review",
+    "submitting": "Submitting...",
+    "submitSuccess": "Thanks for your review",
+    "submitError": "Could not submit your review",
+    "ratingRequired": "Please pick a star rating",
+    "commentRequired": "Please write your review",
+    "starLabel": "{value} stars",
+    "empty": "No reviews for this product yet.",
+    "deleteSuccess": "Review deleted",
+    "deleteError": "Could not delete the review",
+    "previous": "Previous",
+    "next": "Next"
+  },
   "AdminProducts": {
+    "createSuccess": "Product created",
+    "createSuccessDesc": "Product \"{name}\" has been created",
+    "createError": "Could not create product",
+    "updateSuccess": "Product updated",
+    "updateSuccessDesc": "Product \"{name}\" has been updated",
+    "updateError": "Could not update product",
+    "deleteSuccess": "Product deleted",
+    "deleteSuccessDesc": "Product {id} has been deleted",
+    "deleteError": "Could not delete product",
+    "restoreSuccess": "Product restored",
+    "restoreSuccessDesc": "Product {id} has been restored",
+    "restoreError": "Could not restore product",
+    "tryAgain": "Please try again",
     "createTitle": "Add Product",
     "editTitle": "Edit Product"
   },
   "AdminInventories": {
     "title": "Inventories",
-    "description": "Manage product stock"
+    "description": "Manage product stock",
+    "subtitle": "Track stock per variant and adjust quantities.",
+    "searchPlaceholder": "Search by product, variant or SKU",
+    "lowStockOnly": "Low stock only",
+    "product": "Product",
+    "sku": "SKU",
+    "stock": "Stock",
+    "reserved": "Reserved",
+    "available": "Available",
+    "actions": "Actions",
+    "edit": "Edit",
+    "empty": "No variants match the current filter.",
+    "adjustSuccess": "Stock updated",
+    "adjustError": "Could not update stock",
+    "invalidStock": "Stock must be a non-negative integer",
+    "belowReserved": "Cannot go below {reserved} reserved for pending orders"
   },
   "Nav": {
     "home": "Home",
@@ -114,7 +343,7 @@
     "total": "Total:",
     "viewCart": "View Cart"
   },
-  "CartEmpty": {
+  "CartDrawerEmpty": {
     "title": "Your cart is empty",
     "description": "You have no items in your cart. Add some products to continue shopping.",
     "continueShopping": "Continue Shopping"
@@ -141,7 +370,8 @@
     "subheading": "Manage your profile and orders",
     "profile": "My Profile",
     "orders": "My Orders",
-    "address": "Addresses"
+    "address": "Addresses",
+    "wishlist": "Wishlist"
   },
   "Breadcrumb": {
     "home": "Home",
@@ -164,8 +394,5 @@
   },
   "ProductResultInfo": {
     "showing": "Showing {from}–{to} of {total} products"
-  },
-  "AdminInventories": {
-    "title": "Inventories"
   }
 }

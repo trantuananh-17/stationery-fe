@@ -27,4 +27,5 @@ export type CheckoutPayload = {
   billingAddress: z.infer<typeof addressSchema>;
   paymentMethod: 'stripe' | 'cod';
   notes?: string;
+  couponCode?: string;
 };

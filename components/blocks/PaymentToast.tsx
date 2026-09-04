@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
 export default function PaymentToast() {
+  const t = useTranslations('Payment');
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -19,22 +21,22 @@ export default function PaymentToast() {
     if (sessionStorage.getItem(toastKey)) return;
 
     if (redirectStatus === 'succeeded' || hasSuccess) {
-      toast.success('Thanh toán thành công', { position: 'top-right' });
+      toast.success(t('toastSuccess'), { position: 'top-right' });
       sessionStorage.setItem(toastKey, 'shown');
       return;
     }
 
     if (redirectStatus === 'failed') {
-      toast.error('Thanh toán thất bại', { position: 'top-right' });
+      toast.error(t('toastFailed'), { position: 'top-right' });
       sessionStorage.setItem(toastKey, 'shown');
       return;
     }
 
     if (redirectStatus === 'cancelled') {
-      toast.error('Bạn đã hủy thanh toán', { position: 'top-right' });
+      toast.error(t('toastCancelled'), { position: 'top-right' });
       sessionStorage.setItem(toastKey, 'shown');
     }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   return null;
 }

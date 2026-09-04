@@ -2,7 +2,7 @@ import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { routing } from './i18n/routing';
-import { getUserByToken, makeRefreshToken } from './lib/auth';
+import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE, getUserByToken, makeRefreshToken } from './lib/auth';
 
 const intlProxy = createMiddleware(routing);
 
@@ -74,13 +74,13 @@ function setAuthCookies(
   response.cookies.set('token', tokens.accessToken, {
     httpOnly: true,
     path: '/',
-    maxAge: 60 * 15
+    maxAge: ACCESS_TOKEN_MAX_AGE
   });
 
   response.cookies.set('refresh_token', tokens.refreshToken, {
     httpOnly: true,
     path: '/',
-    maxAge: 86400 * 7
+    maxAge: REFRESH_TOKEN_MAX_AGE
   });
 
   return response;

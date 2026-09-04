@@ -8,14 +8,18 @@ import EmptyCart from '@/components/blocks/EmptyCart';
 import { checkoutFormSchema, type CheckoutFormValues, type CheckoutPayload } from '@/types/checkout.type';
 
 import CheckoutForm from './CheckoutForm';
-import CheckoutSumary from './CheckoutSumary';
+import CheckoutSummary from './CheckoutSummary';
 import { useAuthStore } from '@/stores/auth-store';
 import { createOrder } from '@/services/order.service';
 import { useRouter } from '@/i18n/routing';
 import { CartItem } from '@/stores/cart-store';
 import { CheckoutStockItem } from '@/types/order.type';
 import { toast } from 'sonner';
-import { createPaymentIntent } from '@/services/paymet.service';
+import { createPaymentIntent } from '@/services/payment.service';
+import CouponInput from './CouponInput';
+import { ValidatedCoupon } from '@/types/coupon.type';
+import { getShippingQuote } from '@/services/coupon.service';
+import { useQuery } from '@tanstack/react-query';
 
 interface Props {
   initialItems: CartItem[];
@@ -44,8 +48,25 @@ export default function CheckoutClient({ initialItems }: Props) {
     return items.reduce((total, item) => total + item.unitPriceSnapshot * item.quantity, 0);
   }, [items]);
 
-  const shipping = 0;
-  const total = subtotal + shipping;
+  const [coupon, setCoupon] = useState<ValidatedCoupon | null>(null);
+
+  // Mã có thể mất hiệu lực khi giỏ đổi (không còn đủ giá trị tối thiểu),
+  // nên luôn chặn phần giảm không vượt quá tiền hàng.
+  const discount = Math.min(coupon?.discount ?? 0, subtotal);
+  const amountAfterDiscount = subtotal - discount;
+
+  // Phí ship do server tính; hỏi lại mỗi khi số tiền đổi để hiển thị không lệch với đơn thật.
+  const { data: shippingQuote } = useQuery({
+    queryKey: ['shipping-quote', amountAfterDiscount],
+    queryFn: async () => {
+      const response = await getShippingQuote(amountAfterDiscount);
+
+      return response.data?.data ?? null;
+    }
+  });
+
+  const shipping = shippingQuote?.fee ?? 0;
+  const total = amountAfterDiscount + shipping;
 
   const totalItems = useMemo(() => {
     return items.reduce((sum, item) => sum + item.quantity, 0);
@@ -65,7 +86,8 @@ export default function CheckoutClient({ initialItems }: Props) {
       shippingAddress: data.shippingAddress,
       billingAddress: data.shippingAddress,
       paymentMethod: data.paymentMethod,
-      notes: data.notes ?? ''
+      notes: data.notes ?? '',
+      couponCode: coupon?.code
     };
 
     if (!accessToken) {
@@ -131,10 +153,13 @@ export default function CheckoutClient({ initialItems }: Props) {
         </div>
 
         <div className='lg:col-span-1'>
-          <CheckoutSumary
+          <CouponInput subtotal={subtotal} applied={coupon} onApply={setCoupon} />
+
+          <CheckoutSummary
             totalItems={totalItems}
             subtotal={subtotal}
             shipping={shipping}
+            discount={discount}
             total={total}
             initialItems={items}
             stockErrors={stockErrors}

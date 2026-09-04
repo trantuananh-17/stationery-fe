@@ -3,7 +3,7 @@ import { CircleCheck, CircleX } from 'lucide-react';
 import BreadcrumbSection from '@/components/blocks/BreadcrumbSection';
 import ProductDescription from '@/components/blocks/ProductDescription';
 import ProductInfo from '@/components/blocks/ProductInfo';
-import ProductReview from '@/components/blocks/ProductReview';
+import ProductReviewSection from '@/components/blocks/ProductReviewSection';
 import Reviews from '@/components/blocks/Reviews';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -11,7 +11,12 @@ import { cn } from '@/lib/utils';
 
 import ProductImages from './ProductImages';
 import ProductPurchaseForm from './ProductPurchaseForm';
+import WishlistButton from '@/components/blocks/WishlistButton';
+import RecentlyViewed from '@/components/blocks/RecentlyViewed';
+import CompareButton from '@/components/blocks/CompareButton';
+import SimilarProducts from '@/components/blocks/SimilarProducts';
 import { Product } from '@/types/product.type';
+import { getReviews } from '@/services/review.service';
 
 interface ProductDetailProps {
   product: Product;
@@ -23,9 +28,14 @@ export default async function ProductDetail({ product, className }: ProductDetai
 
   const isInStock = product.variants.some((item) => item.isAvailable && item.stock > 0);
 
+  // Lấy sẵn điểm trung bình phía server cho phần sao cạnh tên sản phẩm;
+  // danh sách đánh giá do ProductReviewSection tự tải phía client.
+  const reviewsResponse = await getReviews(product.id, { limit: 1 });
+  const summary = reviewsResponse.data?.data?.summary ?? { average: 0, count: 0 };
+
   const reviews = {
-    rate: 0,
-    totalReviewers: 0
+    rate: summary.average,
+    totalReviewers: summary.count
   };
 
   return (
@@ -70,15 +80,32 @@ export default async function ProductDetail({ product, className }: ProductDetai
               </div>
               <p className='text-muted-foreground text-xs md:text-sm'>{product.shortDescription}</p>
 
-              <ProductPurchaseForm
-                productId={product.id}
-                variants={product.variants}
-                variantOptions={product.variantOptions}
-                selected={{
-                  variantId: defaultVariant?.id,
-                  quantity: 1
-                }}
-              />
+              <div className='flex items-end gap-2'>
+                <ProductPurchaseForm
+                  productId={product.id}
+                  variants={product.variants}
+                  variantOptions={product.variantOptions}
+                  selected={{
+                    variantId: defaultVariant?.id,
+                    quantity: 1
+                  }}
+                />
+
+                <WishlistButton
+                  product={{
+                    productId: product.id,
+                    productName: product.name,
+                    productSlug: product.slug,
+                    thumbnail: product.thumbnail,
+                    price: defaultVariant?.price ?? 0
+                  }}
+                />
+
+                <CompareButton
+                  className='flex items-center gap-1'
+                  product={{ productId: product.id, slug: product.slug, name: product.name }}
+                />
+              </div>
 
               <ProductInfo category={product.category} brand={product.brand} specifications={product.specifications} />
             </div>
@@ -91,7 +118,21 @@ export default async function ProductDetail({ product, className }: ProductDetai
 
             <Separator />
 
-            <ProductReview className='' {...reviews} />
+            <SimilarProducts productId={product.id} />
+
+            <ProductReviewSection productId={product.id} />
+
+            <Separator />
+
+            <RecentlyViewed
+              current={{
+                productId: product.id,
+                name: product.name,
+                slug: product.slug,
+                thumbnail: product.thumbnail,
+                price: defaultVariant?.price ?? 0
+              }}
+            />
           </div>
         </div>
       </section>

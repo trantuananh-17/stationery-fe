@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 
 import ProductForm from '@/components/blocks/admin/ProductForm';
 import { routing } from '@/i18n/routing';
+import { getToken } from '@/lib/auth';
 import { getAdminProductById } from '@/services/product.service';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Product, ProductFormValues } from '@/types/product.type';
@@ -71,7 +72,8 @@ export default async function EditProductPage({ params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: 'AdminProducts' });
-  const res = await getAdminProductById(id);
+  const token = await getToken();
+  const res = await getAdminProductById(token, id);
 
   if (!res?.ok || !res?.data?.data) {
     notFound();

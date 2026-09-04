@@ -17,7 +17,7 @@ import { getOrCreateSessionId } from '@/lib/cart-session';
 import { formatCurrency } from '@/lib/utils';
 
 import { CartDrawerItem } from './CartDrawerItem';
-import { CartEmpty } from './CartEmpty';
+import { CartDrawerEmpty } from './CartDrawerEmpty';
 
 export function CartDrawer() {
   const router = useRouter();
@@ -89,7 +89,7 @@ export function CartDrawer() {
 
         <ScrollArea className='min-h-0 p-2 md:p-4'>
           {totalItems === 0 ? (
-            <CartEmpty />
+            <CartDrawerEmpty />
           ) : (
             <div className='space-y-4'>
               {items.map((item) => (

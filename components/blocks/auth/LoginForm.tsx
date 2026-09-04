@@ -152,6 +152,12 @@ export function LoginForm({ className, ...props }: Props) {
                   {isSubmitting ? t('loading') || 'Đang đăng nhập...' : `${t('buttonLogin')}`}
                 </Button>
                 <FieldDescription className='text-center'>
+                  <Link href='/auth/forgot-password' className='font-medium hover:underline'>
+                    {t('forgotPassword')}
+                  </Link>
+                </FieldDescription>
+
+                <FieldDescription className='text-center'>
                   {t('titleRegister')}
                   <Link href='/auth/sign-up' className='font-medium hover:underline'>
                     {t('buttonRegister')}
