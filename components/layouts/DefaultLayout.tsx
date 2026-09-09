@@ -1,6 +1,7 @@
 import React from 'react';
 import LOGO from '@/assets/images/logo.webp';
 import Image from 'next/image';
+import Script from 'next/script';
 import { getTranslations } from 'next-intl/server';
 
 import Header from '../blocks/Header';
@@ -11,7 +12,6 @@ import { Container } from '../ui/container';
 import Footer from '../blocks/Footer';
 import Provider from './Provider';
 import ShopProvider from '@/providers/ShopProvider';
-import FloatingChatbotAssistant from '../blocks/chats/FloatingChatbotAssistant';
 import AuthBootstrap from './AuthBootstrap';
 
 interface Props {
@@ -95,12 +95,19 @@ export default async function Layout(props: Props) {
   return (
     <Provider>
       <AuthBootstrap />
+
+      {/* Widget chatbot của Ragenta, đang chạy thử thay cho FloatingChatbotAssistant —
+          hai cái cùng neo góc phải dưới nên không bật được đồng thời. Đặt ở đây nên
+          chỉ chạy ở khu shop/marketing, không lên khu admin. */}
+      <Script
+        src='https://staging-frontend.ragenta.cloud/widget.js'
+        data-key='rgpk_HseBwkWImIH-SqCXyla4U1dt'
+        strategy='afterInteractive'
+      />
       <ShopProvider>
         <TooltipProvider>
           <SidebarProvider>
             <AppSidebar />
-
-            <FloatingChatbotAssistant />
 
             <SidebarInset>
               <Container size='xl' className='md:px-10 lg:px-20'>
